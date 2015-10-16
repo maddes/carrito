@@ -25,7 +25,6 @@ class ControllerStep3 extends Controller {
 			$output .= 'define(\'DIR_CACHE\', \'' . DIR_OPENCART . 'system/storage/cache/\');' . "\n";
 			$output .= 'define(\'DIR_DOWNLOAD\', \'' . DIR_OPENCART . 'system/storage/download/\');' . "\n";
 			$output .= 'define(\'DIR_LOGS\', \'' . DIR_OPENCART . 'system/storage/logs/\');' . "\n";
-			$output .= 'define(\'DIR_MODIFICATION\', \'' . DIR_OPENCART . 'system/storage/modification/\');' . "\n";
 			$output .= 'define(\'DIR_UPLOAD\', \'' . DIR_OPENCART . 'system/storage/upload/\');' . "\n\n";
 
 			$output .= '// DB' . "\n";
@@ -62,7 +61,6 @@ class ControllerStep3 extends Controller {
 			$output .= 'define(\'DIR_CACHE\', \'' . DIR_OPENCART . 'system/storage/cache/\');' . "\n";
 			$output .= 'define(\'DIR_DOWNLOAD\', \'' . DIR_OPENCART . 'system/storage/download/\');' . "\n";
 			$output .= 'define(\'DIR_LOGS\', \'' . DIR_OPENCART . 'system/storage/logs/\');' . "\n";
-			$output .= 'define(\'DIR_MODIFICATION\', \'' . DIR_OPENCART . 'system/storage/modification/\');' . "\n";
 			$output .= 'define(\'DIR_UPLOAD\', \'' . DIR_OPENCART . 'system/storage/upload/\');' . "\n";
 			$output .= 'define(\'DIR_CATALOG\', \'' . DIR_OPENCART . 'catalog/\');' . "\n\n";
 
@@ -136,13 +134,13 @@ class ControllerStep3 extends Controller {
 		} else {
 			$data['error_db_database'] = '';
 		}
-		
+
 		if (isset($this->error['db_port'])) {
 			$data['error_db_port'] = $this->error['db_port'];
 		} else {
 			$data['error_db_port'] = '';
 		}
-		
+
 		if (isset($this->error['db_prefix'])) {
 			$data['error_db_prefix'] = $this->error['db_prefix'];
 		} else {
@@ -198,13 +196,13 @@ class ControllerStep3 extends Controller {
 		} else {
 			$data['db_database'] = '';
 		}
-		
+
 		if (isset($this->request->post['db_port'])) {
 			$data['db_port'] = $this->request->post['db_port'];
 		} else {
 			$data['db_port'] = 3306;
 		}
-		
+
 		if (isset($this->request->post['db_prefix'])) {
 			$data['db_prefix'] = $this->request->post['db_prefix'];
 		} else {
@@ -257,7 +255,7 @@ class ControllerStep3 extends Controller {
 
 		if (!$this->request->post['db_port']) {
 			$this->error['db_port'] = $this->language->get('error_db_port');
-		}		
+		}
 
 		if ($this->request->post['db_prefix'] && preg_match('/[^a-z0-9_]/', $this->request->post['db_prefix'])) {
 			$this->error['db_prefix'] = $this->language->get('error_db_prefix');

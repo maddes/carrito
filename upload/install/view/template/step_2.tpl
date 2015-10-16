@@ -350,14 +350,6 @@
                   <?php } ?>
                 </td>
               </tr>
-              <tr>
-                <td><?php echo $modification . '/'; ?></td>
-                <td><?php if (is_writable($modification)) { ?>
-                  <span class="text-success"><?php echo $text_writable; ?></span>
-                  <?php } else { ?>
-                  <span class="text-danger"><?php echo $text_unwritable; ?></span>
-                  <?php } ?>
-                </td>
               </tr>
             </tbody>
           </table>

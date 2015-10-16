@@ -1,3 +1,11 @@
+# Carrito 1.0.3
+* Version bump
+
+# Carrito 1.0.2
+* Versioning fixes
+
+# Carrito 1.0.1
+* Removed testing artefacts
 
 # Carrito 1.0.0.0 changelog
 

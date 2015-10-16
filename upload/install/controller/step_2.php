@@ -83,7 +83,7 @@ class ControllerStep2 extends Controller {
 
 		$data['config_catalog'] = DIR_OPENCART . 'config.php';
 		$data['config_admin'] = DIR_OPENCART . 'admin/config.php';
-		
+
 		$data['image'] = DIR_OPENCART . 'image';
 		$data['image_cache'] = DIR_OPENCART . 'image/cache';
 		$data['image_catalog'] = DIR_OPENCART . 'image/catalog';
@@ -91,7 +91,6 @@ class ControllerStep2 extends Controller {
 		$data['logs'] = DIR_SYSTEM . 'storage/logs';
 		$data['download'] = DIR_SYSTEM . 'storage/download';
 		$data['upload'] = DIR_SYSTEM . 'storage/upload';
-		$data['modification'] = DIR_SYSTEM . 'storage/modification';
 
 		$data['back'] = $this->url->link('step_1');
 
@@ -167,7 +166,7 @@ class ControllerStep2 extends Controller {
 		if (!is_writable(DIR_OPENCART . 'image/catalog')) {
 			$this->error['warning'] = 'Warning: Image catalog directory needs to be writable for Carrito to work!';
 		}
-		
+
 		if (!is_writable(DIR_SYSTEM . 'storage/cache')) {
 			$this->error['warning'] = 'Warning: Cache directory needs to be writable for Carrito to work!';
 		}
@@ -182,10 +181,6 @@ class ControllerStep2 extends Controller {
 
 		if (!is_writable(DIR_SYSTEM . 'storage/upload')) {
 			$this->error['warning'] = 'Warning: Upload directory needs to be writable for Carrito to work!';
-		}
-
-		if (!is_writable(DIR_SYSTEM . 'storage/modification')) {
-			$this->error['warning'] = 'Warning: Modification directory needs to be writable for Carrito to work!';
 		}
 
 		return !$this->error;
