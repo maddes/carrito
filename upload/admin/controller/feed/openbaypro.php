@@ -57,15 +57,9 @@ class ControllerFeedOpenbaypro extends Controller {
 		$this->model_setting_setting->editSetting('openbaypro', $settings);
 
 		// register the event triggers
-		if (version_compare(VERSION, '2.0.1', '>=')) {
-			$this->load->model('extension/event');
-			$this->model_extension_event->addEvent('openbay', 'post.admin.product.delete', 'extension/openbay/eventDeleteProduct');
-			$this->model_extension_event->addEvent('openbay', 'post.admin.product.edit', 'extension/openbay/eventEditProduct');
-		} else {
-			$this->load->model('tool/event');
-			$this->model_tool_event->addEvent('openbay', 'post.product.delete', 'extension/openbay/eventDeleteProduct');
-			$this->model_tool_event->addEvent('openbay', 'post.product.edit', 'extension/openbay/eventEditProduct');
-		}
+		$this->load->model('extension/event');
+		$this->model_extension_event->addEvent('openbay', 'post.admin.product.delete', 'extension/openbay/eventDeleteProduct');
+		$this->model_extension_event->addEvent('openbay', 'post.admin.product.edit', 'extension/openbay/eventEditProduct');
 	}
 
 	public function uninstall() {
@@ -77,14 +71,7 @@ class ControllerFeedOpenbaypro extends Controller {
 		$this->model_setting_setting->editSetting('openbaypro', $settings);
 
 		// delete the event triggers
-		if (version_compare(VERSION, '2.0.1', '>=')) {
-			$this->load->model('extension/event');
-
-			$this->model_extension_event->deleteEvent('openbay');
-		} else {
-			$this->load->model('tool/event');
-
-			$this->model_tool_event->deleteEvent('openbay');
-		}
+		$this->load->model('extension/event');
+		$this->model_extension_event->deleteEvent('openbay');
 	}
 }

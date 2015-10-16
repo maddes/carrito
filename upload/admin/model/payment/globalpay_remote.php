@@ -63,7 +63,7 @@ class ModelPaymentGlobalpayRemote extends Model {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, "https://epage.payandshop.com/epage-remote.cgi");
 			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_USERAGENT, "OpenCart " . VERSION);
+			curl_setopt($ch, CURLOPT_USERAGENT, "Carrito " . VERSION);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -127,7 +127,7 @@ class ModelPaymentGlobalpayRemote extends Model {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, "https://epage.payandshop.com/epage-remote.cgi");
 			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_USERAGENT, "OpenCart " . VERSION);
+			curl_setopt($ch, CURLOPT_USERAGENT, "Carrito " . VERSION);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -195,7 +195,7 @@ class ModelPaymentGlobalpayRemote extends Model {
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, "https://epage.payandshop.com/epage-remote.cgi");
 			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_USERAGENT, "OpenCart " . VERSION);
+			curl_setopt($ch, CURLOPT_USERAGENT, "Carrito " . VERSION);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

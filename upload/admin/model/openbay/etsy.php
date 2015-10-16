@@ -47,24 +47,14 @@ class ModelOpenbayEtsy extends Model{
 				) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
 
 		// register the event triggers
-		if (version_compare(VERSION, '2.0.1', '>=')) {
-			$this->load->model('extension/event');
-			$this->model_extension_event->addEvent('openbaypro_etsy', 'post.order.history.add', 'openbay/etsy/eventAddOrderHistory');
-		} else {
-			$this->load->model('tool/event');
-			$this->model_tool_event->addEvent('openbaypro_etsy', 'post.order.history.add', 'openbay/etsy/eventAddOrderHistory');
-		}
+		$this->load->model('extension/event');
+		$this->model_extension_event->addEvent('openbaypro_etsy', 'post.order.history.add', 'openbay/etsy/eventAddOrderHistory');
 	}
 
 	public function uninstall() {
 		// remove the event triggers
-		if (version_compare(VERSION, '2.0.1', '>=')) {
-			$this->load->model('extension/event');
-			$this->model_extension_event->deleteEvent('openbaypro_etsy');
-		} else {
-			$this->load->model('tool/event');
-			$this->model_tool_event->deleteEvent('openbaypro_etsy');
-		}
+		$this->load->model('extension/event');
+		$this->model_extension_event->deleteEvent('openbaypro_etsy');
 	}
 
 	public function patch() {

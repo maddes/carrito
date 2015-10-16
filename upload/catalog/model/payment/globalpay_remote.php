@@ -61,7 +61,7 @@ class ModelPaymentGlobalpayRemote extends Model {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, "https://remote.globaliris.com/realmpi");
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_USERAGENT, "OpenCart " . VERSION);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Carrito " . VERSION);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -109,7 +109,7 @@ class ModelPaymentGlobalpayRemote extends Model {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, "https://remote.globaliris.com/realmpi");
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_USERAGENT, "OpenCart " . VERSION);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Carrito " . VERSION);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -143,7 +143,7 @@ class ModelPaymentGlobalpayRemote extends Model {
 			$xml .= '<orderid>' . $order_ref . '</orderid>';
 			$xml .= '<amount currency="' . $currency . '">' . $amount . '</amount>';
 			$xml .= '<comments>';
-				$xml .= '<comment id="1">OpenCart</comment>';
+				$xml .= '<comment id="1">Carrito</comment>';
 			$xml .= '</comments>';
 			$xml .= '<card>';
 				$xml .= '<number>' . $card_number . '</number>';
@@ -223,7 +223,7 @@ class ModelPaymentGlobalpayRemote extends Model {
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, "https://remote.globaliris.com/realauth");
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_USERAGENT, "OpenCart " . VERSION);
+		curl_setopt($ch, CURLOPT_USERAGENT, "Carrito " . VERSION);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

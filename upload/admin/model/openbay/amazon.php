@@ -82,13 +82,8 @@ class ModelOpenbayAmazon extends Model {
 			) DEFAULT COLLATE=utf8_general_ci;");
 
 		// add the event triggers
-		if (version_compare(VERSION, '2.0.1', '>=')) {
-			$this->load->model('extension/event');
-			$this->model_extension_event->addEvent('openbaypro_amazon', 'post.order.history.add', 'openbay/amazon/eventAddOrderHistory');
-		} else {
-			$this->load->model('tool/event');
-			$this->model_tool_event->addEvent('openbaypro_amazon', 'post.order.history.add', 'openbay/amazon/eventAddOrderHistory');
-		}
+		$this->load->model('extension/event');
+		$this->model_extension_event->addEvent('openbaypro_amazon', 'post.order.history.add', 'openbay/amazon/eventAddOrderHistory');
 	}
 
 	public function uninstall() {
@@ -107,13 +102,8 @@ class ModelOpenbayAmazon extends Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE `code` = 'openbay_amazon'");
 
 		// remove the event triggers
-		if (version_compare(VERSION, '2.0.1', '>=')) {
-			$this->load->model('extension/event');
-			$this->model_extension_event->deleteEvent('openbaypro_amazon');
-		} else {
-			$this->load->model('tool/event');
-			$this->model_tool_event->deleteEvent('openbaypro_amazon');
-		}
+		$this->load->model('extension/event');
+		$this->model_extension_event->deleteEvent('openbaypro_amazon');
 	}
 
 	public function patch() {

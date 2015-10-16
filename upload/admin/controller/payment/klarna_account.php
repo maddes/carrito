@@ -215,7 +215,8 @@ class ControllerPaymentKlarnaAccount extends Controller {
 				$xml .= '  <methodName>get_pclasses</methodName>';
 				$xml .= '  <params>';
 				$xml .= '    <param><value><string>4.1</string></value></param>';
-				$xml .= '    <param><value><string>API:OPENCART:' . VERSION . '</string></value></param>';
+				//$xml .= '    <param><value><string>API:OPENCART:' . VERSION . '</string></value></param>';
+				$xml .= '    <param><value><string>API:OPENCART:2.1.0.0</string></value></param>';
 				$xml .= '    <param><value><int>' . (int)$klarna_account['merchant'] . '</int></value></param>';
 				$xml .= '    <param><value><int>' . $country[$key]['currency'] . '</int></value></param>';
 				$xml .= '    <param><value><string>' . $digest . '</string></value></param>';
