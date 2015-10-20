@@ -1,3 +1,8 @@
+# Carrito 2.0.0
+* Renamed all .tpl to .php
+* Delegated template lookup to the loader class
+* Side-effect: admin and install may be themed 0.0
+
 # Carrito 1.0.3
 * Version bump
 

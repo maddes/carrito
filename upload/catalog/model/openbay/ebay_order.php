@@ -426,11 +426,7 @@ class ModelOpenbayEbayOrder extends Model{
 					);
 				}
 
-				if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/mail/order.tpl')) {
-					$html = $this->load->view($this->config->get('config_template') . '/template/mail/order.tpl', $data);
-				} else {
-					$html = $this->load->view('default/template/mail/order.tpl', $data);
-				}
+				$html = $this->load->view('mail/order', $data);
 
 				// Text Mail
 				$text  = sprintf($language->get('text_new_greeting'), html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8')) . "\n\n";

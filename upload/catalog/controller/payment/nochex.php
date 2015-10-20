@@ -66,11 +66,7 @@ class ControllerPaymentNochex extends Controller {
 		$data['declined_url'] = $this->url->link('payment/nochex/callback', 'method=decline', 'SSL');
 		$data['callback_url'] = $this->url->link('payment/nochex/callback', 'order=' . $this->session->data['order_id'], 'SSL');
 
-		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/nochex.tpl')) {
-			return $this->load->view($this->config->get('config_template') . '/template/payment/nochex.tpl', $data);
-		} else {
-			return $this->load->view('default/template/payment/nochex.tpl', $data);
-		}
+		return $this->load->view('payment/nochex', $data);
 	}
 
 	public function callback() {

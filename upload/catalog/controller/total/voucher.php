@@ -18,11 +18,7 @@ class ControllerTotalVoucher extends Controller {
 				$data['voucher'] = '';
 			}
 
-			if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/total/voucher.tpl')) {
-				return $this->load->view($this->config->get('config_template') . '/template/total/voucher.tpl', $data);
-			} else {
-				return $this->load->view('default/template/total/voucher.tpl', $data);
-			}
+			return $this->load->view('total/voucher', $data);
 		}
 	}
 
@@ -94,11 +90,7 @@ class ControllerTotalVoucher extends Controller {
 					$data['store_url'] = $order_info['store_url'];
 					$data['message'] = nl2br($voucher['message']);
 
-					if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/mail/voucher.tpl')) {
-						$html = $this->load->view($this->config->get('config_template') . '/template/mail/voucher.tpl', $data);
-					} else {
-						$html = $this->load->view('default/template/mail/voucher.tpl', $data);
-					}
+					$html = $this->load->view('mail/voucher', $data);
 
 					$mail = new Mail();
 					$mail->protocol = $this->config->get('config_mail_protocol');
