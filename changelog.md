@@ -1,3 +1,6 @@
+# Carrito 2.0.2
+* Lazy loading added to the Registry Class
+
 # Carrito 2.0.1
 * Removed Vagrant files
 
