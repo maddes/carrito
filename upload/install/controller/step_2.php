@@ -83,6 +83,12 @@ class ControllerStep2 extends Controller {
 
 		$data['config_catalog'] = DIR_OPENCART . 'config.php';
 		$data['config_admin'] = DIR_OPENCART . 'admin/config.php';
+		if (!file_exists($data['config_catalog'])) {
+			touch($data['config_catalog']);
+		}
+		if (!file_exists($data['config_admin'])) {
+			touch($data['config_admin']);
+		}
 
 		$data['image'] = DIR_OPENCART . 'image';
 		$data['image_cache'] = DIR_OPENCART . 'image/cache';
@@ -97,7 +103,7 @@ class ControllerStep2 extends Controller {
 		$data['footer'] = $this->load->controller('footer');
 		$data['header'] = $this->load->controller('header');
 
-		$this->response->setOutput($this->load->view('step_2.tpl', $data));
+		$this->response->setOutput($this->load->view('step_2', $data));
 	}
 
 	private function validate() {
@@ -144,13 +150,13 @@ class ControllerStep2 extends Controller {
 		}
 
 		if (!file_exists(DIR_OPENCART . 'config.php')) {
-			$this->error['warning'] = 'Warning: config.php does not exist. You need to rename config-dist.php to config.php!';
+			$this->error['warning'] = 'Warning: config.php needs to be writable for Carrito to be installed!';
 		} elseif (!is_writable(DIR_OPENCART . 'config.php')) {
 			$this->error['warning'] = 'Warning: config.php needs to be writable for Carrito to be installed!';
 		}
 
 		if (!file_exists(DIR_OPENCART . 'admin/config.php')) {
-			$this->error['warning'] = 'Warning: admin/config.php does not exist. You need to rename admin/config-dist.php to admin/config.php!';
+			$this->error['warning'] = 'Warning: admin/config.php needs to be writable for Carrito to be installed!';
 		} elseif (!is_writable(DIR_OPENCART . 'admin/config.php')) {
 			$this->error['warning'] = 'Warning: admin/config.php needs to be writable for Carrito to be installed!';
 		}

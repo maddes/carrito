@@ -70,19 +70,26 @@ final class Loader {
 	public function view($template, $data = array()) {
 		// $this->event->trigger('pre.view.' . str_replace('/', '.', $template), $data);
 
-		$file = DIR_TEMPLATE . $template;
+		$file = DIR_TEMPLATE.'default/template/'.$template.'.php';
 
-		if (file_exists($file)) {
+		if ($this->registry->get('config'))
+		{
+			if (file_exists(DIR_TEMPLATE.$this->registry->get('config')->get('config_template').'/template/'.$template.'.php'))
+			{
+				$file = DIR_TEMPLATE.$this->registry->get('config')->get('config_template').'/template/'.$template.'.php';
+			}
+		}
+
+		if (file_exists($file))
+		{
 			extract($data);
-
 			ob_start();
-
 			require($file);
-
 			$output = ob_get_contents();
-
 			ob_end_clean();
-		} else {
+		}
+		else
+		{
 			trigger_error('Error: Could not load template ' . $file . '!');
 			exit();
 		}

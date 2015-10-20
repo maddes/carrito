@@ -298,7 +298,7 @@ class ControllerPaymentSecureTradingWs extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
-		$this->response->setOutput($this->load->view('payment/securetrading_ws.tpl', $data));
+		$this->response->setOutput($this->load->view('payment/securetrading_ws', $data));
 	}
 
 	public function install() {
@@ -399,7 +399,7 @@ class ControllerPaymentSecureTradingWs extends Controller {
 			}
 		}
 
-		$this->template = 'payment/securetrading_ws_transactions.tpl';
+		$this->template = 'payment/securetrading_ws_transactions';
 
 		$this->response->setOutput($this->render());
 	}
@@ -446,7 +446,7 @@ class ControllerPaymentSecureTradingWs extends Controller {
 				$data['order_id'] = $this->request->get['order_id'];
 				$data['token'] = $this->request->get['token'];
 
-				$this->template = 'payment/securetrading_ws_order.tpl';
+				$this->template = 'payment/securetrading_ws_order';
 
 				$this->response->setOutput($this->render());
 			}

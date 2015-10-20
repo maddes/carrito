@@ -254,9 +254,7 @@
             <tbody>
               <tr>
                 <td><?php echo $config_catalog; ?></td>
-                <td><?php if (!file_exists($config_catalog)) { ?>
-                  <span class="text-danger"><?php echo $text_missing; ?></span>
-                  <?php } elseif (!is_writable($config_catalog)) { ?>
+                <td><?php if (!file_exists($config_catalog) or !is_writable($config_catalog)) { ?>
                   <span class="text-danger"><?php echo $text_unwritable; ?></span>
                   <?php } else { ?>
                   <span class="text-success"><?php echo $text_writable; ?></span>
@@ -265,9 +263,7 @@
               </tr>
               <tr>
                 <td><?php echo $config_admin; ?></td>
-                <td><?php if (!file_exists($config_admin)) { ?>
-                  <span class="text-danger"><?php echo $text_missing; ?></span>
-                  <?php } elseif (!is_writable($config_admin)) { ?>
+                <td><?php if (!file_exists($config_admin) or !is_writable($config_admin)) { ?>
                   <span class="text-danger"><?php echo $text_unwritable; ?></span>
                   <?php } else { ?>
                   <span class="text-success"><?php echo $text_writable; ?></span>
