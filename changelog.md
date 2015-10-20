@@ -1,3 +1,6 @@
+# Carrito 3.0.1
+* Version bump.
+
 # Carrito 3.0.0
 * Lazy loading of models added to the Registry Class
 * 2000+ (all) calls to $this->load->model() removed.
