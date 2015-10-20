@@ -1,3 +1,6 @@
+# Carrito 2.0.1
+* Removed Vagrant files
+
 # Carrito 2.0.0
 * Renamed all .tpl to .php
 * Delegated template lookup to the loader class
