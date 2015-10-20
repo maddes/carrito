@@ -5,10 +5,6 @@ class ControllerEbayOpenbay extends Controller {
 		$secret         = $this->config->get('ebay_secret');
 		$active         = $this->config->get('ebay_status');
 
-		$this->load->model('openbay/ebay_openbay');
-		$this->load->model('openbay/ebay_product');
-		$this->load->model('openbay/ebay_order');
-
 		if(empty($encrypted)) {
 			$this->response->addHeader('Content-Type: application/json');
 			$this->response->setOutput(json_encode(array('msg' => 'error 002')));
@@ -97,8 +93,6 @@ class ControllerEbayOpenbay extends Controller {
 		$this->response->addHeader('Content-Type: application/json');
 
 		if(isset($data['secret']) && $secret == $data['secret'] && $active == 1 && isset($data['data'])) {
-			$this->load->model('openbay/ebay_openbay');
-			$this->load->model('openbay/ebay_product');
 			$this->model_openbay_ebay_product->importItems($data);
 			$this->response->setOutput(json_encode(array('msg' => 'ok', 'error' => false)));
 		} else {
@@ -120,7 +114,6 @@ class ControllerEbayOpenbay extends Controller {
 
 	public function autoSetup() {
 		set_time_limit(0);
-		$this->load->model('setting/setting');
 		$settings = $this->model_setting_setting->getSetting('ebay');
 
 		$this->response->addHeader('Cache-Control: no-cache, must-revalidate');

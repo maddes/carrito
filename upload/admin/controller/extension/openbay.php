@@ -5,8 +5,6 @@ class ControllerExtensionOpenbay extends Controller {
 	public function install() {
 		$this->load->language('extension/openbay');
 
-		$this->load->model('extension/extension');
-
 		if (!$this->user->hasPermission('modify', 'extension/openbay')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
 
@@ -15,8 +13,6 @@ class ControllerExtensionOpenbay extends Controller {
 			$this->model_extension_extension->install('openbay', $this->request->get['extension']);
 
 			$this->session->data['success'] = $this->language->get('text_install_success');
-
-			$this->load->model('user/user_group');
 
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'openbay/' . $this->request->get['extension']);
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'openbay/' . $this->request->get['extension']);
@@ -37,8 +33,6 @@ class ControllerExtensionOpenbay extends Controller {
 	public function uninstall() {
 		$this->load->language('extension/openbay');
 
-		$this->load->model('extension/extension');
-
 		if (!$this->user->hasPermission('modify', 'extension/openbay')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
 
@@ -47,9 +41,6 @@ class ControllerExtensionOpenbay extends Controller {
 			$this->session->data['success'] = $this->language->get('text_uninstall_success');
 
 			require_once(DIR_APPLICATION . 'controller/openbay/' . $this->request->get['extension'] . '.php');
-
-			$this->load->model('extension/extension');
-			$this->load->model('setting/setting');
 
 			$this->model_extension_extension->uninstall('openbay', $this->request->get['extension']);
 			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
@@ -66,10 +57,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function index() {
-		$this->load->model('openbay/openbay');
-		$this->load->model('extension/extension');
-		$this->load->model('setting/setting');
-		$this->load->model('openbay/version');
 
 		$data = $this->load->language('extension/openbay');
 
@@ -154,7 +141,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function manage() {
-		$this->load->model('setting/setting');
 
 		$data = $this->load->language('extension/openbay');
 
@@ -194,7 +180,6 @@ class ControllerExtensionOpenbay extends Controller {
 			if (isset($settings['openbay_version'])) {
 				$data['openbay_version'] = $settings['openbay_version'];
 			} else {
-				$this->load->model('openbay/version');
 				$settings['openbay_version'] = $this->model_openbay_version->version();
 				$data['openbay_version'] = $this->model_openbay_version->version();
 				$this->model_setting_setting->editSetting('openbay', $settings);
@@ -280,7 +265,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function updateTest() {
-		$this->load->model('openbay/openbay');
 
 		$json = $this->model_openbay_openbay->updateTest();
 
@@ -289,7 +273,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function update() {
-		$this->load->model('openbay/openbay');
 
 		$json = $this->model_openbay_openbay->update();
 
@@ -298,7 +281,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function updateV2() {
-		$this->load->model('openbay/openbay');
 		$this->load->language('extension/openbay');
 
 		// set base var
@@ -353,17 +335,9 @@ class ControllerExtensionOpenbay extends Controller {
 				break;
 			case 'run_patch': // step 6 - run any db updates or other patch files
 				$this->model_openbay_openbay->patch();
-
-				$this->load->model('openbay/ebay');
 				$this->model_openbay_ebay->patch();
-
-				$this->load->model('openbay/amazon');
 				$this->model_openbay_amazon->patch();
-
-				$this->load->model('openbay/amazonus');
 				$this->model_openbay_amazonus->patch();
-
-				$this->load->model('openbay/etsy');
 				$this->model_openbay_etsy->patch();
 
 				$response = array('error' => 0, 'response' => '', 'percent_complete' => 90, 'status_message' => 'Running patch files');
@@ -372,7 +346,6 @@ class ControllerExtensionOpenbay extends Controller {
 				$this->response->setOutput(json_encode($response));
 				break;
 			case 'update_version': // step 7 - update the version number
-				$this->load->model('setting/setting');
 
 				$response = $this->model_openbay_openbay->updateV2UpdateVersion($beta);
 
@@ -384,15 +357,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function patch() {
-		$this->load->model('openbay/openbay');
-		$this->load->model('openbay/ebay');
-		$this->load->model('openbay/amazon');
-		$this->load->model('openbay/amazonus');
-		$this->load->model('openbay/etsy');
-		$this->load->model('extension/extension');
-		$this->load->model('setting/setting');
-		$this->load->model('user/user_group');
-		$this->load->model('openbay/version');
 
 		$this->model_openbay_openbay->patch();
 		$this->model_openbay_ebay->patch();
@@ -422,7 +386,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function notifications() {
-		$this->load->model('openbay/openbay');
 
 		$json = $this->model_openbay_openbay->getNotifications();
 
@@ -431,7 +394,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function version() {
-		$this->load->model('openbay/openbay');
 
 		$json = $this->model_openbay_openbay->version();
 
@@ -440,7 +402,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function faq() {
-		$this->load->model('openbay/openbay');
 
 		$this->load->language('extension/openbay');
 
@@ -453,7 +414,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function faqDismiss() {
-		$this->load->model('openbay/openbay');
 
 		$json = $this->model_openbay_openbay->faqDismiss($this->request->get['qry_route']);
 
@@ -462,7 +422,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function faqClear() {
-		$this->load->model('openbay/openbay');
 		$this->model_openbay_openbay->faqClear();
 
 		$json = array('msg' => 'ok');
@@ -574,7 +533,6 @@ class ControllerExtensionOpenbay extends Controller {
 
 	public function orderList() {
 		$this->language->load('sale/order');
-		$this->load->model('openbay/order');
 
 		$data = $this->load->language('openbay/openbay_order');
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -858,8 +816,6 @@ class ControllerExtensionOpenbay extends Controller {
 		$data['filter_date_added'] = $filter_date_added;
 		$data['filter_channel'] = $filter_channel;
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		$data['sort'] = $sort;
@@ -880,7 +836,6 @@ class ControllerExtensionOpenbay extends Controller {
 			$this->session->data['error'] = $data['text_no_orders'];
 			$this->response->redirect($this->url->link('extension/openbay/orderList', 'token=' . $this->session->data['token'], 'SSL'));
 		} else {
-			$this->load->model('openbay/order');
 			$this->language->load('sale/order');
 
 			$data['column_order_id'] = $this->language->get('column_order_id');
@@ -905,8 +860,6 @@ class ControllerExtensionOpenbay extends Controller {
 			if ($this->config->get('openbay_amazonus_status') == 1) {
 				$data['market_options']['amazonus']['carriers'] = $this->openbay->amazonus->getCarriers();
 			}
-
-			$this->load->model('localisation/order_status');
 			$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 			$data['status_mapped'] = array();
 
@@ -1000,9 +953,6 @@ class ControllerExtensionOpenbay extends Controller {
 	}
 
 	public function orderListComplete() {
-		$this->load->model('sale/order');
-		$this->load->model('openbay/openbay');
-		$this->load->model('localisation/order_status');
 
 		$data = $this->load->language('openbay/openbay_order');
 
@@ -1015,7 +965,6 @@ class ControllerExtensionOpenbay extends Controller {
 
 		//Amazon EU
 		if ($this->config->get('openbay_amazon_status') == 1) {
-			$this->load->model('openbay/amazon');
 
 			$orders = array();
 
@@ -1059,7 +1008,6 @@ class ControllerExtensionOpenbay extends Controller {
 
 		//Amazon US
 		if ($this->config->get('openbay_amazonus_status') == 1) {
-			$this->load->model('openbay/amazonus');
 
 			$orders = array();
 
@@ -1152,14 +1100,7 @@ class ControllerExtensionOpenbay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/product');
-		$this->load->model('catalog/category');
-		$this->load->model('catalog/manufacturer');
-		$this->load->model('openbay/openbay');
-		$this->load->model('tool/image');
-
 		if ($this->openbay->addonLoad('openstock')) {
-			$this->load->model('module/openstock');
 			$openstock_installed = true;
 		} else {
 			$openstock_installed = false;
@@ -1483,7 +1424,6 @@ class ControllerExtensionOpenbay extends Controller {
 			$markets = array();
 
 			if ($this->config->get('ebay_status') == '1') {
-				$this->load->model('openbay/ebay');
 
 				$active_list = $this->model_openbay_ebay->getLiveListingArray();
 
@@ -1505,7 +1445,6 @@ class ControllerExtensionOpenbay extends Controller {
 			}
 
 			if ($this->config->get('openbay_amazon_status') == '1') {
-				$this->load->model('openbay/amazon');
 				$amazon_status = $this->model_openbay_amazon->getProductStatus($result['product_id']);
 
 				if ($amazon_status == 'processing') {
@@ -1540,7 +1479,6 @@ class ControllerExtensionOpenbay extends Controller {
 			}
 
 			if ($this->config->get('openbay_amazonus_status') == '1') {
-				$this->load->model('openbay/amazonus');
 				$amazonus_status = $this->model_openbay_amazonus->getProductStatus($result['product_id']);
 
 				if ($amazonus_status == 'processing') {
@@ -1575,7 +1513,6 @@ class ControllerExtensionOpenbay extends Controller {
 			}
 
 			if ($this->config->get('etsy_status') == '1') {
-				$this->load->model('openbay/etsy_product');
 
 				$status = $this->model_openbay_etsy_product->getStatus($result['product_id']);
 

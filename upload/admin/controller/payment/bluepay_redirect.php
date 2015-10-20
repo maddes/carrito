@@ -8,8 +8,6 @@ class ControllerPaymentBluepayredirect extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('bluepay_redirect', $this->request->post);
 
@@ -130,8 +128,6 @@ class ControllerPaymentBluepayredirect extends Controller {
 			$data['bluepay_redirect_order_status_id'] = $this->config->get('bluepay_redirect_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['bluepay_redirect_geo_zone_id'])) {
@@ -139,8 +135,6 @@ class ControllerPaymentBluepayredirect extends Controller {
 		} else {
 			$data['bluepay_redirect_geo_zone_id'] = $this->config->get('bluepay_redirect_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -170,20 +164,17 @@ class ControllerPaymentBluepayredirect extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/bluepay_redirect');
 
 		$this->model_payment_bluepay_redirect->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/bluepay_redirect');
 
 		$this->model_payment_bluepay_redirect->uninstall();
 	}
 
 	public function order() {
 		if ($this->config->get('bluepay_redirect_status')) {
-			$this->load->model('payment/bluepay_redirect');
 
 			$bluepay_redirect_order = $this->model_payment_bluepay_redirect->getOrder($this->request->get['order_id']);
 
@@ -230,7 +221,6 @@ class ControllerPaymentBluepayredirect extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/bluepay_redirect');
 
 			$bluepay_redirect_order = $this->model_payment_bluepay_redirect->getOrder($this->request->post['order_id']);
 
@@ -264,7 +254,6 @@ class ControllerPaymentBluepayredirect extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($this->request->post['amount']) && $this->request->post['amount'] > 0) {
-			$this->load->model('payment/bluepay_redirect');
 
 			$bluepay_redirect_order = $this->model_payment_bluepay_redirect->getOrder($this->request->post['order_id']);
 
@@ -310,7 +299,6 @@ class ControllerPaymentBluepayredirect extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('payment/bluepay_redirect');
 
 			$bluepay_redirect_order = $this->model_payment_bluepay_redirect->getOrder($this->request->post['order_id']);
 

@@ -7,8 +7,6 @@ class ControllerMarketingAffiliate extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/affiliate');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerMarketingAffiliate extends Controller {
 		$this->load->language('marketing/affiliate');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('marketing/affiliate');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_marketing_affiliate->addAffiliate($this->request->post);
@@ -69,8 +65,6 @@ class ControllerMarketingAffiliate extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/affiliate');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_marketing_affiliate->editAffiliate($this->request->get['affiliate_id'], $this->request->post);
 
@@ -120,8 +114,6 @@ class ControllerMarketingAffiliate extends Controller {
 		$this->load->language('marketing/affiliate');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('marketing/affiliate');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $affiliate_id) {
@@ -175,8 +167,6 @@ class ControllerMarketingAffiliate extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/affiliate');
-
 		if (isset($this->request->get['affiliate_id']) && $this->validateApprove()) {
 			$this->model_marketing_affiliate->approve($this->request->get['affiliate_id']);
 
@@ -226,8 +216,6 @@ class ControllerMarketingAffiliate extends Controller {
 		$this->load->language('marketing/affiliate');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('marketing/affiliate');
 
 		if (isset($this->request->get['email']) && $this->validateUnlock()) {
 			$this->model_marketing_affiliate->deleteLoginAttempts($this->request->get['email']);
@@ -885,8 +873,6 @@ class ControllerMarketingAffiliate extends Controller {
 			$data['country_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		if (isset($this->request->post['zone_id'])) {
@@ -1081,8 +1067,6 @@ class ControllerMarketingAffiliate extends Controller {
 			$this->error['city'] = $this->language->get('error_city');
 		}
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 		if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -1135,8 +1119,6 @@ class ControllerMarketingAffiliate extends Controller {
 	public function transaction() {
 		$this->load->language('marketing/affiliate');
 
-		$this->load->model('marketing/affiliate');
-
 		$data['text_no_results'] = $this->language->get('text_no_results');
 		$data['text_balance'] = $this->language->get('text_balance');
 
@@ -1187,7 +1169,6 @@ class ControllerMarketingAffiliate extends Controller {
 		if (!$this->user->hasPermission('modify', 'marketing/affiliate')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('marketing/affiliate');
 
 			$this->model_marketing_affiliate->addTransaction($this->request->get['affiliate_id'], $this->request->post['description'], $this->request->post['amount']);
 
@@ -1213,8 +1194,6 @@ class ControllerMarketingAffiliate extends Controller {
 			} else {
 				$filter_email = '';
 			}
-
-			$this->load->model('marketing/affiliate');
 
 			$filter_data = array(
 				'filter_name'  => $filter_name,

@@ -49,8 +49,6 @@ class ControllerReportAffiliate extends Controller {
 			'href' => $this->url->link('report/affiliate', 'token=' . $this->session->data['token'] . $url, 'SSL')
 		);
 
-		$this->load->model('report/affiliate');
-
 		$data['affiliates'] = array();
 
 		$filter_data = array(

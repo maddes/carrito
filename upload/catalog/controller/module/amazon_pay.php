@@ -2,8 +2,6 @@
 class ControllerModuleAmazonPay extends Controller {
 	public function index() {
 
-		$this->load->model('payment/amazon_login_pay');
-
 		if ($this->config->get('amazon_login_pay_status') && $this->config->get('amazon_pay_status') && !empty($_SERVER['HTTPS']) && !($this->config->get('amazon_login_pay_minimum_total') > 0 && $this->config->get('amazon_login_pay_minimum_total') > $this->cart->getTotal())) {
 			// capital L in Amazon cookie name is required, do not alter for coding standards
 			if (!$this->customer->isLogged() && isset($this->request->cookie['amazon_Login_state_cache'])) {
@@ -42,9 +40,6 @@ class ControllerModuleAmazonPay extends Controller {
 	}
 
 	public function login() {
-		$this->load->model('payment/amazon_login_pay');
-		$this->load->model('account/customer');
-		$this->load->model('account/customer_group');
 		$this->load->language('payment/amazon_login_pay');
 
 		unset($this->session->data['lpa']);
@@ -77,8 +72,6 @@ class ControllerModuleAmazonPay extends Controller {
 				if ($this->validate($user->email)) {
 					unset($this->session->data['guest']);
 
-					$this->load->model('account/address');
-
 					if ($this->config->get('config_tax_customer') == 'payment') {
 						$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 					}
@@ -86,8 +79,6 @@ class ControllerModuleAmazonPay extends Controller {
 					if ($this->config->get('config_tax_customer') == 'shipping') {
 						$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 					}
-
-					$this->load->model('account/activity');
 
 					$activity_data = array(
 						'customer_id' => $this->customer->getId(),
@@ -135,8 +126,6 @@ class ControllerModuleAmazonPay extends Controller {
 				if ($this->validate($user->email)) {
 					unset($this->session->data['guest']);
 
-					$this->load->model('account/address');
-
 					if ($this->config->get('config_tax_customer') == 'payment') {
 						$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 					}
@@ -144,8 +133,6 @@ class ControllerModuleAmazonPay extends Controller {
 					if ($this->config->get('config_tax_customer') == 'shipping') {
 						$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 					}
-
-					$this->load->model('account/activity');
 
 					$activity_data = array(
 						'customer_id' => $this->customer->getId(),

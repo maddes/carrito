@@ -9,8 +9,6 @@ class ControllerCommonLanguage extends Controller {
 
 		$data['code'] = $this->session->data['language'];
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = array();
 
 		$results = $this->model_localisation_language->getLanguages();

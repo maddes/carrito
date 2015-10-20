@@ -7,8 +7,6 @@ class ControllerSaleRecurring extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/recurring');
-
 		$this->getList();
 	}
 
@@ -299,9 +297,6 @@ class ControllerSaleRecurring extends Controller {
 	}
 
 	public function info() {
-		$this->load->model('sale/recurring');
-		$this->load->model('sale/order');
-		$this->load->model('catalog/product');
 
 		$this->language->load('sale/recurring');
 

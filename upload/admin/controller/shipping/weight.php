@@ -7,8 +7,6 @@ class ControllerShippingWeight extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('weight', $this->request->post);
 
@@ -63,8 +61,6 @@ class ControllerShippingWeight extends Controller {
 
 		$data['cancel'] = $this->url->link('extension/shipping', 'token=' . $this->session->data['token'], 'SSL');
 
-		$this->load->model('localisation/geo_zone');
-
 		$geo_zones = $this->model_localisation_geo_zone->getGeoZones();
 
 		foreach ($geo_zones as $geo_zone) {
@@ -88,8 +84,6 @@ class ControllerShippingWeight extends Controller {
 		} else {
 			$data['weight_tax_class_id'] = $this->config->get('weight_tax_class_id');
 		}
-
-		$this->load->model('localisation/tax_class');
 
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 

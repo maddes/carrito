@@ -54,8 +54,6 @@ class ModelSaleOrder extends Model {
 				$affiliate_id = 0;
 			}
 
-			$this->load->model('marketing/affiliate');
-
 			$affiliate_info = $this->model_marketing_affiliate->getAffiliate($affiliate_id);
 
 			if ($affiliate_info) {
@@ -65,8 +63,6 @@ class ModelSaleOrder extends Model {
 				$affiliate_firstname = '';
 				$affiliate_lastname = '';
 			}
-
-			$this->load->model('localisation/language');
 
 			$language_info = $this->model_localisation_language->getLanguage($order_query->row['language_id']);
 

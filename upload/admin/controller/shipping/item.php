@@ -7,8 +7,6 @@ class ControllerShippingItem extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('item', $this->request->post);
 
@@ -73,8 +71,6 @@ class ControllerShippingItem extends Controller {
 			$data['item_tax_class_id'] = $this->config->get('item_tax_class_id');
 		}
 
-		$this->load->model('localisation/tax_class');
-
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		if (isset($this->request->post['item_geo_zone_id'])) {
@@ -82,8 +78,6 @@ class ControllerShippingItem extends Controller {
 		} else {
 			$data['item_geo_zone_id'] = $this->config->get('item_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

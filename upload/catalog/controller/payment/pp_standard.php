@@ -14,8 +14,6 @@ class ControllerPaymentPPStandard extends Controller {
 			$data['action'] = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
 		}
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		if ($order_info) {
@@ -106,8 +104,6 @@ class ControllerPaymentPPStandard extends Controller {
 		} else {
 			$order_id = 0;
 		}
-
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 

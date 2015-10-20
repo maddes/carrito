@@ -7,8 +7,6 @@ class ControllerPaymentTwoCheckout extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('twocheckout', $this->request->post);
 
@@ -117,8 +115,6 @@ class ControllerPaymentTwoCheckout extends Controller {
 			$data['twocheckout_order_status_id'] = $this->config->get('twocheckout_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['twocheckout_geo_zone_id'])) {
@@ -126,8 +122,6 @@ class ControllerPaymentTwoCheckout extends Controller {
 		} else {
 			$data['twocheckout_geo_zone_id'] = $this->config->get('twocheckout_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

@@ -37,8 +37,6 @@ class ModelPaymentBluePayRedirect extends Model {
 
 		$card_data = array();
 
-		$this->load->model('account/address');
-
 		foreach ($query->rows as $row) {
 
 			$card_data[] = array(

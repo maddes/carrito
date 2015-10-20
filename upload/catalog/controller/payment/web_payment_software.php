@@ -38,7 +38,6 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 	}
 
 	public function send() {
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 

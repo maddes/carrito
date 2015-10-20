@@ -9,12 +9,6 @@ class ControllerAccountWishList extends Controller {
 
 		$this->load->language('account/wishlist');
 
-		$this->load->model('account/wishlist');
-
-		$this->load->model('catalog/product');
-
-		$this->load->model('tool/image');
-
 		if (isset($this->request->get['remove'])) {
 			// Remove Wishlist
 			$this->model_account_wishlist->deleteWishlist($this->request->get['remove']);
@@ -139,14 +133,11 @@ class ControllerAccountWishList extends Controller {
 			$product_id = 0;
 		}
 
-		$this->load->model('catalog/product');
-
 		$product_info = $this->model_catalog_product->getProduct($product_id);
 
 		if ($product_info) {
 			if ($this->customer->isLogged()) {
 				// Edit customers cart
-				$this->load->model('account/wishlist');
 
 				$this->model_account_wishlist->addWishlist($this->request->post['product_id']);
 

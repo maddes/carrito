@@ -59,8 +59,6 @@ class ControllerReportProductPurchased extends Controller {
 			'href' => $this->url->link('report/product_purchased', 'token=' . $this->session->data['token'] . $url, 'SSL')
 		);
 
-		$this->load->model('report/product');
-
 		$data['products'] = array();
 
 		$filter_data = array(
@@ -103,8 +101,6 @@ class ControllerReportProductPurchased extends Controller {
 		$data['button_filter'] = $this->language->get('button_filter');
 
 		$data['token'] = $this->session->data['token'];
-
-		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 

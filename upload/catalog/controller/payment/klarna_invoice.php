@@ -1,7 +1,6 @@
 <?php
 class ControllerPaymentKlarnaInvoice extends Controller {
 	public function index() {
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -59,8 +58,6 @@ class ControllerPaymentKlarnaInvoice extends Controller {
 			$total_data = array();
 			$total = 0;
 
-			$this->load->model('extension/extension');
-
 			$sort_order = array();
 
 			$results = $this->model_extension_extension->getExtensions('total');
@@ -75,7 +72,6 @@ class ControllerPaymentKlarnaInvoice extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
 
 					$taxes = array();
 
@@ -156,8 +152,6 @@ class ControllerPaymentKlarnaInvoice extends Controller {
 		$this->load->language('payment/klarna_invoice');
 
 		$json = array();
-
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 

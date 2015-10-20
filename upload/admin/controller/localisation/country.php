@@ -7,8 +7,6 @@ class ControllerLocalisationCountry extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/country');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerLocalisationCountry extends Controller {
 		$this->load->language('localisation/country');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/country');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_country->addCountry($this->request->post);
@@ -49,8 +45,6 @@ class ControllerLocalisationCountry extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/country');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_country->editCountry($this->request->get['country_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerLocalisationCountry extends Controller {
 		$this->load->language('localisation/country');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/country');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $country_id) {
@@ -405,12 +397,6 @@ class ControllerLocalisationCountry extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store');
-		$this->load->model('customer/customer');
-		$this->load->model('marketing/affiliate');
-		$this->load->model('localisation/zone');
-		$this->load->model('localisation/geo_zone');
-
 		foreach ($this->request->post['selected'] as $country_id) {
 			if ($this->config->get('config_country_id') == $country_id) {
 				$this->error['warning'] = $this->language->get('error_default');
@@ -453,12 +439,9 @@ class ControllerLocalisationCountry extends Controller {
 	public function country() {
 		$json = array();
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->get['country_id']);
 
 		if ($country_info) {
-			$this->load->model('localisation/zone');
 
 			$json = array(
 				'country_id'        => $country_info['country_id'],

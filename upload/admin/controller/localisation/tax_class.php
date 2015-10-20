@@ -7,8 +7,6 @@ class ControllerLocalisationTaxClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/tax_class');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerLocalisationTaxClass extends Controller {
 		$this->load->language('localisation/tax_class');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/tax_class');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_tax_class->addTaxClass($this->request->post);
@@ -49,8 +45,6 @@ class ControllerLocalisationTaxClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/tax_class');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_tax_class->editTaxClass($this->request->get['tax_class_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerLocalisationTaxClass extends Controller {
 		$this->load->language('localisation/tax_class');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/tax_class');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $tax_class_id) {
@@ -347,8 +339,6 @@ class ControllerLocalisationTaxClass extends Controller {
 			$data['description'] = '';
 		}
 
-		$this->load->model('localisation/tax_rate');
-
 		$data['tax_rates'] = $this->model_localisation_tax_rate->getTaxRates();
 
 		if (isset($this->request->post['tax_rule'])) {
@@ -386,8 +376,6 @@ class ControllerLocalisationTaxClass extends Controller {
 		if (!$this->user->hasPermission('modify', 'localisation/tax_class')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('catalog/product');
 
 		foreach ($this->request->post['selected'] as $tax_class_id) {
 			$product_total = $this->model_catalog_product->getTotalProductsByTaxClassId($tax_class_id);

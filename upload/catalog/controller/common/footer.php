@@ -20,8 +20,6 @@ class ControllerCommonFooter extends Controller {
 		$data['text_wishlist'] = $this->language->get('text_wishlist');
 		$data['text_newsletter'] = $this->language->get('text_newsletter');
 
-		$this->load->model('catalog/information');
-
 		$data['informations'] = array();
 
 		foreach ($this->model_catalog_information->getInformations() as $result) {
@@ -49,7 +47,6 @@ class ControllerCommonFooter extends Controller {
 
 		// Whos Online
 		if ($this->config->get('config_customer_online')) {
-			$this->load->model('tool/online');
 
 			if (isset($this->request->server['REMOTE_ADDR'])) {
 				$ip = $this->request->server['REMOTE_ADDR'];

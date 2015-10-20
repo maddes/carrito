@@ -3,9 +3,6 @@ class ControllerPaymentSecureTradingPp extends Controller {
 	private $error = array();
 
 	public function index() {
-		$this->load->model('setting/setting');
-		$this->load->model('localisation/geo_zone');
-		$this->load->model('localisation/order_status');
 		$this->load->language('payment/securetrading_pp');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
@@ -284,19 +281,16 @@ class ControllerPaymentSecureTradingPp extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/securetrading_pp');
 		$this->model_payment_securetrading_pp->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/securetrading_pp');
 		$this->model_payment_securetrading_pp->uninstall();
 	}
 
 	public function order() {
 
 		if ($this->config->get('securetrading_pp_status')) {
-			$this->load->model('payment/securetrading_pp');
 
 			$securetrading_pp_order = $this->model_payment_securetrading_pp->getOrder($this->request->get['order_id']);
 
@@ -347,7 +341,6 @@ class ControllerPaymentSecureTradingPp extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/securetrading_pp');
 
 			$securetrading_pp_order = $this->model_payment_securetrading_pp->getOrder($this->request->post['order_id']);
 
@@ -371,8 +364,6 @@ class ControllerPaymentSecureTradingPp extends Controller {
 						'notify' => false,
 						'comment' => '',
 					);
-
-					$this->load->model('sale/order');
 
 					$this->model_sale_order->addOrderHistory($this->request->post['order_id'], $this->data);
 
@@ -399,7 +390,6 @@ class ControllerPaymentSecureTradingPp extends Controller {
 		$amount = number_format($this->request->post['amount'], 2);
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($amount) && $amount > 0) {
-			$this->load->model('payment/securetrading_pp');
 
 			$securetrading_pp_order = $this->model_payment_securetrading_pp->getOrder($this->request->post['order_id']);
 
@@ -422,8 +412,6 @@ class ControllerPaymentSecureTradingPp extends Controller {
 						$this->model_payment_securetrading_pp->updateReleaseStatus($securetrading_pp_order['securetrading_pp_order_id'], 1);
 						$release_status = 1;
 						$json['msg'] = $this->language->get('text_release_ok_order');
-
-						$this->load->model('sale/order');
 
 						$history = array();
 						$history['order_status_id'] = $this->config->get('securetrading_pp_order_status_success_settled_id');
@@ -460,7 +448,6 @@ class ControllerPaymentSecureTradingPp extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('payment/securetrading_pp');
 
 			$securetrading_pp_order = $this->model_payment_securetrading_pp->getOrder($this->request->post['order_id']);
 
@@ -489,8 +476,6 @@ class ControllerPaymentSecureTradingPp extends Controller {
 						$this->model_payment_securetrading_pp->updateRebateStatus($securetrading_pp_order['securetrading_pp_order_id'], 1);
 						$rebate_status = 1;
 						$json['msg'] = $this->language->get('text_rebate_ok_order');
-
-						$this->load->model('sale/order');
 
 						$history = array();
 						$history['order_status_id'] = $this->config->get('securetrading_pp_refunded_order_status_id');

@@ -3,12 +3,6 @@ class ControllerProductSearch extends Controller {
 	public function index() {
 		$this->load->language('product/search');
 
-		$this->load->model('catalog/category');
-
-		$this->load->model('catalog/product');
-
-		$this->load->model('tool/image');
-
 		if (isset($this->request->get['search'])) {
 			$search = $this->request->get['search'];
 		} else {
@@ -155,8 +149,6 @@ class ControllerProductSearch extends Controller {
 		$data['button_grid'] = $this->language->get('button_grid');
 
 		$data['compare'] = $this->url->link('product/compare');
-
-		$this->load->model('catalog/category');
 
 		// 3 Level Category Search
 		$data['categories'] = array();

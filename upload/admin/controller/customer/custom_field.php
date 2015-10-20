@@ -7,8 +7,6 @@ class ControllerCustomerCustomField extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/custom_field');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCustomerCustomField extends Controller {
 		$this->load->language('customer/custom_field');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('customer/custom_field');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_customer_custom_field->addCustomField($this->request->post);
@@ -49,8 +45,6 @@ class ControllerCustomerCustomField extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/custom_field');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_customer_custom_field->editCustomField($this->request->get['custom_field_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerCustomerCustomField extends Controller {
 		$this->load->language('customer/custom_field');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('customer/custom_field');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $custom_field_id) {
@@ -398,8 +390,6 @@ class ControllerCustomerCustomField extends Controller {
 
 		$data['token'] = $this->session->data['token'];
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['custom_field_description'])) {
@@ -489,8 +479,6 @@ class ControllerCustomerCustomField extends Controller {
 				$data['custom_field_required'][] = $custom_field_customer_group['customer_group_id'];
 			}
 		}
-
-		$this->load->model('customer/customer_group');
 
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 

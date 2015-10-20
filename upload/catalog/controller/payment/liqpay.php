@@ -3,8 +3,6 @@ class ControllerPaymentLiqPay extends Controller {
 	public function index() {
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$data['action'] = 'https://liqpay.com/?do=clickNbuy';
@@ -38,7 +36,6 @@ class ControllerPaymentLiqPay extends Controller {
 		$order_id = substr($xml, $posleft + 9, $posright - $posleft - 10);
 
 		if ($signature == $this->request->post['signature']) {
-			$this->load->model('checkout/order');
 
 			$this->model_checkout_order->addOrderHistory($order_id, $this->config->get('config_order_status_id'));
 		}

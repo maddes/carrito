@@ -78,8 +78,6 @@ class ControllerInformationContact extends Controller {
 
 		$data['action'] = $this->url->link('information/contact', '', 'SSL');
 
-		$this->load->model('tool/image');
-
 		if ($this->config->get('config_image')) {
 			$data['image'] = $this->model_tool_image->resize($this->config->get('config_image'), $this->config->get('config_image_location_width'), $this->config->get('config_image_location_height'));
 		} else {
@@ -96,8 +94,6 @@ class ControllerInformationContact extends Controller {
 		$data['comment'] = $this->config->get('config_comment');
 
 		$data['locations'] = array();
-
-		$this->load->model('localisation/location');
 
 		foreach((array)$this->config->get('config_location') as $location_id) {
 			$location_info = $this->model_localisation_location->getLocation($location_id);

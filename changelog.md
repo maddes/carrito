@@ -1,5 +1,8 @@
-# Carrito 2.0.2
-* Lazy loading added to the Registry Class
+# Carrito 3.0.0
+* Lazy loading of models added to the Registry Class
+* 2000+ (all) calls to $this->load->model() removed.
+* Side-effect: Models must have one and only one folder level deep due to name collisions. (lame)
+* Version bump because Loader::model() signature changed. (we now receive the IOC hash)
 
 # Carrito 2.0.1
 * Removed Vagrant files

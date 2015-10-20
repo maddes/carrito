@@ -8,7 +8,6 @@ class ModelTotalKlarnaFee extends Model {
 		$klarna_fee = $this->config->get('klarna_fee');
 
 		if (isset($this->session->data['payment_address_id'])) {
-			$this->load->model('account/address');
 
 			$address = $this->model_account_address->getAddress($this->session->data['payment_address_id']);
 		} elseif (isset($this->session->data['guest']['payment'])) {

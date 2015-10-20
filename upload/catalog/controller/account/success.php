@@ -24,8 +24,6 @@ class ControllerAccountSuccess extends Controller {
 
 		$data['heading_title'] = $this->language->get('heading_title');
 
-		$this->load->model('account/customer_group');
-
 		$customer_group_info = $this->model_account_customer_group->getCustomerGroup($this->config->get('config_customer_group_id'));
 
 		if ($customer_group_info && !$customer_group_info['approval']) {

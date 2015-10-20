@@ -93,12 +93,9 @@ class ControllerCheckoutCheckout extends Controller {
 	public function country() {
 		$json = array();
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->get['country_id']);
 
 		if ($country_info) {
-			$this->load->model('localisation/zone');
 
 			$json = array(
 				'country_id'        => $country_info['country_id'],
@@ -118,8 +115,6 @@ class ControllerCheckoutCheckout extends Controller {
 
 	public function customfield() {
 		$json = array();
-
-		$this->load->model('account/custom_field');
 
 		// Customer Group
 		if (isset($this->request->get['customer_group_id']) && is_array($this->config->get('config_customer_group_display')) && in_array($this->request->get['customer_group_id'], $this->config->get('config_customer_group_display'))) {

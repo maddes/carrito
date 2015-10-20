@@ -27,8 +27,6 @@ class ControllerTotalVoucher extends Controller {
 
 		$json = array();
 
-		$this->load->model('total/voucher');
-
 		if (isset($this->request->post['voucher'])) {
 			$voucher = $this->request->post['voucher'];
 		} else {
@@ -54,7 +52,6 @@ class ControllerTotalVoucher extends Controller {
 	}
 
 	public function send($order_id) {
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 

@@ -11,8 +11,6 @@ class ControllerAccountForgotten extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('account/customer');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->load->language('mail/forgotten');
 
@@ -48,7 +46,6 @@ class ControllerAccountForgotten extends Controller {
 			$customer_info = $this->model_account_customer->getCustomerByEmail($this->request->post['email']);
 
 			if ($customer_info) {
-				$this->load->model('account/activity');
 
 				$activity_data = array(
 					'customer_id' => $customer_info['customer_id'],

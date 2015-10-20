@@ -7,8 +7,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('sagepay_direct', $this->request->post);
 
@@ -128,8 +126,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 			$data['sagepay_direct_order_status_id'] = $this->config->get('sagepay_direct_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['sagepay_direct_geo_zone_id'])) {
@@ -137,8 +133,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 		} else {
 			$data['sagepay_direct_geo_zone_id'] = $this->config->get('sagepay_direct_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -184,20 +178,16 @@ class ControllerPaymentSagepayDirect extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/sagepay_direct');
 		$this->model_payment_sagepay_direct->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/sagepay_direct');
 		$this->model_payment_sagepay_direct->uninstall();
 	}
 
 	public function order() {
 
 		if ($this->config->get('sagepay_direct_status')) {
-
-			$this->load->model('payment/sagepay_direct');
 
 			$sagepay_direct_order = $this->model_payment_sagepay_direct->getOrder($this->request->get['order_id']);
 
@@ -246,7 +236,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/sagepay_direct');
 
 			$sagepay_direct_order = $this->model_payment_sagepay_direct->getOrder($this->request->post['order_id']);
 
@@ -281,7 +270,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($this->request->post['amount']) && $this->request->post['amount'] > 0) {
-			$this->load->model('payment/sagepay_direct');
 
 			$sagepay_direct_order = $this->model_payment_sagepay_direct->getOrder($this->request->post['order_id']);
 
@@ -327,7 +315,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('payment/sagepay_direct');
 
 			$sagepay_direct_order = $this->model_payment_sagepay_direct->getOrder($this->request->post['order_id']);
 

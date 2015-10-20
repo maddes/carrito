@@ -225,7 +225,6 @@ class ModelPaymentPPExpress extends Model {
 		}
 
 		// Totals
-		$this->load->model('extension/extension');
 
 		$total_data = array();
 		$total = 0;
@@ -245,7 +244,6 @@ class ModelPaymentPPExpress extends Model {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
 
 					$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 				}

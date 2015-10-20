@@ -7,9 +7,6 @@ class ControllerModuleAmazonPay extends Controller {
 	public function index() {
 		$this->language->load('module/amazon_pay');
 
-		$this->load->model('setting/setting');
-		$this->load->model('design/layout');
-
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
@@ -134,12 +131,10 @@ class ControllerModuleAmazonPay extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/event');
 		$this->model_extension_event->addEvent('amazon_pay', 'post.customer.logout', 'module/amazon_pay/logout');
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/event');
 		$this->model_extension_event->deleteEvent('amazon_pay');
 	}
 

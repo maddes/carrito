@@ -3,8 +3,6 @@ class ControllerPaymentTwoCheckout extends Controller {
 	public function index() {
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$data['action'] = 'https://www.2checkout.com/checkout/purchase';
@@ -76,7 +74,6 @@ class ControllerPaymentTwoCheckout extends Controller {
 	}
 
 	public function callback() {
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($this->request->post['cart_order_id']);
 

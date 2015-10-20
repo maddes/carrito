@@ -28,8 +28,6 @@ class ControllerAccountTransaction extends Controller {
 			'href' => $this->url->link('account/transaction', '', 'SSL')
 		);
 
-		$this->load->model('account/transaction');
-
 		$data['heading_title'] = $this->language->get('heading_title');
 
 		$data['column_date_added'] = $this->language->get('column_date_added');

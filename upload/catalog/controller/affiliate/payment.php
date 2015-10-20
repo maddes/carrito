@@ -13,15 +13,12 @@ class ControllerAffiliatePayment extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('affiliate/affiliate');
-
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
 			$this->model_affiliate_affiliate->editPayment($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			// Add to activity log
-			$this->load->model('affiliate/activity');
 
 			$activity_data = array(
 				'affiliate_id' => $this->affiliate->getId(),

@@ -7,8 +7,6 @@ class ControllerLocalisationZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/zone');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerLocalisationZone extends Controller {
 		$this->load->language('localisation/zone');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/zone');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_zone->addZone($this->request->post);
@@ -49,8 +45,6 @@ class ControllerLocalisationZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/zone');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_zone->editZone($this->request->get['zone_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerLocalisationZone extends Controller {
 		$this->load->language('localisation/zone');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/zone');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $zone_id) {
@@ -360,8 +352,6 @@ class ControllerLocalisationZone extends Controller {
 			$data['country_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		$data['header'] = $this->load->controller('common/header');
@@ -387,11 +377,6 @@ class ControllerLocalisationZone extends Controller {
 		if (!$this->user->hasPermission('modify', 'localisation/zone')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('setting/store');
-		$this->load->model('customer/customer');
-		$this->load->model('marketing/affiliate');
-		$this->load->model('localisation/geo_zone');
 
 		foreach ($this->request->post['selected'] as $zone_id) {
 			if ($this->config->get('config_zone_id') == $zone_id) {

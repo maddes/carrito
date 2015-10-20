@@ -14,14 +14,12 @@ class ControllerAccountPassword extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->load->model('account/customer');
 
 			$this->model_account_customer->editPassword($this->customer->getEmail(), $this->request->post['password']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			// Add to activity log
-			$this->load->model('account/activity');
 
 			$activity_data = array(
 				'customer_id' => $this->customer->getId(),

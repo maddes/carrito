@@ -12,8 +12,6 @@ class ControllerProductProduct extends Controller {
 			'href' => $this->url->link('common/home')
 		);
 
-		$this->load->model('catalog/category');
-
 		if (isset($this->request->get['path'])) {
 			$path = '';
 
@@ -66,8 +64,6 @@ class ControllerProductProduct extends Controller {
 				);
 			}
 		}
-
-		$this->load->model('catalog/manufacturer');
 
 		if (isset($this->request->get['manufacturer_id'])) {
 			$data['breadcrumbs'][] = array(
@@ -153,8 +149,6 @@ class ControllerProductProduct extends Controller {
 		} else {
 			$product_id = 0;
 		}
-
-		$this->load->model('catalog/product');
 
 		$product_info = $this->model_catalog_product->getProduct($product_id);
 
@@ -257,8 +251,6 @@ class ControllerProductProduct extends Controller {
 			$data['button_upload'] = $this->language->get('button_upload');
 			$data['button_continue'] = $this->language->get('button_continue');
 
-			$this->load->model('catalog/review');
-
 			$data['tab_description'] = $this->language->get('tab_description');
 			$data['tab_attribute'] = $this->language->get('tab_attribute');
 			$data['tab_review'] = sprintf($this->language->get('tab_review'), $product_info['reviews']);
@@ -278,8 +270,6 @@ class ControllerProductProduct extends Controller {
 			} else {
 				$data['stock'] = $this->language->get('text_instock');
 			}
-
-			$this->load->model('tool/image');
 
 			if ($product_info['image']) {
 				$data['popup'] = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height'));
@@ -556,8 +546,6 @@ class ControllerProductProduct extends Controller {
 	public function review() {
 		$this->load->language('product/product');
 
-		$this->load->model('catalog/review');
-
 		$data['text_no_reviews'] = $this->language->get('text_no_reviews');
 
 		if (isset($this->request->get['page'])) {
@@ -622,7 +610,6 @@ class ControllerProductProduct extends Controller {
 			}
 
 			if (!isset($json['error'])) {
-				$this->load->model('catalog/review');
 
 				$this->model_catalog_review->addReview($this->request->get['product_id'], $this->request->post);
 
@@ -636,7 +623,6 @@ class ControllerProductProduct extends Controller {
 
 	public function getRecurringDescription() {
 		$this->language->load('product/product');
-		$this->load->model('catalog/product');
 
 		if (isset($this->request->post['product_id'])) {
 			$product_id = $this->request->post['product_id'];

@@ -7,7 +7,6 @@ class ModelOpenbayOpenbay extends Model {
 		/**
 		 * Fix to update event names on versions later than 2.0.1 due to the change.
 		 */
-		$this->load->model('extension/event');
 
 		$this->model_extension_event->deleteEvent('openbay');
 
@@ -342,8 +341,6 @@ class ModelOpenbayOpenbay extends Model {
 		error_reporting(0);
 		set_time_limit(0);
 		ob_start();
-
-		$this->load->model('setting/setting');
 		$this->load->language('extension/openbay');
 
 		$data = $this->request->post;
@@ -464,13 +461,9 @@ class ModelOpenbayOpenbay extends Model {
 					 * Run the patch files
 					 */
 					$this->patch(false);
-					$this->load->model('openbay/ebay');
 					$this->model_openbay_ebay->patch();
-					$this->load->model('openbay/amazon');
 					$this->model_openbay_amazon->patch();
-					$this->load->model('openbay/amazonus');
 					$this->model_openbay_amazonus->patch();
-					$this->load->model('openbay/etsy');
 					$this->model_openbay_etsy->patch();
 
 					/**
@@ -1002,8 +995,6 @@ class ModelOpenbayOpenbay extends Model {
 
 	public function addOrderHistory($order_id, $data, $store_id = 0) {
 		$json = array();
-
-		$this->load->model('setting/store');
 
 		$store_info = $this->model_setting_store->getStore($store_id);
 

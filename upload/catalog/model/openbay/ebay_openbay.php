@@ -37,8 +37,6 @@ class ModelOpenbayEbayOpenbay extends Model{
 	}
 
 	public function orderHandle($order) {
-		$this->load->model('checkout/order');
-		$this->load->model('openbay/ebay_order');
 
 		$this->language->load('openbay/ebay_order');
 
@@ -233,9 +231,6 @@ class ModelOpenbayEbayOpenbay extends Model{
 			$openstock = false;
 		}
 
-		$this->load->model('localisation/currency');
-		$this->load->model('catalog/product');
-
 		$currency = $this->model_localisation_currency->getCurrencyByCode($this->config->get('ebay_def_currency'));
 
 		if ($this->config->get('ebay_create_date') == 1) {
@@ -402,8 +397,6 @@ class ModelOpenbayEbayOpenbay extends Model{
 	}
 
 	private function updateOrderWithConfirmedData($order_id, $order) {
-		$this->load->model('localisation/currency');
-		$this->load->model('catalog/product');
 		$totals_language = $this->language->load('openbay/ebay_order');
 
 		$name_parts     = $this->openbay->splitName((string)$order->address->name);

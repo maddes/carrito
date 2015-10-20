@@ -7,8 +7,6 @@ class ControllerCatalogCategory extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/category');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCatalogCategory extends Controller {
 		$this->language->load('catalog/category');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/category');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_category->addCategory($this->request->post);
@@ -49,8 +45,6 @@ class ControllerCatalogCategory extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/category');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_category->editCategory($this->request->get['category_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerCatalogCategory extends Controller {
 		$this->language->load('catalog/category');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/category');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $category_id) {
@@ -114,8 +106,6 @@ class ControllerCatalogCategory extends Controller {
 		$this->language->load('catalog/category');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/category');
 
 		if ($this->validateRepair()) {
 			$this->model_catalog_category->repairCategories();
@@ -381,8 +371,6 @@ class ControllerCatalogCategory extends Controller {
 
 		$data['token'] = $this->session->data['token'];
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['category_description'])) {
@@ -409,8 +397,6 @@ class ControllerCatalogCategory extends Controller {
 			$data['parent_id'] = 0;
 		}
 
-		$this->load->model('catalog/filter');
-
 		if (isset($this->request->post['category_filter'])) {
 			$filters = $this->request->post['category_filter'];
 		} elseif (isset($this->request->get['category_id'])) {
@@ -431,8 +417,6 @@ class ControllerCatalogCategory extends Controller {
 				);
 			}
 		}
-
-		$this->load->model('setting/store');
 
 		$data['stores'] = $this->model_setting_store->getStores();
 
@@ -459,8 +443,6 @@ class ControllerCatalogCategory extends Controller {
 		} else {
 			$data['image'] = '';
 		}
-
-		$this->load->model('tool/image');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
@@ -512,8 +494,6 @@ class ControllerCatalogCategory extends Controller {
 			$data['category_layout'] = array();
 		}
 
-		$this->load->model('design/layout');
-
 		$data['layouts'] = $this->model_design_layout->getLayouts();
 
 		$data['header'] = $this->load->controller('common/header');
@@ -539,7 +519,6 @@ class ControllerCatalogCategory extends Controller {
 		}
 
 		if (utf8_strlen($this->request->post['keyword']) > 0) {
-			$this->load->model('catalog/url_alias');
 
 			$url_alias_info = $this->model_catalog_url_alias->getUrlAlias($this->request->post['keyword']);
 
@@ -579,7 +558,6 @@ class ControllerCatalogCategory extends Controller {
 		$json = array();
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/category');
 
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],

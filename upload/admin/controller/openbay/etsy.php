@@ -2,9 +2,6 @@
 class ControllerOpenbayEtsy extends Controller {
 	public function install() {
 		$this->load->language('openbay/etsy');
-		$this->load->model('openbay/etsy');
-		$this->load->model('setting/setting');
-		$this->load->model('extension/extension');
 
 		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'openbay/etsy_product');
 		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'openbay/etsy_product');
@@ -17,9 +14,6 @@ class ControllerOpenbayEtsy extends Controller {
 	}
 
 	public function uninstall() {
-		$this->load->model('openbay/etsy');
-		$this->load->model('setting/setting');
-		$this->load->model('extension/extension');
 
 		$this->model_openbay_etsy->uninstall();
 		$this->model_extension_extension->uninstall('openbay', $this->request->get['extension']);
@@ -70,10 +64,6 @@ class ControllerOpenbayEtsy extends Controller {
 
 	public function settings() {
 		$data = $this->load->language('openbay/etsy_settings');
-
-		$this->load->model('setting/setting');
-		$this->load->model('openbay/etsy');
-		$this->load->model('localisation/order_status');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
 			$this->model_setting_setting->editSetting('etsy', $this->request->post);

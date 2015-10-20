@@ -7,8 +7,6 @@ class ControllerFraudMaxMind extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('maxmind', $this->request->post);
 
@@ -88,8 +86,6 @@ class ControllerFraudMaxMind extends Controller {
 			$data['maxmind_order_status_id'] = $this->config->get('maxmind_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['maxmind_status'])) {
@@ -106,13 +102,11 @@ class ControllerFraudMaxMind extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('fraud/maxmind');
 
 		$this->model_fraud_maxmind->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('fraud/maxmind');
 
 		$this->model_fraud_maxmind->uninstall();
 	}
@@ -131,8 +125,6 @@ class ControllerFraudMaxMind extends Controller {
 
 	public function order() {
 		$this->load->language('fraud/maxmind');
-
-		$this->load->model('fraud/maxmind');
 
 		if (isset($this->request->get['order_id'])) {
 			$order_id = $this->request->get['order_id'];

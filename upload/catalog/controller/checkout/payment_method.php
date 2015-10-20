@@ -9,8 +9,6 @@ class ControllerCheckoutPaymentMethod extends Controller {
 			$total = 0;
 			$taxes = $this->cart->getTaxes();
 
-			$this->load->model('extension/extension');
-
 			$sort_order = array();
 
 			$results = $this->model_extension_extension->getExtensions('total');
@@ -23,7 +21,6 @@ class ControllerCheckoutPaymentMethod extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
 
 					$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 				}
@@ -32,15 +29,12 @@ class ControllerCheckoutPaymentMethod extends Controller {
 			// Payment Methods
 			$method_data = array();
 
-			$this->load->model('extension/extension');
-
 			$results = $this->model_extension_extension->getExtensions('payment');
 
 			$recurring = $this->cart->hasRecurringProducts();
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('payment/' . $result['code']);
 
 					$method = $this->{'model_payment_' . $result['code']}->getMethod($this->session->data['payment_address'], $total);
 
@@ -100,7 +94,6 @@ class ControllerCheckoutPaymentMethod extends Controller {
 		$data['scripts'] = $this->document->getScripts();
 
 		if ($this->config->get('config_checkout_id')) {
-			$this->load->model('catalog/information');
 
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_checkout_id'));
 
@@ -163,7 +156,6 @@ class ControllerCheckoutPaymentMethod extends Controller {
 		}
 
 		if ($this->config->get('config_checkout_id')) {
-			$this->load->model('catalog/information');
 
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_checkout_id'));
 

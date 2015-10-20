@@ -7,10 +7,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-		$this->load->model('extension/extension');
-		$this->load->model('payment/pp_express');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			unset($this->request->post['pp_express_module']);
 
@@ -225,8 +221,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 		$data['currency_codes'] = $this->model_payment_pp_express->currencyCodes();
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['pp_express_canceled_reversal_status_id'])) {
@@ -313,8 +307,6 @@ class ControllerPaymentPPExpress extends Controller {
 			$data['pp_express_recurring_cancel_status'] = $this->config->get('pp_express_recurring_cancel_status');
 		}
 
-		$this->load->model('tool/image');
-
 		if (isset($this->request->post['pp_express_logo']) && is_file(DIR_IMAGE . $this->request->post['pp_express_logo'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['pp_express_logo'], 750, 90);
 		} elseif (is_file(DIR_IMAGE . $this->config->get('pp_express_logo'))) {
@@ -331,8 +323,6 @@ class ControllerPaymentPPExpress extends Controller {
 			$data['pp_express_geo_zone_id'] = $this->config->get('pp_express_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
-
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
 		if (isset($this->request->post['pp_express_status'])) {
@@ -346,8 +336,6 @@ class ControllerPaymentPPExpress extends Controller {
 		} else {
 			$data['pp_express_sort_order'] = $this->config->get('pp_express_sort_order');
 		}
-
-		$this->load->model('localisation/country');
 
 		$country = $this->model_localisation_country->getCountry($this->config->get('config_country_id'));
 
@@ -383,7 +371,6 @@ class ControllerPaymentPPExpress extends Controller {
 	}
 
 	public function imageLogo() {
-		$this->load->model('tool/image');
 
 		if (isset($this->request->get['image'])) {
 			$this->response->setOutput($this->model_tool_image->resize(html_entity_decode($this->request->get['image'], ENT_QUOTES, 'UTF-8'), 750, 90));
@@ -428,9 +415,6 @@ class ControllerPaymentPPExpress extends Controller {
 		if (isset($this->request->get['merchantId'])) {
 			$this->load->language('payment/pp_express');
 
-			$this->load->model('payment/pp_express');
-			$this->load->model('setting/setting');
-
 			$token = $this->model_payment_pp_express->getTokens('live');
 
 			if (isset($token->access_token)) {
@@ -454,9 +438,6 @@ class ControllerPaymentPPExpress extends Controller {
 		if (isset($this->request->get['merchantId'])) {
 			$this->load->language('payment/pp_express');
 
-			$this->load->model('payment/pp_express');
-			$this->load->model('setting/setting');
-
 			$token = $this->model_payment_pp_express->getTokens('sandbox');
 
 			if (isset($token->access_token)) {
@@ -477,7 +458,6 @@ class ControllerPaymentPPExpress extends Controller {
 	}
 
 	public function resend() {
-		$this->load->model('payment/pp_express');
 		$this->load->language('payment/pp_express');
 
 		$json = array();
@@ -551,8 +531,6 @@ class ControllerPaymentPPExpress extends Controller {
 		 * capture can be full or partial amounts
 		 */
 		if (isset($this->request->post['order_id']) && $this->request->post['amount'] > 0 && isset($this->request->post['order_id']) && isset($this->request->post['complete'])) {
-
-			$this->load->model('payment/pp_express');
 
 			$paypal_order = $this->model_payment_pp_express->getOrder($this->request->post['order_id']);
 
@@ -668,7 +646,6 @@ class ControllerPaymentPPExpress extends Controller {
 		 * used to void an authorised payment
 		 */
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/pp_express');
 
 			$paypal_order = $this->model_payment_pp_express->getOrder($this->request->post['order_id']);
 
@@ -753,8 +730,6 @@ class ControllerPaymentPPExpress extends Controller {
 		$data['cancel'] = $this->url->link('payment/pp_express', 'token=' . $this->session->data['token'], 'SSL');
 
 		$data['transaction_id'] = $this->request->get['transaction_id'];
-
-		$this->load->model('payment/pp_express');
 		$pp_transaction = $this->model_payment_pp_express->getTransaction($this->request->get['transaction_id']);
 
 		$data['amount_original'] = $pp_transaction['AMT'];
@@ -793,8 +768,6 @@ class ControllerPaymentPPExpress extends Controller {
 		 * refund can be full or partial
 		 */
 		if (isset($this->request->post['transaction_id']) && isset($this->request->post['refund_full'])) {
-
-			$this->load->model('payment/pp_express');
 			$this->load->language('payment/pp_express_refund');
 
 			if ($this->request->post['refund_full'] == 0 && $this->request->post['amount'] == 0) {
@@ -876,18 +849,15 @@ class ControllerPaymentPPExpress extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/pp_express');
 		$this->model_payment_pp_express->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/pp_express');
 		$this->model_payment_pp_express->uninstall();
 	}
 
 	public function order() {
 		if ($this->config->get('pp_express_status')) {
-			$this->load->model('payment/pp_express');
 			$this->load->language('payment/pp_express_order');
 
 			$paypal_order = $this->model_payment_pp_express->getOrder($this->request->get['order_id']);
@@ -948,7 +918,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 	public function search() {
 		$this->load->language('payment/pp_express_search');
-		$this->load->model('payment/pp_express');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
@@ -1061,8 +1030,6 @@ class ControllerPaymentPPExpress extends Controller {
 		 */
 		if (isset($this->request->post['date_start'])) {
 
-			$this->load->model('payment/pp_express');
-
 			$call_data = array();
 			$call_data['METHOD'] = 'TransactionSearch';
 			$call_data['STARTDATE'] = gmdate($this->request->post['date_start'] . "\TH:i:s\Z");
@@ -1153,7 +1120,6 @@ class ControllerPaymentPPExpress extends Controller {
 	}
 
 	public function viewTransaction() {
-		$this->load->model('payment/pp_express');
 		$this->load->language('payment/pp_express_view');
 
 		$data['transaction'] = $this->model_payment_pp_express->getTransaction($this->request->get['transaction_id']);
@@ -1289,9 +1255,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 	public function recurringCancel() {
 		//cancel an active recurring
-
-		$this->load->model('sale/recurring');
-		$this->load->model('payment/pp_express');
 		$this->language->load('sale/recurring');
 
 		$recurring = $this->model_sale_recurring->getRecurring($this->request->get['order_recurring_id']);
@@ -1316,7 +1279,6 @@ class ControllerPaymentPPExpress extends Controller {
 	}
 
 	public function recurringButtons() {
-		$this->load->model('sale/recurring');
 
 		$recurring = $this->model_sale_recurring->getRecurring($this->request->get['order_recurring_id']);
 

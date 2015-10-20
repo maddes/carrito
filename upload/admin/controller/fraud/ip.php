@@ -7,8 +7,6 @@ class ControllerFraudIp extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('ip', $this->request->post);
 
@@ -75,8 +73,6 @@ class ControllerFraudIp extends Controller {
 			$data['ip_order_status_id'] = $this->config->get('ip_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['ip_status'])) {
@@ -93,13 +89,11 @@ class ControllerFraudIp extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('fraud/ip');
 
 		$this->model_fraud_ip->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('fraud/ip');
 
 		$this->model_fraud_ip->uninstall();
 	}
@@ -114,9 +108,6 @@ class ControllerFraudIp extends Controller {
 
     public function ip() {
 		$this->load->language('fraud/ip');
-
-		$this->load->model('fraud/ip');
-        $this->load->model('customer/customer');
 
 		$data['text_no_results'] = $this->language->get('text_no_results');
 		$data['text_loading'] = $this->language->get('text_loading');
@@ -170,7 +161,6 @@ class ControllerFraudIp extends Controller {
 		if (!$this->user->hasPermission('modify', 'fraud/ip')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('fraud/ip');
 
 			if (!$this->model_fraud_ip->getTotalIpsByIp($this->request->post['ip'])) {
 				$this->model_fraud_ip->addIp($this->request->post['ip']);
@@ -191,7 +181,6 @@ class ControllerFraudIp extends Controller {
 		if (!$this->user->hasPermission('modify', 'fraud/ip')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('fraud/ip');
 
 			$this->model_fraud_ip->removeIp($this->request->post['ip']);
 

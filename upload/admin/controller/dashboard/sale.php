@@ -9,8 +9,6 @@ class ControllerDashboardSale extends Controller {
 
 		$data['token'] = $this->session->data['token'];
 
-		$this->load->model('report/sale');
-
 		$today = $this->model_report_sale->getTotalSales(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
 
 		$yesterday = $this->model_report_sale->getTotalSales(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));

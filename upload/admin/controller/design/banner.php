@@ -7,8 +7,6 @@ class ControllerDesignBanner extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/banner');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerDesignBanner extends Controller {
 		$this->load->language('design/banner');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('design/banner');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_design_banner->addBanner($this->request->post);
@@ -49,8 +45,6 @@ class ControllerDesignBanner extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/banner');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_design_banner->editBanner($this->request->get['banner_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerDesignBanner extends Controller {
 		$this->load->language('design/banner');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('design/banner');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $banner_id) {
@@ -353,11 +345,7 @@ class ControllerDesignBanner extends Controller {
 			$data['status'] = true;
 		}
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
-
-		$this->load->model('tool/image');
 
 		if (isset($this->request->post['banner_image'])) {
 			$banner_images = $this->request->post['banner_image'];

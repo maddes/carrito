@@ -84,8 +84,6 @@ class ModelFraudFraudLabsPro extends Model {
 	public function addOrderHistory($order_id, $data, $store_id = 0) {
 		$json = array();
 
-		$this->load->model('setting/store');
-
 		$store_info = $this->model_setting_store->getStore($store_id);
 
 		if ($store_info) {

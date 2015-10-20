@@ -11,8 +11,6 @@ class ControllerDashboardActivity extends Controller {
 
 		$data['activities'] = array();
 
-		$this->load->model('report/activity');
-
 		$results = $this->model_report_activity->getActivities();
 
 		foreach ($results as $result) {

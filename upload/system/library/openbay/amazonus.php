@@ -116,7 +116,6 @@ class Amazonus {
 		$product = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "product` WHERE `product_id` = '" . (int)$product_id . "' LIMIT 1")->row;
 
 		if ($this->openbay->addonLoad('openstock') && (isset($product['has_option']) && $product['has_option'] == 1)) {
-			$this->load->model('module/openstock');
 			$logger->write('Variant item');
 
 			$quantity_data = array();
@@ -154,7 +153,6 @@ class Amazonus {
 		if ($this->config->get('openbay_amazonus_status') != 1 || !defined('HTTPS_CATALOG')) {
 			return;
 		}
-		$this->load->model('openbay/amazonus');
 
 		$log = new \Log('amazonus.log');
 		$log->write('Called bulkUpdateOrders method');
@@ -223,8 +221,6 @@ class Amazonus {
 
 		$log = new \Log('amazonus.log');
 		$log->write("Order's $amazonus_order_id status changed to $order_status_string");
-
-		$this->load->model('openbay/amazonus');
 		$amazonus_order_products = $this->model_openbay_amazonus->getAmazonusOrderedProducts($order_id);
 
 		$request_node = new \SimpleXMLElement('<Request/>');

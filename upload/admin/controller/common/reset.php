@@ -17,8 +17,6 @@ class ControllerCommonReset extends Controller {
 			$code = '';
 		}
 
-		$this->load->model('user/user');
-
 		$user_info = $this->model_user_user->getUserByCode($code);
 
 		if ($user_info) {
@@ -89,7 +87,6 @@ class ControllerCommonReset extends Controller {
 
 			$this->response->setOutput($this->load->view('common/reset', $data));
 		} else {
-			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSettingValue('config', 'config_password', '0');
 

@@ -37,7 +37,6 @@ class ControllerPaymentWorldpay extends Controller {
 
 		$data['existing_cards'] = array();
 		if ($this->customer->isLogged() && $data['worldpay_card']) {
-			$this->load->model('payment/worldpay');
 			$data['existing_cards'] = $this->model_payment_worldpay->getCards($this->customer->getId());
 		}
 
@@ -52,9 +51,6 @@ class ControllerPaymentWorldpay extends Controller {
 
 	public function send() {
 		$this->load->language('payment/worldpay');
-		$this->load->model('checkout/order');
-		$this->load->model('localisation/country');
-		$this->load->model('payment/worldpay');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -135,7 +131,6 @@ class ControllerPaymentWorldpay extends Controller {
 
 	public function deleteCard() {
 		$this->load->language('payment/worldpay');
-		$this->load->model('payment/worldpay');
 
 		if (isset($this->request->post['token'])) {
 			if ($this->model_payment_worldpay->deleteCard($this->request->post['token'])) {
@@ -157,7 +152,6 @@ class ControllerPaymentWorldpay extends Controller {
 
 	public function webhook() {
 		if (isset($this->request->get['token']) && $this->request->get['token'] == $this->config->get('worldpay_secret_token')) {
-			$this->load->model('payment/worldpay');
 			$message = json_decode(file_get_contents('php://input'), true);
 
 			if (isset($message['orderCode'])) {
@@ -195,7 +189,6 @@ class ControllerPaymentWorldpay extends Controller {
 
 				$this->model_payment_worldpay->logger($order_status_id);
 				if (isset($order['order_id'])) {
-					$this->load->model('checkout/order');
 					$this->model_checkout_order->addOrderHistory($order['order_id'], $order_status_id);
 				}
 			}
@@ -207,7 +200,6 @@ class ControllerPaymentWorldpay extends Controller {
 
 	public function cron() {
 		if ($this->request->get['token'] == $this->config->get('worldpay_cron_job_token')) {
-			$this->load->model('payment/worldpay');
 
 			$orders = $this->model_payment_worldpay->cronPayment();
 

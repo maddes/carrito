@@ -6,8 +6,6 @@ class ControllerOpenbayAmazonus extends Controller {
 		}
 
 		$this->load->library('log');
-		$this->load->model('checkout/order');
-		$this->load->model('openbay/amazonus_order');
 		$this->language->load('openbay/amazonus_order');
 
 		$logger = new Log('amazonus.log');
@@ -322,8 +320,6 @@ class ControllerOpenbayAmazonus extends Controller {
 
 		$this->load->library('log');
 		$this->load->library('openbay/amazonus');
-		$this->load->model('openbay/amazonus_listing');
-		$this->load->model('openbay/amazonus_product');
 
 		$logger = new Log('amazonus_listing.log');
 		$logger->write('amazonus/listing - started');
@@ -364,8 +360,6 @@ class ControllerOpenbayAmazonus extends Controller {
 		if ($this->config->get('openbay_amazonus_status') != '1') {
 			return;
 		}
-
-		$this->load->model('openbay/amazonus_product');
 
 		$logger = new Log('amazonus.log');
 		$logger->write('amazonus/listing_reports - started');
@@ -419,7 +413,6 @@ class ControllerOpenbayAmazonus extends Controller {
 		ob_start();
 
 		$this->load->library('openbay/amazonus');
-		$this->load->model('openbay/amazonus_product');
 		$this->load->library('log');
 		$logger = new Log('amazonus_product.log');
 
@@ -491,8 +484,6 @@ class ControllerOpenbayAmazonus extends Controller {
 		if ($this->config->get('openbay_amazonus_status') != '1') {
 			return;
 		}
-
-		$this->load->model('openbay/amazonus_product');
 
 		$logger = new Log('amazonus.log');
 		$logger->write('amazonus/search - started');
@@ -584,7 +575,6 @@ class ControllerOpenbayAmazonus extends Controller {
 
 	public function eventAddOrderHistory($order_id) {
 		if (!empty($order_id)) {
-			$this->load->model('openbay/amazonus_order');
 
 			$this->model_openbay_amazonus_order->addOrderHistory($order_id);
 		}

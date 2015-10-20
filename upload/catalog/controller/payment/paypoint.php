@@ -3,8 +3,6 @@ class ControllerPaymentPaypoint extends Controller {
 	public function index() {
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$data['merchant'] = $this->config->get('paypoint_merchant');
@@ -73,8 +71,6 @@ class ControllerPaymentPaypoint extends Controller {
 			$order_id = 0;
 		}
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 
 		// Validate the request is from PayPoint
@@ -132,8 +128,6 @@ class ControllerPaymentPaypoint extends Controller {
 				if (isset($this->request->get['valid'])) {
 					$message .= 'valid: ' . $this->request->get['valid'] . "\n";
 				}
-
-				$this->load->model('checkout/order');
 
 				$this->model_checkout_order->addOrderHistory($order_id, $this->config->get('paypoint_order_status_id'), $message, false);
 

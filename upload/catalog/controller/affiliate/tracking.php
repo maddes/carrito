@@ -58,7 +58,6 @@ class ControllerAffiliateTracking extends Controller {
 		$json = array();
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/product');
 
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],

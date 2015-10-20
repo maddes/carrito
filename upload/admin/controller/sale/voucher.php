@@ -7,8 +7,6 @@ class ControllerSaleVoucher extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/voucher');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerSaleVoucher extends Controller {
 		$this->load->language('sale/voucher');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('sale/voucher');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_sale_voucher->addVoucher($this->request->post);
@@ -49,8 +45,6 @@ class ControllerSaleVoucher extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/voucher');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_sale_voucher->editVoucher($this->request->get['voucher_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerSaleVoucher extends Controller {
 		$this->load->language('sale/voucher');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('sale/voucher');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $voucher_id) {
@@ -431,8 +423,6 @@ class ControllerSaleVoucher extends Controller {
 			$data['to_email'] = '';
 		}
 
-		$this->load->model('sale/voucher_theme');
-
 		$data['voucher_themes'] = $this->model_sale_voucher_theme->getVoucherThemes();
 
 		if (isset($this->request->post['voucher_theme_id'])) {
@@ -521,8 +511,6 @@ class ControllerSaleVoucher extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('sale/order');
-
 		foreach ($this->request->post['selected'] as $voucher_id) {
 			$order_voucher_info = $this->model_sale_order->getOrderVoucherByVoucherId($voucher_id);
 
@@ -538,8 +526,6 @@ class ControllerSaleVoucher extends Controller {
 
 	public function history() {
 		$this->load->language('sale/voucher');
-
-		$this->load->model('sale/voucher');
 
 		$data['text_no_results'] = $this->language->get('text_no_results');
 
@@ -592,7 +578,6 @@ class ControllerSaleVoucher extends Controller {
 		}
 
 		if (!$json) {
-			$this->load->model('sale/voucher');
 
 			$vouchers = array();
 

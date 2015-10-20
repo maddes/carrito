@@ -75,7 +75,6 @@ class ModelPaymentGlobalpayRemote extends Model {
 	}
 
 	public function enrollmentSignature($account, $amount, $currency, $order_ref, $card_number, $card_expire, $card_type, $card_name, $pares) {
-		$this->load->model('checkout/order');
 
 		$timestamp = strftime("%Y%m%d%H%M%S");
 		$merchant_id = $this->config->get('globalpay_remote_merchant_id');
@@ -123,7 +122,6 @@ class ModelPaymentGlobalpayRemote extends Model {
 	}
 
 	public function capturePayment($account, $amount, $currency, $order_id, $order_ref, $card_number, $expire, $name, $type, $cvv, $issue, $eci_ref, $eci = '', $cavv = '', $xid = '') {
-		$this->load->model('checkout/order');
 
 		$timestamp = strftime("%Y%m%d%H%M%S");
 		$merchant_id = $this->config->get('globalpay_remote_merchant_id');

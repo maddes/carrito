@@ -69,8 +69,6 @@ class ControllerReportAffiliateActivity extends Controller {
 			'text' => $this->language->get('heading_title')
 		);
 
-		$this->load->model('report/affiliate');
-
 		$data['activities'] = array();
 
 		$filter_data = array(

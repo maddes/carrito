@@ -6,7 +6,6 @@ class ModelOpenbayEbayProduct extends Model {
 
 	public function importItems($data) {
 		$this->openbay->ebay->log('Starting item import');
-		$this->load->model('catalog/product');
 
 		//check for ebay import img table
 		$res = $this->db->query("SHOW TABLES LIKE '" . DB_PREFIX . "ebay_image_import'");
@@ -16,7 +15,6 @@ class ModelOpenbayEbayProduct extends Model {
 
 		if ($this->openbay->addonLoad('openstock')) {
 			$openstock = true;
-			$this->load->model('module/openstock');
 		} else {
 			$openstock = false;
 			$this->openbay->ebay->log('Openstock module not found');

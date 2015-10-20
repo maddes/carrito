@@ -24,8 +24,6 @@ class ControllerCommonFileManager extends Controller {
 
 		$data['images'] = array();
 
-		$this->load->model('tool/image');
-
 		// Get directories
 		$directories = glob($directory . '/' . $filter_name . '*', GLOB_ONLYDIR);
 

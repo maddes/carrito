@@ -68,9 +68,6 @@ class ControllerCheckoutCart extends Controller {
 				$data['weight'] = '';
 			}
 
-			$this->load->model('tool/image');
-			$this->load->model('tool/upload');
-
 			$data['products'] = array();
 
 			$products = $this->cart->getProducts();
@@ -182,7 +179,6 @@ class ControllerCheckoutCart extends Controller {
 			}
 
 			// Totals
-			$this->load->model('extension/extension');
 
 			$total_data = array();
 			$total = 0;
@@ -202,7 +198,6 @@ class ControllerCheckoutCart extends Controller {
 
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {
-						$this->load->model('total/' . $result['code']);
 
 						$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 					}
@@ -229,8 +224,6 @@ class ControllerCheckoutCart extends Controller {
 			$data['continue'] = $this->url->link('common/home');
 
 			$data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
-
-			$this->load->model('extension/extension');
 
 			$data['checkout_buttons'] = array();
 
@@ -284,8 +277,6 @@ class ControllerCheckoutCart extends Controller {
 		} else {
 			$product_id = 0;
 		}
-
-		$this->load->model('catalog/product');
 
 		$product_info = $this->model_catalog_product->getProduct($product_id);
 
@@ -342,7 +333,6 @@ class ControllerCheckoutCart extends Controller {
 				unset($this->session->data['payment_methods']);
 
 				// Totals
-				$this->load->model('extension/extension');
 
 				$total_data = array();
 				$total = 0;
@@ -362,7 +352,6 @@ class ControllerCheckoutCart extends Controller {
 
 					foreach ($results as $result) {
 						if ($this->config->get($result['code'] . '_status')) {
-							$this->load->model('total/' . $result['code']);
 
 							$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 						}
@@ -431,7 +420,6 @@ class ControllerCheckoutCart extends Controller {
 			unset($this->session->data['reward']);
 
 			// Totals
-			$this->load->model('extension/extension');
 
 			$total_data = array();
 			$total = 0;
@@ -451,7 +439,6 @@ class ControllerCheckoutCart extends Controller {
 
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {
-						$this->load->model('total/' . $result['code']);
 
 						$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 					}

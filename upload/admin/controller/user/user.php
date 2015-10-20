@@ -7,8 +7,6 @@ class ControllerUserUser extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/user');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerUserUser extends Controller {
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('user/user');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_user_user->addUser($this->request->post);
@@ -49,8 +45,6 @@ class ControllerUserUser extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/user');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_user_user->editUser($this->request->get['user_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerUserUser extends Controller {
 		$this->load->language('user/user');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('user/user');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $user_id) {
@@ -372,8 +364,6 @@ class ControllerUserUser extends Controller {
 			$data['user_group_id'] = '';
 		}
 
-		$this->load->model('user/user_group');
-
 		$data['user_groups'] = $this->model_user_user_group->getUserGroups();
 
 		if (isset($this->request->post['password'])) {
@@ -419,8 +409,6 @@ class ControllerUserUser extends Controller {
 		} else {
 			$data['image'] = '';
 		}
-
-		$this->load->model('tool/image');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);

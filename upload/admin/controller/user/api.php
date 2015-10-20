@@ -7,8 +7,6 @@ class ControllerUserApi extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/api');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerUserApi extends Controller {
 		$this->load->language('user/api');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('user/api');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_user_api->addApi($this->request->post);
@@ -49,8 +45,6 @@ class ControllerUserApi extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/api');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_user_api->editApi($this->request->get['api_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerUserApi extends Controller {
 		$this->load->language('user/api');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('user/api');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $api_id) {
@@ -440,7 +432,6 @@ class ControllerUserApi extends Controller {
 		if (!$this->user->hasPermission('modify', 'user/api')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('user/api');
 
 			$this->model_user_api->addApiIp($this->request->get['api_id'], $this->request->post['ip']);
 
@@ -459,7 +450,6 @@ class ControllerUserApi extends Controller {
 		if (!$this->user->hasPermission('modify', 'user/api')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('user/api');
 
 			$this->model_user_api->deleteApiSession($this->request->get['api_session_id']);
 

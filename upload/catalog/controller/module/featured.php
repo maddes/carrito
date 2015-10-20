@@ -11,10 +11,6 @@ class ControllerModuleFeatured extends Controller {
 		$data['button_wishlist'] = $this->language->get('button_wishlist');
 		$data['button_compare'] = $this->language->get('button_compare');
 
-		$this->load->model('catalog/product');
-
-		$this->load->model('tool/image');
-
 		$data['products'] = array();
 
 		if (!$setting['limit']) {

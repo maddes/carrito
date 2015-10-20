@@ -7,8 +7,6 @@ class ControllerLocalisationLengthClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/length_class');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerLocalisationLengthClass extends Controller {
 		$this->load->language('localisation/length_class');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/length_class');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_length_class->addLengthClass($this->request->post);
@@ -49,8 +45,6 @@ class ControllerLocalisationLengthClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/length_class');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_length_class->editLengthClass($this->request->get['length_class_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerLocalisationLengthClass extends Controller {
 		$this->load->language('localisation/length_class');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/length_class');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $length_class_id) {
@@ -330,8 +322,6 @@ class ControllerLocalisationLengthClass extends Controller {
 			$length_class_info = $this->model_localisation_length_class->getLengthClass($this->request->get['length_class_id']);
 		}
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['length_class_description'])) {
@@ -379,8 +369,6 @@ class ControllerLocalisationLengthClass extends Controller {
 		if (!$this->user->hasPermission('modify', 'localisation/length_class')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('catalog/product');
 
 		foreach ($this->request->post['selected'] as $length_class_id) {
 			if ($this->config->get('config_length_class_id') == $length_class_id) {

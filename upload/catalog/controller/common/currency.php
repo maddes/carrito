@@ -9,8 +9,6 @@ class ControllerCommonCurrency extends Controller {
 
 		$data['code'] = $this->currency->getCode();
 
-		$this->load->model('localisation/currency');
-
 		$data['currencies'] = array();
 
 		$results = $this->model_localisation_currency->getCurrencies();

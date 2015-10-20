@@ -69,8 +69,6 @@ class ControllerReportSaleShipping extends Controller {
 			'href' => $this->url->link('report/sale_shipping', 'token=' . $this->session->data['token'] . $url, 'SSL')
 		);
 
-		$this->load->model('report/sale');
-
 		$data['orders'] = array();
 
 		$filter_data = array(
@@ -117,8 +115,6 @@ class ControllerReportSaleShipping extends Controller {
 		$data['button_filter'] = $this->language->get('button_filter');
 
 		$data['token'] = $this->session->data['token'];
-
-		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 

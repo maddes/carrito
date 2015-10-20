@@ -35,8 +35,6 @@ class ModelPaymentSagePayDirect extends Model {
 
 		$card_data = array();
 
-		$this->load->model('account/address');
-
 		foreach ($query->rows as $row) {
 
 			$card_data[] = array(
@@ -119,9 +117,6 @@ class ModelPaymentSagePayDirect extends Model {
 	}
 
 	public function recurringPayment($item, $vendor_tx_code) {
-
-		$this->load->model('checkout/recurring');
-		$this->load->model('payment/sagepay_direct');
 		//trial information
 		if ($item['recurring_trial'] == 1) {
 			$price = $item['recurring_trial_price'];
@@ -255,8 +250,6 @@ class ModelPaymentSagePayDirect extends Model {
 	}
 
 	public function cronPayment() {
-
-		$this->load->model('account/order');
 		$recurrings = $this->getProfiles();
 		$cron_data = array();
 		$i = 0;

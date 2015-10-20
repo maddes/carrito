@@ -7,8 +7,6 @@ class ControllerExtensionShipping extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
 		$this->getList();
 	}
 
@@ -17,12 +15,8 @@ class ControllerExtensionShipping extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
 		if ($this->validate()) {
 			$this->model_extension_extension->install('shipping', $this->request->get['extension']);
-
-			$this->load->model('user/user_group');
 
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'shipping/' . $this->request->get['extension']);
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'shipping/' . $this->request->get['extension']);
@@ -43,12 +37,8 @@ class ControllerExtensionShipping extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
 		if ($this->validate()) {
 			$this->model_extension_extension->uninstall('shipping', $this->request->get['extension']);
-
-			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 
@@ -104,8 +94,6 @@ class ControllerExtensionShipping extends Controller {
 		} else {
 			$data['success'] = '';
 		}
-
-		$this->load->model('extension/extension');
 
 		$extensions = $this->model_extension_extension->getInstalled('shipping');
 

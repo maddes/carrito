@@ -14,14 +14,12 @@ class ControllerAffiliatePassword extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->load->model('affiliate/affiliate');
 
 			$this->model_affiliate_affiliate->editPassword($this->affiliate->getEmail(), $this->request->post['password']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			// Add to activity log
-			$this->load->model('affiliate/activity');
 
 			$activity_data = array(
 				'affiliate_id' => $this->affiliate->getId(),

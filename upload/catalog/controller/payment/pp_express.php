@@ -51,9 +51,6 @@ class ControllerPaymentPPExpress extends Controller {
 		unset($this->session->data['payment_method']);
 		unset($this->session->data['payment_methods']);
 
-		$this->load->model('payment/pp_express');
-		$this->load->model('tool/image');
-
 		if ($this->cart->hasShipping()) {
 			$shipping = 2;
 		} else {
@@ -118,7 +115,6 @@ class ControllerPaymentPPExpress extends Controller {
 		 *
 		 * It has no output, instead it sets the data and locates to checkout
 		 */
-		$this->load->model('payment/pp_express');
 		$data = array(
 			'METHOD' => 'GetExpressCheckoutDetails',
 			'TOKEN'  => $this->session->data['paypal']['token']
@@ -276,7 +272,6 @@ class ControllerPaymentPPExpress extends Controller {
 			 */
 
 			if ($this->cart->hasShipping()) {
-				$this->load->model('account/address');
 
 				$addresses = $this->model_account_address->getAddresses();
 
@@ -352,8 +347,6 @@ class ControllerPaymentPPExpress extends Controller {
 	public function expressConfirm() {
 		$this->language->load('payment/pp_express');
 		$this->language->load('checkout/cart');
-
-		$this->load->model('tool/image');
 
 		// Coupon
 		if (isset($this->request->post['coupon']) && $this->validateCoupon()) {
@@ -436,8 +429,6 @@ class ControllerPaymentPPExpress extends Controller {
 		}
 
 		$data['action'] = $this->url->link('payment/pp_express/expressConfirm', '', 'SSL');
-
-		$this->load->model('tool/upload');
 
 		$products = $this->cart->getProducts();
 
@@ -548,7 +539,6 @@ class ControllerPaymentPPExpress extends Controller {
 			 * Shipping services
 			 */
 			if ($this->customer->isLogged()) {
-				$this->load->model('account/address');
 				$shipping_address = $this->model_account_address->getAddress($this->session->data['shipping_address_id']);
 			} elseif (isset($this->session->data['guest'])) {
 				$shipping_address = $this->session->data['guest']['shipping'];
@@ -558,14 +548,11 @@ class ControllerPaymentPPExpress extends Controller {
 				// Shipping Methods
 				$quote_data = array();
 
-				$this->load->model('extension/extension');
-
 				$results = $this->model_extension_extension->getExtensions('shipping');
 
 				if (!empty($results)) {
 					foreach ($results as $result) {
 						if ($this->config->get($result['code'] . '_status')) {
-							$this->load->model('shipping/' . $result['code']);
 
 							$quote = $this->{'model_shipping_' . $result['code']}->getQuote($shipping_address);
 
@@ -617,7 +604,6 @@ class ControllerPaymentPPExpress extends Controller {
 		}
 
 		// Totals
-		$this->load->model('extension/extension');
 
 		$total_data = array();
 		$total = 0;
@@ -637,7 +623,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
 
 					$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 				}
@@ -665,7 +650,6 @@ class ControllerPaymentPPExpress extends Controller {
 		 * Payment methods
 		 */
 		if ($this->customer->isLogged() && isset($this->session->data['payment_address_id'])) {
-			$this->load->model('account/address');
 			$payment_address = $this->model_account_address->getAddress($this->session->data['payment_address_id']);
 		} elseif (isset($this->session->data['guest'])) {
 			$payment_address = $this->session->data['guest']['payment'];
@@ -673,13 +657,10 @@ class ControllerPaymentPPExpress extends Controller {
 
 		$method_data = array();
 
-		$this->load->model('extension/extension');
-
 		$results = $this->model_extension_extension->getExtensions('payment');
 
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-				$this->load->model('payment/' . $result['code']);
 
 				$method = $this->{'model_payment_' . $result['code']}->getMethod($payment_address, $total);
 
@@ -742,7 +723,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 		if ($this->cart->hasShipping()) {
 			// Validate if shipping address has been set.
-			$this->load->model('account/address');
 
 			if ($this->customer->isLogged() && isset($this->session->data['shipping_address_id'])) {
 				$shipping_address = $this->model_account_address->getAddress($this->session->data['shipping_address_id']);
@@ -764,7 +744,6 @@ class ControllerPaymentPPExpress extends Controller {
 		}
 
 		// Validate if payment address has been set.
-		$this->load->model('account/address');
 
 		if ($this->customer->isLogged() && isset($this->session->data['payment_address_id'])) {
 			$payment_address = $this->model_account_address->getAddress($this->session->data['payment_address_id']);
@@ -806,8 +785,6 @@ class ControllerPaymentPPExpress extends Controller {
 			$total = 0;
 			$taxes = $this->cart->getTaxes();
 
-			$this->load->model('extension/extension');
-
 			$sort_order = array();
 
 			$results = $this->model_extension_extension->getExtensions('total');
@@ -820,7 +797,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
 
 					$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 				}
@@ -856,8 +832,6 @@ class ControllerPaymentPPExpress extends Controller {
 				$data['email'] = $this->customer->getEmail();
 				$data['telephone'] = $this->customer->getTelephone();
 				$data['fax'] = $this->customer->getFax();
-
-				$this->load->model('account/address');
 
 				$payment_address = $this->model_account_address->getAddress($this->session->data['payment_address_id']);
 			} elseif (isset($this->session->data['guest'])) {
@@ -899,7 +873,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 			if ($this->cart->hasShipping()) {
 				if ($this->customer->isLogged()) {
-					$this->load->model('account/address');
 
 					$shipping_address = $this->model_account_address->getAddress($this->session->data['shipping_address_id']);
 				} elseif (isset($this->session->data['guest'])) {
@@ -1008,7 +981,6 @@ class ControllerPaymentPPExpress extends Controller {
 				$subtotal = $this->cart->getSubTotal();
 
 				// Affiliate
-				$this->load->model('affiliate/affiliate');
 
 				$affiliate_info = $this->model_affiliate_affiliate->getAffiliateByCode($this->request->cookie['tracking']);
 
@@ -1021,7 +993,6 @@ class ControllerPaymentPPExpress extends Controller {
 				}
 
 				// Marketing
-				$this->load->model('checkout/marketing');
 
 				$marketing_info = $this->model_checkout_marketing->getMarketingByCode($this->request->cookie['tracking']);
 
@@ -1063,13 +1034,8 @@ class ControllerPaymentPPExpress extends Controller {
 				$data['accept_language'] = '';
 			}
 
-			$this->load->model('account/custom_field');
-			$this->load->model('checkout/order');
-
 			$order_id = $this->model_checkout_order->addOrder($data);
 			$this->session->data['order_id'] = $order_id;
-
-			$this->load->model('payment/pp_express');
 
 			$paypal_data = array(
 				'TOKEN'                      => $this->session->data['paypal']['token'],
@@ -1154,8 +1120,6 @@ class ControllerPaymentPPExpress extends Controller {
 				//loop through any products that are recurring items
 				if ($recurring_products) {
 					$this->language->load('payment/pp_express');
-
-					$this->load->model('checkout/recurring');
 
 					$billing_period = array(
 						'day'        => 'Day',
@@ -1259,10 +1223,6 @@ class ControllerPaymentPPExpress extends Controller {
 			$this->response->redirect($this->url->link('checkout/cart'));
 		}
 
-		$this->load->model('payment/pp_express');
-		$this->load->model('tool/image');
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$max_amount = $this->cart->getTotal() * 1.5;
@@ -1337,9 +1297,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 	public function checkoutReturn() {
 		$this->language->load('payment/pp_express');
-
-		$this->load->model('payment/pp_express');
-		$this->load->model('checkout/order');
 
 		$data = array(
 			'METHOD' => 'GetExpressCheckoutDetails',
@@ -1434,7 +1391,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 			//loop through any products that are recurring items
 			if ($recurring_products) {
-				$this->load->model('checkout/recurring');
 
 				$billing_period = array(
 					'day'        => 'Day',
@@ -1564,8 +1520,6 @@ class ControllerPaymentPPExpress extends Controller {
 	}
 
 	public function ipn() {
-		$this->load->model('payment/pp_express');
-		$this->load->model('account/recurring');
 
 		$request = 'cmd=_notify-validate';
 
@@ -1865,9 +1819,6 @@ class ControllerPaymentPPExpress extends Controller {
 
 	public function recurringCancel() {
 		//cancel an active recurring
-
-		$this->load->model('account/recurring');
-		$this->load->model('payment/pp_express');
 		$this->language->load('account/recurring');
 
 		$recurring = $this->model_account_recurring->getProfile($this->request->get['recurring_id']);
@@ -1892,7 +1843,6 @@ class ControllerPaymentPPExpress extends Controller {
 	}
 
 	protected function validateCoupon() {
-		$this->load->model('total/coupon');
 
 		$coupon_info = $this->model_total_coupon->getCoupon($this->request->post['coupon']);
 
@@ -1911,7 +1861,6 @@ class ControllerPaymentPPExpress extends Controller {
 	}
 
 	protected function validateVoucher() {
-		$this->load->model('total/coupon');
 
 		$voucher_info = $this->model_total_voucher->getVoucher($this->request->post['voucher']);
 

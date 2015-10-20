@@ -7,8 +7,6 @@ class ControllerDesignLayout extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/layout');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerDesignLayout extends Controller {
 		$this->load->language('design/layout');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('design/layout');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_design_layout->addLayout($this->request->post);
@@ -49,8 +45,6 @@ class ControllerDesignLayout extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/layout');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_design_layout->editLayout($this->request->get['layout_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerDesignLayout extends Controller {
 		$this->load->language('design/layout');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('design/layout');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $layout_id) {
@@ -339,8 +331,6 @@ class ControllerDesignLayout extends Controller {
 			$data['name'] = '';
 		}
 
-		$this->load->model('setting/store');
-
 		$data['stores'] = $this->model_setting_store->getStores();
 
 		if (isset($this->request->post['layout_route'])) {
@@ -358,10 +348,6 @@ class ControllerDesignLayout extends Controller {
 		} else {
 			$data['layout_modules'] = array();
 		}
-
-		$this->load->model('extension/extension');
-
-		$this->load->model('extension/module');
 
 		$data['extensions'] = array();
 
@@ -415,11 +401,6 @@ class ControllerDesignLayout extends Controller {
 		if (!$this->user->hasPermission('modify', 'design/layout')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('setting/store');
-		$this->load->model('catalog/product');
-		$this->load->model('catalog/category');
-		$this->load->model('catalog/information');
 
 		foreach ($this->request->post['selected'] as $layout_id) {
 			if ($this->config->get('config_layout_id') == $layout_id) {

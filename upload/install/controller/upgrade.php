@@ -4,7 +4,6 @@ class ControllerUpgrade extends Controller {
 
 	public function index() {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->load->model('upgrade');
 
 			$this->model_upgrade->mysql();
 

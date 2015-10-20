@@ -8,8 +8,6 @@ class ControllerPaymentKlarnaAccount extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$status = false;
 
@@ -142,11 +140,7 @@ class ControllerPaymentKlarnaAccount extends Controller {
 			$data['klarna_account'] = $this->config->get('klarna_account');
 		}
 
-		$this->load->model('localisation/geo_zone');
-
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
-
-		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 

@@ -28,8 +28,6 @@ class ControllerAccountDownload extends Controller {
 			'href' => $this->url->link('account/download', '', 'SSL')
 		);
 
-		$this->load->model('account/download');
-
 		$data['heading_title'] = $this->language->get('heading_title');
 
 		$data['text_empty'] = $this->language->get('text_empty');
@@ -115,8 +113,6 @@ class ControllerAccountDownload extends Controller {
 
 			$this->response->redirect($this->url->link('account/login', '', 'SSL'));
 		}
-
-		$this->load->model('account/download');
 
 		if (isset($this->request->get['download_id'])) {
 			$download_id = $this->request->get['download_id'];

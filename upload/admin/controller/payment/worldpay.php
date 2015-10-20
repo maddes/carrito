@@ -8,8 +8,6 @@ class ControllerPaymentWorldpay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('worldpay', $this->request->post);
 
@@ -127,8 +125,6 @@ class ControllerPaymentWorldpay extends Controller {
 			$data['worldpay_order_status_id'] = $this->config->get('worldpay_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['worldpay_geo_zone_id'])) {
@@ -136,8 +132,6 @@ class ControllerPaymentWorldpay extends Controller {
 		} else {
 			$data['worldpay_geo_zone_id'] = $this->config->get('worldpay_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -177,11 +171,7 @@ class ControllerPaymentWorldpay extends Controller {
 			$data['worldpay_last_cron_job_run'] = '';
 		}
 
-		$this->load->model('localisation/geo_zone');
-
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
-
-		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
@@ -247,20 +237,16 @@ class ControllerPaymentWorldpay extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/worldpay');
 		$this->model_payment_worldpay->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/worldpay');
 		$this->model_payment_worldpay->uninstall();
 	}
 
 	public function order() {
 
 		if ($this->config->get('worldpay_status')) {
-
-			$this->load->model('payment/worldpay');
 
 			$worldpay_order = $this->model_payment_worldpay->getOrder($this->request->get['order_id']);
 
@@ -307,7 +293,6 @@ class ControllerPaymentWorldpay extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('payment/worldpay');
 
 			$worldpay_order = $this->model_payment_worldpay->getOrder($this->request->post['order_id']);
 

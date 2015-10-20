@@ -7,8 +7,6 @@ class ControllerCatalogOption extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/option');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCatalogOption extends Controller {
 		$this->language->load('catalog/option');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/option');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_option->addOption($this->request->post);
@@ -49,8 +45,6 @@ class ControllerCatalogOption extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/option');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_option->editOption($this->request->get['option_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerCatalogOption extends Controller {
 		$this->language->load('catalog/option');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/option');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $option_id) {
@@ -345,8 +337,6 @@ class ControllerCatalogOption extends Controller {
 
 		$data['token'] = $this->session->data['token'];
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['option_description'])) {
@@ -380,8 +370,6 @@ class ControllerCatalogOption extends Controller {
 		} else {
 			$option_values = array();
 		}
-
-		$this->load->model('tool/image');
 
 		$data['option_values'] = array();
 
@@ -445,8 +433,6 @@ class ControllerCatalogOption extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('catalog/product');
-
 		foreach ($this->request->post['selected'] as $option_id) {
 			$product_total = $this->model_catalog_product->getTotalProductsByOptionId($option_id);
 
@@ -463,10 +449,6 @@ class ControllerCatalogOption extends Controller {
 
 		if (isset($this->request->get['filter_name'])) {
 			$this->language->load('catalog/option');
-
-			$this->load->model('catalog/option');
-
-			$this->load->model('tool/image');
 
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],

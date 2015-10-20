@@ -7,8 +7,6 @@ class ControllerPaymentNochex extends Controller {
 
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$data['action'] = 'https://secure.nochex.com/';
@@ -83,8 +81,6 @@ class ControllerPaymentNochex extends Controller {
 		} else {
 			$order_id = 0;
 		}
-
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 

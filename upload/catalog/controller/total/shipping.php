@@ -26,8 +26,6 @@ class ControllerTotalShipping extends Controller {
 				$data['country_id'] = $this->config->get('config_country_id');
 			}
 
-			$this->load->model('localisation/country');
-
 			$data['countries'] = $this->model_localisation_country->getCountries();
 
 			if (isset($this->session->data['shipping_address']['zone_id'])) {
@@ -73,8 +71,6 @@ class ControllerTotalShipping extends Controller {
 			$json['error']['zone'] = $this->language->get('error_zone');
 		}
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 		if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -95,8 +91,6 @@ class ControllerTotalShipping extends Controller {
 				$iso_code_3 = '';
 				$address_format = '';
 			}
-
-			$this->load->model('localisation/zone');
 
 			$zone_info = $this->model_localisation_zone->getZone($this->request->post['zone_id']);
 
@@ -128,13 +122,10 @@ class ControllerTotalShipping extends Controller {
 
 			$quote_data = array();
 
-			$this->load->model('extension/extension');
-
 			$results = $this->model_extension_extension->getExtensions('shipping');
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('shipping/' . $result['code']);
 
 					$quote = $this->{'model_shipping_' . $result['code']}->getQuote($this->session->data['shipping_address']);
 
@@ -202,12 +193,9 @@ class ControllerTotalShipping extends Controller {
 	public function country() {
 		$json = array();
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->get['country_id']);
 
 		if ($country_info) {
-			$this->load->model('localisation/zone');
 
 			$json = array(
 				'country_id'        => $country_info['country_id'],

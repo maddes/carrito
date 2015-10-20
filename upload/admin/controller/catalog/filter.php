@@ -7,8 +7,6 @@ class ControllerCatalogFilter extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/filter');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCatalogFilter extends Controller {
 		$this->language->load('catalog/filter');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/filter');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_filter->addFilter($this->request->post);
@@ -49,8 +45,6 @@ class ControllerCatalogFilter extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/filter');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_filter->editFilter($this->request->get['filter_group_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerCatalogFilter extends Controller {
 		$this->language->load('catalog/filter');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/filter');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $filter_group_id) {
@@ -331,8 +323,6 @@ class ControllerCatalogFilter extends Controller {
 
 		$data['token'] = $this->session->data['token'];
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['filter_group_description'])) {
@@ -402,7 +392,6 @@ class ControllerCatalogFilter extends Controller {
 		$json = array();
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/filter');
 
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],

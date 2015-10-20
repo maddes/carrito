@@ -60,8 +60,6 @@ class ControllerCheckoutConfirm extends Controller {
 			$total = 0;
 			$taxes = $this->cart->getTaxes();
 
-			$this->load->model('extension/extension');
-
 			$sort_order = array();
 
 			$results = $this->model_extension_extension->getExtensions('total');
@@ -74,7 +72,6 @@ class ControllerCheckoutConfirm extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
 
 					$this->{'model_total_' . $result['code']}->getTotal($order_data['totals'], $total, $taxes);
 				}
@@ -101,7 +98,6 @@ class ControllerCheckoutConfirm extends Controller {
 			}
 
 			if ($this->customer->isLogged()) {
-				$this->load->model('account/customer');
 
 				$customer_info = $this->model_account_customer->getCustomer($this->customer->getId());
 
@@ -254,7 +250,6 @@ class ControllerCheckoutConfirm extends Controller {
 				$subtotal = $this->cart->getSubTotal();
 
 				// Affiliate
-				$this->load->model('affiliate/affiliate');
 
 				$affiliate_info = $this->model_affiliate_affiliate->getAffiliateByCode($this->request->cookie['tracking']);
 
@@ -267,7 +262,6 @@ class ControllerCheckoutConfirm extends Controller {
 				}
 
 				// Marketing
-				$this->load->model('checkout/marketing');
 
 				$marketing_info = $this->model_checkout_marketing->getMarketingByCode($this->request->cookie['tracking']);
 
@@ -309,8 +303,6 @@ class ControllerCheckoutConfirm extends Controller {
 				$order_data['accept_language'] = '';
 			}
 
-			$this->load->model('checkout/order');
-
 			$this->session->data['order_id'] = $this->model_checkout_order->addOrder($order_data);
 
 			$data['text_recurring_item'] = $this->language->get('text_recurring_item');
@@ -321,8 +313,6 @@ class ControllerCheckoutConfirm extends Controller {
 			$data['column_quantity'] = $this->language->get('column_quantity');
 			$data['column_price'] = $this->language->get('column_price');
 			$data['column_total'] = $this->language->get('column_total');
-
-			$this->load->model('tool/upload');
 
 			$data['products'] = array();
 

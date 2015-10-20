@@ -7,8 +7,6 @@ class ControllerCatalogInformation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/information');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCatalogInformation extends Controller {
 		$this->language->load('catalog/information');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/information');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_information->addInformation($this->request->post);
@@ -49,8 +45,6 @@ class ControllerCatalogInformation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/information');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_information->editInformation($this->request->get['information_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerCatalogInformation extends Controller {
 		$this->language->load('catalog/information');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/information');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $information_id) {
@@ -359,8 +351,6 @@ class ControllerCatalogInformation extends Controller {
 
 		$data['token'] = $this->session->data['token'];
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['information_description'])) {
@@ -370,8 +360,6 @@ class ControllerCatalogInformation extends Controller {
 		} else {
 			$data['information_description'] = array();
 		}
-
-		$this->load->model('setting/store');
 
 		$data['stores'] = $this->model_setting_store->getStores();
 
@@ -423,8 +411,6 @@ class ControllerCatalogInformation extends Controller {
 			$data['information_layout'] = array();
 		}
 
-		$this->load->model('design/layout');
-
 		$data['layouts'] = $this->model_design_layout->getLayouts();
 
 		$data['header'] = $this->load->controller('common/header');
@@ -454,7 +440,6 @@ class ControllerCatalogInformation extends Controller {
 		}
 
 		if (utf8_strlen($this->request->post['keyword']) > 0) {
-			$this->load->model('catalog/url_alias');
 
 			$url_alias_info = $this->model_catalog_url_alias->getUrlAlias($this->request->post['keyword']);
 
@@ -478,8 +463,6 @@ class ControllerCatalogInformation extends Controller {
 		if (!$this->user->hasPermission('modify', 'catalog/information')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('setting/store');
 
 		foreach ($this->request->post['selected'] as $information_id) {
 			if ($this->config->get('config_account_id') == $information_id) {

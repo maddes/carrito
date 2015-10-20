@@ -3,8 +3,6 @@ class ControllerModulePPButton extends Controller {
 	public function index() {
 		$this->language->load('module/pp_button');
 
-		$this->load->model('setting/setting');
-
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {

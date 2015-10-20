@@ -7,8 +7,6 @@ class ControllerCatalogManufacturer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/manufacturer');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->language->load('catalog/manufacturer');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/manufacturer');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_manufacturer->addManufacturer($this->request->post);
@@ -49,8 +45,6 @@ class ControllerCatalogManufacturer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/manufacturer');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_manufacturer->editManufacturer($this->request->get['manufacturer_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerCatalogManufacturer extends Controller {
 		$this->language->load('catalog/manufacturer');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/manufacturer');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $manufacturer_id) {
@@ -347,8 +339,6 @@ class ControllerCatalogManufacturer extends Controller {
 			$data['name'] = '';
 		}
 
-		$this->load->model('setting/store');
-
 		$data['stores'] = $this->model_setting_store->getStores();
 
 		if (isset($this->request->post['manufacturer_store'])) {
@@ -374,8 +364,6 @@ class ControllerCatalogManufacturer extends Controller {
 		} else {
 			$data['image'] = '';
 		}
-
-		$this->load->model('tool/image');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
@@ -412,7 +400,6 @@ class ControllerCatalogManufacturer extends Controller {
 		}
 
 		if (utf8_strlen($this->request->post['keyword']) > 0) {
-			$this->load->model('catalog/url_alias');
 
 			$url_alias_info = $this->model_catalog_url_alias->getUrlAlias($this->request->post['keyword']);
 
@@ -433,8 +420,6 @@ class ControllerCatalogManufacturer extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('catalog/product');
-
 		foreach ($this->request->post['selected'] as $manufacturer_id) {
 			$product_total = $this->model_catalog_product->getTotalProductsByManufacturerId($manufacturer_id);
 
@@ -450,7 +435,6 @@ class ControllerCatalogManufacturer extends Controller {
 		$json = array();
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/manufacturer');
 
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],

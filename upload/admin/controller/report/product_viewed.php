@@ -29,8 +29,6 @@ class ControllerReportProductViewed extends Controller {
 			'href' => $this->url->link('report/product_viewed', 'token=' . $this->session->data['token'] . $url, 'SSL')
 		);
 
-		$this->load->model('report/product');
-
 		$filter_data = array(
 			'start' => ($page - 1) * $this->config->get('config_limit_admin'),
 			'limit' => $this->config->get('config_limit_admin')
@@ -121,7 +119,6 @@ class ControllerReportProductViewed extends Controller {
 		if (!$this->user->hasPermission('modify', 'report/product_viewed')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('report/product');
 
 			$this->model_report_product->reset();
 

@@ -32,9 +32,6 @@ class ControllerInformationSitemap extends Controller {
 		$data['text_information'] = $this->language->get('text_information');
 		$data['text_contact'] = $this->language->get('text_contact');
 
-		$this->load->model('catalog/category');
-		$this->load->model('catalog/product');
-
 		$data['categories'] = array();
 
 		$categories_1 = $this->model_catalog_category->getCategories(0);
@@ -81,8 +78,6 @@ class ControllerInformationSitemap extends Controller {
 		$data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
 		$data['search'] = $this->url->link('product/search');
 		$data['contact'] = $this->url->link('information/contact');
-
-		$this->load->model('catalog/information');
 
 		$data['informations'] = array();
 

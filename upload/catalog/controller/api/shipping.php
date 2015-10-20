@@ -49,8 +49,6 @@ class ControllerApiShipping extends Controller {
 					$json['error']['city'] = $this->language->get('error_city');
 				}
 
-				$this->load->model('localisation/country');
-
 				$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 				if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -66,7 +64,6 @@ class ControllerApiShipping extends Controller {
 				}
 
 				// Custom field validation
-				$this->load->model('account/custom_field');
 
 				$custom_fields = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
 
@@ -77,7 +74,6 @@ class ControllerApiShipping extends Controller {
 				}
 
 				if (!$json) {
-					$this->load->model('localisation/country');
 
 					$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
@@ -92,8 +88,6 @@ class ControllerApiShipping extends Controller {
 						$iso_code_3 = '';
 						$address_format = '';
 					}
-
-					$this->load->model('localisation/zone');
 
 					$zone_info = $this->model_localisation_zone->getZone($this->request->post['zone_id']);
 
@@ -163,13 +157,10 @@ class ControllerApiShipping extends Controller {
 				// Shipping Methods
 				$json['shipping_methods'] = array();
 
-				$this->load->model('extension/extension');
-
 				$results = $this->model_extension_extension->getExtensions('shipping');
 
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {
-						$this->load->model('shipping/' . $result['code']);
 
 						$quote = $this->{'model_shipping_' . $result['code']}->getQuote($this->session->data['shipping_address']);
 

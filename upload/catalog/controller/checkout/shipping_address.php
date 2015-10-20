@@ -28,8 +28,6 @@ class ControllerCheckoutShippingAddress extends Controller {
 			$data['address_id'] = $this->customer->getAddressId();
 		}
 
-		$this->load->model('account/address');
-
 		$data['addresses'] = $this->model_account_address->getAddresses();
 
 		if (isset($this->session->data['shipping_address']['postcode'])) {
@@ -50,12 +48,9 @@ class ControllerCheckoutShippingAddress extends Controller {
 			$data['zone_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		// Custom Fields
-		$this->load->model('account/custom_field');
 
 		$data['custom_fields'] = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
 
@@ -109,7 +104,6 @@ class ControllerCheckoutShippingAddress extends Controller {
 
 		if (!$json) {
 			if (isset($this->request->post['shipping_address']) && $this->request->post['shipping_address'] == 'existing') {
-				$this->load->model('account/address');
 
 				if (empty($this->request->post['address_id'])) {
 					$json['error']['warning'] = $this->language->get('error_address');
@@ -119,7 +113,6 @@ class ControllerCheckoutShippingAddress extends Controller {
 
 				if (!$json) {
 					// Default Shipping Address
-					$this->load->model('account/address');
 
 					$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->request->post['address_id']);
 
@@ -143,8 +136,6 @@ class ControllerCheckoutShippingAddress extends Controller {
 					$json['error']['city'] = $this->language->get('error_city');
 				}
 
-				$this->load->model('localisation/country');
-
 				$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 				if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -160,7 +151,6 @@ class ControllerCheckoutShippingAddress extends Controller {
 				}
 
 				// Custom field validation
-				$this->load->model('account/custom_field');
 
 				$custom_fields = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
 
@@ -172,7 +162,6 @@ class ControllerCheckoutShippingAddress extends Controller {
 
 				if (!$json) {
 					// Default Shipping Address
-					$this->load->model('account/address');
 
 					$address_id = $this->model_account_address->addAddress($this->request->post);
 
@@ -180,8 +169,6 @@ class ControllerCheckoutShippingAddress extends Controller {
 
 					unset($this->session->data['shipping_method']);
 					unset($this->session->data['shipping_methods']);
-
-					$this->load->model('account/activity');
 
 					$activity_data = array(
 						'customer_id' => $this->customer->getId(),

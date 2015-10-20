@@ -7,8 +7,6 @@ class ControllerExtensionTotal extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
 		$this->getList();
 	}
 
@@ -17,12 +15,8 @@ class ControllerExtensionTotal extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
 		if ($this->validate()) {
 			$this->model_extension_extension->install('total', $this->request->get['extension']);
-
-			$this->load->model('user/user_group');
 
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'total/' . $this->request->get['extension']);
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'total/' . $this->request->get['extension']);
@@ -42,12 +36,8 @@ class ControllerExtensionTotal extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
 		if ($this->validate()) {
 			$this->model_extension_extension->uninstall('total', $this->request->get['extension']);
-
-			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 
@@ -102,8 +92,6 @@ class ControllerExtensionTotal extends Controller {
 		} else {
 			$data['success'] = '';
 		}
-
-		$this->load->model('extension/extension');
 
 		$extensions = $this->model_extension_extension->getInstalled('total');
 

@@ -7,9 +7,6 @@ class ControllerPaymentFirstdata extends Controller {
 		$data['text_new_card'] = $this->language->get('text_new_card');
 		$data['text_store_card'] = $this->language->get('text_store_card');
 
-		$this->load->model('checkout/order');
-		$this->load->model('payment/firstdata');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		if ($this->config->get('firstdata_live_demo') == 1) {
@@ -86,9 +83,6 @@ class ControllerPaymentFirstdata extends Controller {
 	}
 
 	public function notify() {
-		$this->load->model('payment/firstdata');
-
-		$this->load->model('checkout/order');
 
 		$this->load->language('payment/firstdata');
 

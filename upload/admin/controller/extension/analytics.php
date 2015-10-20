@@ -7,8 +7,6 @@ class ControllerExtensionAnalytics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
 		$this->getList();
 	}
 
@@ -17,12 +15,8 @@ class ControllerExtensionAnalytics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
 		if ($this->validate()) {
 			$this->model_extension_extension->install('analytics', $this->request->get['extension']);
-
-			$this->load->model('user/user_group');
 
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'analytics/' . $this->request->get['extension']);
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'analytics/' . $this->request->get['extension']);
@@ -43,12 +37,8 @@ class ControllerExtensionAnalytics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
 		if ($this->validate()) {
 			$this->model_extension_extension->uninstall('analytics', $this->request->get['extension']);
-
-			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 

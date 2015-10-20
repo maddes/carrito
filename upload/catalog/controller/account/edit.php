@@ -17,15 +17,12 @@ class ControllerAccountEdit extends Controller {
 		$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
 		$this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
 
-		$this->load->model('account/customer');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_account_customer->editCustomer($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			// Add to activity log
-			$this->load->model('account/activity');
 
 			$activity_data = array(
 				'customer_id' => $this->customer->getId(),
@@ -154,7 +151,6 @@ class ControllerAccountEdit extends Controller {
 		}
 
 		// Custom Fields
-		$this->load->model('account/custom_field');
 
 		$data['custom_fields'] = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
 
@@ -200,7 +196,6 @@ class ControllerAccountEdit extends Controller {
 		}
 
 		// Custom field validation
-		$this->load->model('account/custom_field');
 
 		$custom_fields = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
 

@@ -7,8 +7,6 @@ class ControllerShippingFedex extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('fedex', $this->request->post);
 
@@ -320,8 +318,6 @@ class ControllerShippingFedex extends Controller {
 			$data['fedex_length_class_id'] = $this->config->get('fedex_length_class_id');
 		}
 
-		$this->load->model('localisation/length_class');
-
 		$data['length_classes'] = $this->model_localisation_length_class->getLengthClasses();
 
 		if (isset($this->request->post['fedex_dropoff_type'])) {
@@ -366,8 +362,6 @@ class ControllerShippingFedex extends Controller {
 			$data['fedex_weight_class_id'] = $this->config->get('fedex_weight_class_id');
 		}
 
-		$this->load->model('localisation/weight_class');
-
 		$data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 
 		if (isset($this->request->post['fedex_tax_class_id'])) {
@@ -376,8 +370,6 @@ class ControllerShippingFedex extends Controller {
 			$data['fedex_tax_class_id'] = $this->config->get('fedex_tax_class_id');
 		}
 
-		$this->load->model('localisation/tax_class');
-
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		if (isset($this->request->post['fedex_geo_zone_id'])) {
@@ -385,8 +377,6 @@ class ControllerShippingFedex extends Controller {
 		} else {
 			$data['fedex_geo_zone_id'] = $this->config->get('fedex_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

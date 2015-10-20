@@ -7,8 +7,6 @@ class ControllerCatalogAttributeGroup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/attribute_group');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCatalogAttributeGroup extends Controller {
 		$this->language->load('catalog/attribute_group');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/attribute_group');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_attribute_group->addAttributeGroup($this->request->post);
@@ -49,8 +45,6 @@ class ControllerCatalogAttributeGroup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/attribute_group');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_attribute_group->editAttributeGroup($this->request->get['attribute_group_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerCatalogAttributeGroup extends Controller {
 		$this->language->load('catalog/attribute_group');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/attribute_group');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $attribute_group_id) {
@@ -320,8 +312,6 @@ class ControllerCatalogAttributeGroup extends Controller {
 			$attribute_group_info = $this->model_catalog_attribute_group->getAttributeGroup($this->request->get['attribute_group_id']);
 		}
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['attribute_group_description'])) {
@@ -365,8 +355,6 @@ class ControllerCatalogAttributeGroup extends Controller {
 		if (!$this->user->hasPermission('modify', 'catalog/attribute_group')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('catalog/attribute');
 
 		foreach ($this->request->post['selected'] as $attribute_group_id) {
 			$attribute_total = $this->model_catalog_attribute->getTotalAttributesByAttributeGroupId($attribute_group_id);

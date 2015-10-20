@@ -3,12 +3,6 @@ class ControllerProductCategory extends Controller {
 	public function index() {
 		$this->load->language('product/category');
 
-		$this->load->model('catalog/category');
-
-		$this->load->model('catalog/product');
-
-		$this->load->model('tool/image');
-
 		if (isset($this->request->get['filter'])) {
 			$filter = $this->request->get['filter'];
 		} else {

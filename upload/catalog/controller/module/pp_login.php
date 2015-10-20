@@ -21,8 +21,6 @@ class ControllerModulePPLogin extends Controller {
 
 			$locale = $this->config->get('pp_login_locale');
 
-			$this->load->model('localisation/language');
-
 			$languages = $this->model_localisation_language->getLanguages();
 
 			foreach ($languages as $language) {
@@ -53,9 +51,6 @@ class ControllerModulePPLogin extends Controller {
 	}
 
 	public function login() {
-		$this->load->model('module/pp_login');
-		$this->load->model('account/customer');
-		$this->load->model('account/customer_group');
 
 		if ($this->customer->isLogged()) {
 			echo '<script type="text/javascript">window.opener.location = "' . $this->url->link('account/account', '', 'SSL') . '"; window.close();</script>';
@@ -150,7 +145,6 @@ class ControllerModulePPLogin extends Controller {
 		unset($this->session->data['guest']);
 
 		// Default Shipping Address
-		$this->load->model('account/address');
 
 		if ($this->config->get('config_tax_customer') == 'payment') {
 			$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
@@ -161,7 +155,6 @@ class ControllerModulePPLogin extends Controller {
 		}
 
 		// Add to activity log
-		$this->load->model('account/activity');
 
 		$activity_data = array(
 			'customer_id' => $this->customer->getId(),

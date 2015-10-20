@@ -7,8 +7,6 @@ class ControllerModuleFeatured extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/module');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			if (!isset($this->request->get['module_id'])) {
 				$this->model_extension_module->addModule('featured', $this->request->post);
@@ -108,8 +106,6 @@ class ControllerModuleFeatured extends Controller {
 		} else {
 			$data['name'] = '';
 		}
-
-		$this->load->model('catalog/product');
 
 		$data['products'] = array();
 

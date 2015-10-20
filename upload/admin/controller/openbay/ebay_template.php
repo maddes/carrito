@@ -5,8 +5,6 @@ class ControllerOpenbayEbayTemplate extends Controller {
 	public function listAll() {
 		$data = $this->load->language('openbay/ebay_template');
 
-		$this->load->model('openbay/ebay_template');
-
 		$this->document->setTitle($data['heading_title']);
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
@@ -62,8 +60,6 @@ class ControllerOpenbayEbayTemplate extends Controller {
 	public function add() {
 		$data = $this->load->language('openbay/ebay_template');
 
-		$this->load->model('openbay/ebay_template');
-
 		$data['page_title']   = $data['heading_title'];
 		$data['btn_save']     = $this->url->link('openbay/ebay_template/add', 'token=' . $this->session->data['token'], 'SSL');
 		$data['cancel']       = $this->url->link('openbay/ebay_template/listAll', 'token=' . $this->session->data['token'], 'SSL');
@@ -81,7 +77,6 @@ class ControllerOpenbayEbayTemplate extends Controller {
 
 	public function delete() {
 		$this->load->language('openbay/ebay_template');
-		$this->load->model('openbay/ebay_template');
 
 		if (!$this->user->hasPermission('modify', 'openbay/ebay_template')) {
 			$this->error['warning'] = $this->language->get('error_permission');
@@ -97,8 +92,6 @@ class ControllerOpenbayEbayTemplate extends Controller {
 
 	public function edit() {
 		$data = $this->load->language('openbay/ebay_template');
-
-		$this->load->model('openbay/ebay_template');
 
 		$data['page_title']   = $data['text_title_list_edit'];
 		$data['btn_save']     = $this->url->link('openbay/ebay_template/edit', 'token=' . $this->session->data['token'], 'SSL');
@@ -117,7 +110,6 @@ class ControllerOpenbayEbayTemplate extends Controller {
 	}
 
 	public function templateForm($data) {
-		$this->load->model('openbay/ebay');
 
 		$data['token'] = $this->session->data['token'];
 

@@ -7,8 +7,6 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('authorizenet_sim', $this->request->post);
 
@@ -123,8 +121,6 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 			$data['authorizenet_sim_order_status_id'] = $this->config->get('authorizenet_sim_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['authorizenet_sim_geo_zone_id'])) {
@@ -132,8 +128,6 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 		} else {
 			$data['authorizenet_sim_geo_zone_id'] = $this->config->get('authorizenet_sim_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

@@ -235,7 +235,6 @@ final class Openbay {
 	}
 
 	public function newOrderAdminNotify($order_id, $order_status_id) {
-		$this->load->model('checkout/order');
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 
 		$language = new \Language($order_info['language_directory']);
@@ -435,7 +434,6 @@ final class Openbay {
 	}
 
 	public function getOrderProductVariant($order_id, $product_id, $order_product_id) {
-		$this->load->model('module/openstock');
 
 		$order_option_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$order_product_id . "'");
 

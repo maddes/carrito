@@ -5,8 +5,6 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$data['x_login'] = $this->config->get('authorizenet_sim_merchant');
@@ -48,7 +46,6 @@ class ControllerPaymentAuthorizeNetSim extends Controller {
 
 	public function callback() {
 		if (md5($this->config->get('authorizenet_sim_response_key') . $this->request->post['x_login'] . $this->request->post['x_trans_id'] . $this->request->post['x_amount']) == strtolower($this->request->post['x_MD5_Hash'])) {
-			$this->load->model('checkout/order');
 
 			$order_info = $this->model_checkout_order->getOrder($details['x_invoice_num']);
 

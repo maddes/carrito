@@ -47,7 +47,6 @@ class ControllerCommonDashboard extends Controller {
 
 		// Run currency update
 		if ($this->config->get('config_currency_auto')) {
-			$this->load->model('localisation/currency');
 
 			$this->model_localisation_currency->refresh();
 		}

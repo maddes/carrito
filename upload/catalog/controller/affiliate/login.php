@@ -11,11 +11,8 @@ class ControllerAffiliateLogin extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('affiliate/affiliate');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && isset($this->request->post['email']) && isset($this->request->post['password']) && $this->validate()) {
 			// Add to activity log
-			$this->load->model('affiliate/activity');
 
 			$activity_data = array(
 				'affiliate_id' => $this->affiliate->getId(),
@@ -116,7 +113,6 @@ class ControllerAffiliateLogin extends Controller {
 
 	protected function validate() {
 		// Check how many login attempts have been made.
-        $this->load->model('account/customer');
 		$login_info = $this->model_account_customer->getLoginAttempts($this->request->post['email']);
 
 		if ($login_info && ($login_info['total'] >= $this->config->get('config_login_attempts')) && strtotime('-1 hour') < strtotime($login_info['date_modified'])) {

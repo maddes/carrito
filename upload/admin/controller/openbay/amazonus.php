@@ -1,9 +1,6 @@
 <?php
 class ControllerOpenbayAmazonus extends Controller {
 	public function install() {
-		$this->load->model('openbay/amazonus');
-		$this->load->model('setting/setting');
-		$this->load->model('extension/extension');
 
 		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'openbay/amazonus_listing');
 		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'openbay/amazonus_listing');
@@ -14,9 +11,6 @@ class ControllerOpenbayAmazonus extends Controller {
 	}
 
 	public function uninstall() {
-		$this->load->model('openbay/amazonus');
-		$this->load->model('setting/setting');
-		$this->load->model('extension/extension');
 
 		$this->model_openbay_amazonus->uninstall();
 		$this->model_extension_extension->uninstall('openbay', $this->request->get['extension']);
@@ -24,9 +18,6 @@ class ControllerOpenbayAmazonus extends Controller {
 	}
 
 	public function index() {
-		$this->load->model('setting/setting');
-		$this->load->model('localisation/order_status');
-		$this->load->model('openbay/amazonus');
 
 		$data = $this->load->language('openbay/amazonus');
 
@@ -228,12 +219,6 @@ class ControllerOpenbayAmazonus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
-
-		$this->load->model('setting/setting');
-		$this->load->model('localisation/order_status');
-		$this->load->model('openbay/amazonus');
-
-		$this->load->model('customer/customer_group');
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 
 		$settings = $this->model_setting_setting->getSetting('openbay_amazonus');
@@ -426,7 +411,6 @@ class ControllerOpenbayAmazonus extends Controller {
 		);
 
 		$data['token'] = $this->session->data['token'];
-		$this->load->model('openbay/amazonus');
 		$saved_products = $this->model_openbay_amazonus->getSavedProducts();
 
 		$data['saved_products'] = array();
@@ -469,8 +453,6 @@ class ControllerOpenbayAmazonus extends Controller {
 		$variants = array();
 
 		if ($this->openbay->addonLoad('openstock') && isset($this->request->get['product_id'])) {
-			$this->load->model('module/openstock');
-			$this->load->model('tool/image');
 			$variants = $this->model_module_openstock->getVariants($this->request->get['product_id']);
 		}
 
@@ -490,7 +472,6 @@ class ControllerOpenbayAmazonus extends Controller {
 
 	public function addLink() {
 		if (isset($this->request->get['product_id']) && isset($this->request->get['amazon_sku'])) {
-			$this->load->model('openbay/amazonus');
 
 			$amazon_sku = $this->request->get['amazon_sku'];
 			$product_id = $this->request->get['product_id'];
@@ -503,8 +484,6 @@ class ControllerOpenbayAmazonus extends Controller {
 
 			if ($var != '' && $this->openbay->addonLoad('openstock')) {
 				$logger->write('Using openStock');
-				$this->load->model('tool/image');
-				$this->load->model('module/openstock');
 				$option_stocks = $this->model_module_openstock->getVariants($product_id);
 
 				$quantity_data = array();
@@ -537,7 +516,6 @@ class ControllerOpenbayAmazonus extends Controller {
 
 	public function deleteLink() {
 		if (isset($this->request->get['amazon_sku'])) {
-			$this->load->model('openbay/amazonus');
 
 			$amazon_sku = $this->request->get['amazon_sku'];
 
@@ -553,8 +531,6 @@ class ControllerOpenbayAmazonus extends Controller {
 	}
 
 	public function getLinks() {
-		$this->load->model('openbay/amazonus');
-		$this->load->model('catalog/product');
 
 		$itemLinks = $this->model_openbay_amazonus->getProductLinks();
 
@@ -563,8 +539,6 @@ class ControllerOpenbayAmazonus extends Controller {
 	}
 
 	public function getUnlinked() {
-		$this->load->model('openbay/amazonus');
-		$this->load->model('catalog/product');
 
 		$unlinkedProducts = $this->model_openbay_amazonus->getUnlinkedProducts();
 
@@ -580,7 +554,6 @@ class ControllerOpenbayAmazonus extends Controller {
 				'message' => $this->language->get('error_not_searched'),
 			);
 		} else {
-			$this->load->model('openbay/amazonus_listing');
 
 			$delete_search_results = array();
 
@@ -636,8 +609,6 @@ class ControllerOpenbayAmazonus extends Controller {
 	}
 
 	public function doBulkSearch() {
-		$this->load->model('catalog/product');
-		$this->load->model('openbay/amazonus_listing');
 		$this->load->language('openbay/amazonus_bulk');
 
 		$json = array();
@@ -692,9 +663,6 @@ class ControllerOpenbayAmazonus extends Controller {
 	}
 
 	public function bulkListProducts() {
-		$this->load->model('openbay/amazonus');
-		$this->load->model('catalog/product');
-		$this->load->model('tool/image');
 
 		$data = $this->load->language('openbay/amazonus_bulk_listing');
 
@@ -828,7 +796,6 @@ class ControllerOpenbayAmazonus extends Controller {
 	}
 
 	public function bulkLinking() {
-		$this->load->model('openbay/amazonus');
 
 		$data = $this->load->language('openbay/amazonus_bulk_linking');
 
@@ -924,8 +891,6 @@ class ControllerOpenbayAmazonus extends Controller {
 	}
 
 	public function loadListingReport() {
-		$this->load->model('openbay/amazonus');
-		$this->load->model('setting/setting');
 		$this->load->language('openbay/amazonus_bulk_linking');
 
 		$this->model_openbay_amazonus->deleteListingReports();
@@ -955,7 +920,6 @@ class ControllerOpenbayAmazonus extends Controller {
 	}
 
 	public function doBulkLinking() {
-		$this->load->model('openbay/amazonus');
 
 		$links = array();
 		$skus = array();

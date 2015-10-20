@@ -7,8 +7,6 @@ class ControllerCustomerCustomer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCustomerCustomer extends Controller {
 		$this->load->language('customer/customer');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('customer/customer');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_customer_customer->addCustomer($this->request->post);
@@ -77,8 +73,6 @@ class ControllerCustomerCustomer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_customer_customer->editCustomer($this->request->get['customer_id'], $this->request->post);
 
@@ -136,8 +130,6 @@ class ControllerCustomerCustomer extends Controller {
 		$this->load->language('customer/customer');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('customer/customer');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $customer_id) {
@@ -198,8 +190,6 @@ class ControllerCustomerCustomer extends Controller {
 		$this->load->language('customer/customer');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('customer/customer');
 
 		$customers = array();
 
@@ -266,8 +256,6 @@ class ControllerCustomerCustomer extends Controller {
 		$this->load->language('customer/customer');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('customer/customer');
 
 		if (isset($this->request->get['email']) && $this->validateUnlock()) {
 			$this->model_customer_customer->deleteLoginAttempts($this->request->get['email']);
@@ -650,11 +638,7 @@ class ControllerCustomerCustomer extends Controller {
 		$data['filter_ip'] = $filter_ip;
 		$data['filter_date_added'] = $filter_date_added;
 
-		$this->load->model('customer/customer_group');
-
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
-
-		$this->load->model('setting/store');
 
 		$data['stores'] = $this->model_setting_store->getStores();
 
@@ -850,8 +834,6 @@ class ControllerCustomerCustomer extends Controller {
 			$customer_info = $this->model_customer_customer->getCustomer($this->request->get['customer_id']);
 		}
 
-		$this->load->model('customer/customer_group');
-
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 
 		if (isset($this->request->post['customer_group_id'])) {
@@ -903,7 +885,6 @@ class ControllerCustomerCustomer extends Controller {
 		}
 
 		// Custom Fields
-		$this->load->model('customer/custom_field');
 
 		$data['custom_fields'] = array();
 
@@ -978,8 +959,6 @@ class ControllerCustomerCustomer extends Controller {
 			$data['confirm'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		if (isset($this->request->post['address'])) {
@@ -1039,7 +1018,6 @@ class ControllerCustomerCustomer extends Controller {
 		}
 
 		// Custom field validation
-		$this->load->model('customer/custom_field');
 
 		$custom_fields = $this->model_customer_custom_field->getCustomFields(array('filter_customer_group_id' => $this->request->post['customer_group_id']));
 
@@ -1076,8 +1054,6 @@ class ControllerCustomerCustomer extends Controller {
 				if ((utf8_strlen($value['city']) < 2) || (utf8_strlen($value['city']) > 128)) {
 					$this->error['address'][$key]['city'] = $this->language->get('error_city');
 				}
-
-				$this->load->model('localisation/country');
 
 				$country_info = $this->model_localisation_country->getCountry($value['country_id']);
 
@@ -1141,8 +1117,6 @@ class ControllerCustomerCustomer extends Controller {
 			$customer_id = 0;
 		}
 
-		$this->load->model('customer/customer');
-
 		$customer_info = $this->model_customer_customer->getCustomer($customer_id);
 
 		if ($customer_info) {
@@ -1156,8 +1130,6 @@ class ControllerCustomerCustomer extends Controller {
 			} else {
 				$store_id = 0;
 			}
-
-			$this->load->model('setting/store');
 
 			$store_info = $this->model_setting_store->getStore($store_id);
 
@@ -1197,8 +1169,6 @@ class ControllerCustomerCustomer extends Controller {
 
 	public function history() {
 		$this->load->language('customer/customer');
-
-		$this->load->model('customer/customer');
 
 		$data['text_no_results'] = $this->language->get('text_no_results');
 
@@ -1245,7 +1215,6 @@ class ControllerCustomerCustomer extends Controller {
 		if (!$this->user->hasPermission('modify', 'customer/customer')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('customer/customer');
 
 			$this->model_customer_customer->addHistory($this->request->get['customer_id'], $this->request->post['comment']);
 
@@ -1258,8 +1227,6 @@ class ControllerCustomerCustomer extends Controller {
 
 	public function transaction() {
 		$this->load->language('customer/customer');
-
-		$this->load->model('customer/customer');
 
 		$data['text_no_results'] = $this->language->get('text_no_results');
 		$data['text_balance'] = $this->language->get('text_balance');
@@ -1311,7 +1278,6 @@ class ControllerCustomerCustomer extends Controller {
 		if (!$this->user->hasPermission('modify', 'customer/customer')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('customer/customer');
 
 			$this->model_customer_customer->addTransaction($this->request->get['customer_id'], $this->request->post['description'], $this->request->post['amount']);
 
@@ -1324,8 +1290,6 @@ class ControllerCustomerCustomer extends Controller {
 
 	public function reward() {
 		$this->load->language('customer/customer');
-
-		$this->load->model('customer/customer');
 
 		$data['text_no_results'] = $this->language->get('text_no_results');
 		$data['text_balance'] = $this->language->get('text_balance');
@@ -1377,7 +1341,6 @@ class ControllerCustomerCustomer extends Controller {
 		if (!$this->user->hasPermission('modify', 'customer/customer')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('customer/customer');
 
 			$this->model_customer_customer->addReward($this->request->get['customer_id'], $this->request->post['description'], $this->request->post['points']);
 
@@ -1390,8 +1353,6 @@ class ControllerCustomerCustomer extends Controller {
 
 	public function ip() {
 		$this->load->language('customer/customer');
-
-		$this->load->model('customer/customer');
 
 		$data['text_no_results'] = $this->language->get('text_no_results');
 
@@ -1449,8 +1410,6 @@ class ControllerCustomerCustomer extends Controller {
 				$filter_email = '';
 			}
 
-			$this->load->model('customer/customer');
-
 			$filter_data = array(
 				'filter_name'  => $filter_name,
 				'filter_email' => $filter_email,
@@ -1492,8 +1451,6 @@ class ControllerCustomerCustomer extends Controller {
 	public function customfield() {
 		$json = array();
 
-		$this->load->model('customer/custom_field');
-
 		// Customer Group
 		if (isset($this->request->get['customer_group_id'])) {
 			$customer_group_id = $this->request->get['customer_group_id'];
@@ -1518,7 +1475,6 @@ class ControllerCustomerCustomer extends Controller {
 		$json = array();
 
 		if (!empty($this->request->get['address_id'])) {
-			$this->load->model('customer/customer');
 
 			$json = $this->model_customer_customer->getAddress($this->request->get['address_id']);
 		}

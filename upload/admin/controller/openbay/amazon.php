@@ -1,9 +1,6 @@
 <?php
 class ControllerOpenbayAmazon extends Controller {
 	public function install() {
-		$this->load->model('openbay/amazon');
-		$this->load->model('setting/setting');
-		$this->load->model('extension/extension');
 
 		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'openbay/amazon_listing');
 		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'openbay/amazon_listing');
@@ -14,9 +11,6 @@ class ControllerOpenbayAmazon extends Controller {
 	}
 
 	public function uninstall() {
-		$this->load->model('openbay/amazon');
-		$this->load->model('setting/setting');
-		$this->load->model('extension/extension');
 
 		$this->model_openbay_amazon->uninstall();
 		$this->model_extension_extension->uninstall('openbay', $this->request->get['extension']);
@@ -24,9 +18,6 @@ class ControllerOpenbayAmazon extends Controller {
 	}
 
 	public function index() {
-		$this->load->model('setting/setting');
-		$this->load->model('localisation/order_status');
-		$this->load->model('openbay/amazon');
 
 		$data = $this->load->language('openbay/amazon');
 
@@ -232,12 +223,6 @@ class ControllerOpenbayAmazon extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
-
-		$this->load->model('setting/setting');
-		$this->load->model('localisation/order_status');
-		$this->load->model('openbay/amazon');
-
-		$this->load->model('customer/customer_group');
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 
 		$settings = $this->model_setting_setting->getSetting('openbay_amazon');
@@ -429,7 +414,6 @@ class ControllerOpenbayAmazon extends Controller {
 		);
 
 		$data['token'] = $this->session->data['token'];
-		$this->load->model('openbay/amazon');
 		$saved_products = $this->model_openbay_amazon->getSavedProducts();
 
 		$data['saved_products'] = array();
@@ -472,8 +456,6 @@ class ControllerOpenbayAmazon extends Controller {
 		$variants = array();
 
 		if ($this->openbay->addonLoad('openstock') && isset($this->request->get['product_id'])) {
-			$this->load->model('module/openstock');
-			$this->load->model('tool/image');
 			$variants = $this->model_module_openstock->getVariants($this->request->get['product_id']);
 		}
 
@@ -493,7 +475,6 @@ class ControllerOpenbayAmazon extends Controller {
 
 	public function addLink() {
 		if (isset($this->request->get['product_id']) && isset($this->request->get['amazon_sku'])) {
-			$this->load->model('openbay/amazon');
 
 			$amazon_sku = $this->request->get['amazon_sku'];
 			$product_id = $this->request->get['product_id'];
@@ -506,8 +487,6 @@ class ControllerOpenbayAmazon extends Controller {
 
 			if ($var != '' && $this->openbay->addonLoad('openstock')) {
 				$logger->write('Using openStock');
-				$this->load->model('tool/image');
-				$this->load->model('module/openstock');
 				$option_stocks = $this->model_module_openstock->getVariants($product_id);
 
 				$quantity_data = array();
@@ -540,7 +519,6 @@ class ControllerOpenbayAmazon extends Controller {
 
 	public function deleteLink() {
 		if (isset($this->request->get['amazon_sku'])) {
-			$this->load->model('openbay/amazon');
 
 			$amazon_sku = $this->request->get['amazon_sku'];
 
@@ -556,8 +534,6 @@ class ControllerOpenbayAmazon extends Controller {
 	}
 
 	public function getLinks() {
-		$this->load->model('openbay/amazon');
-		$this->load->model('catalog/product');
 
 		$json = json_encode($this->model_openbay_amazon->getProductLinks());
 
@@ -566,8 +542,6 @@ class ControllerOpenbayAmazon extends Controller {
 	}
 
 	public function getUnlinked() {
-		$this->load->model('openbay/amazon');
-		$this->load->model('catalog/product');
 
 		$json = json_encode($this->model_openbay_amazon->getUnlinkedProducts());
 
@@ -583,7 +557,6 @@ class ControllerOpenbayAmazon extends Controller {
 				'message' => $this->language->get('error_not_searched'),
 			);
 		} else {
-			$this->load->model('openbay/amazon_listing');
 
 			$delete_search_results = array();
 
@@ -640,8 +613,6 @@ class ControllerOpenbayAmazon extends Controller {
 	}
 
 	public function doBulkSearch() {
-		$this->load->model('catalog/product');
-		$this->load->model('openbay/amazon_listing');
 		$this->load->language('openbay/amazon_bulk_listing');
 
 		$json = array();
@@ -697,9 +668,6 @@ class ControllerOpenbayAmazon extends Controller {
 	}
 
 	public function bulkListProducts() {
-		$this->load->model('openbay/amazon');
-		$this->load->model('catalog/product');
-		$this->load->model('tool/image');
 
 		$data = $this->load->language('openbay/amazon_bulk_listing');
 
@@ -851,7 +819,6 @@ class ControllerOpenbayAmazon extends Controller {
 	}
 
 	public function bulkLinking() {
-		$this->load->model('openbay/amazon');
 
 		$data = $this->load->language('openbay/amazon_bulk_linking');
 
@@ -991,8 +958,6 @@ class ControllerOpenbayAmazon extends Controller {
 	}
 
 	public function loadListingReport() {
-		$this->load->model('openbay/amazon');
-		$this->load->model('setting/setting');
 		$this->load->language('openbay/amazon_bulk_linking');
 
 		$marketplace = $this->request->get['marketplace'];
@@ -1026,7 +991,6 @@ class ControllerOpenbayAmazon extends Controller {
 	}
 
 	public function doBulkLinking() {
-		$this->load->model('openbay/amazon');
 
 		$links = array();
 		$skus = array();

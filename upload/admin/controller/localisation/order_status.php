@@ -7,8 +7,6 @@ class ControllerLocalisationOrderStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/order_status');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerLocalisationOrderStatus extends Controller {
 		$this->load->language('localisation/order_status');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/order_status');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_order_status->addOrderStatus($this->request->post);
@@ -49,8 +45,6 @@ class ControllerLocalisationOrderStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/order_status');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_order_status->editOrderStatus($this->request->get['order_status_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerLocalisationOrderStatus extends Controller {
 		$this->load->language('localisation/order_status');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/order_status');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $order_status_id) {
@@ -312,8 +304,6 @@ class ControllerLocalisationOrderStatus extends Controller {
 
 		$data['cancel'] = $this->url->link('localisation/order_status', 'token=' . $this->session->data['token'] . $url, 'SSL');
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['order_status'])) {
@@ -349,9 +339,6 @@ class ControllerLocalisationOrderStatus extends Controller {
 		if (!$this->user->hasPermission('modify', 'localisation/order_status')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('setting/store');
-		$this->load->model('sale/order');
 
 		foreach ($this->request->post['selected'] as $order_status_id) {
 			if ($this->config->get('config_order_status_id') == $order_status_id) {

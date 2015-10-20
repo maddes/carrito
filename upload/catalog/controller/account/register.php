@@ -15,8 +15,6 @@ class ControllerAccountRegister extends Controller {
 		$this->document->addScript('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.js');
 		$this->document->addStyle('catalog/view/javascript/jquery/datetimepicker/bootstrap-datetimepicker.min.css');
 
-		$this->load->model('account/customer');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$customer_id = $this->model_account_customer->addCustomer($this->request->post);
 
@@ -28,7 +26,6 @@ class ControllerAccountRegister extends Controller {
 			unset($this->session->data['guest']);
 
 			// Add to activity log
-			$this->load->model('account/activity');
 
 			$activity_data = array(
 				'customer_id' => $customer_id,
@@ -173,7 +170,6 @@ class ControllerAccountRegister extends Controller {
 		$data['customer_groups'] = array();
 
 		if (is_array($this->config->get('config_customer_group_display'))) {
-			$this->load->model('account/customer_group');
 
 			$customer_groups = $this->model_account_customer_group->getCustomerGroups();
 
@@ -268,12 +264,9 @@ class ControllerAccountRegister extends Controller {
 			$data['zone_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		// Custom Fields
-		$this->load->model('account/custom_field');
 
 		$data['custom_fields'] = $this->model_account_custom_field->getCustomFields();
 
@@ -321,7 +314,6 @@ class ControllerAccountRegister extends Controller {
 		}
 
 		if ($this->config->get('config_account_id')) {
-			$this->load->model('catalog/information');
 
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
 
@@ -379,8 +371,6 @@ class ControllerAccountRegister extends Controller {
 			$this->error['city'] = $this->language->get('error_city');
 		}
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 		if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -403,7 +393,6 @@ class ControllerAccountRegister extends Controller {
 		}
 
 		// Custom field validation
-		$this->load->model('account/custom_field');
 
 		$custom_fields = $this->model_account_custom_field->getCustomFields($customer_group_id);
 
@@ -432,7 +421,6 @@ class ControllerAccountRegister extends Controller {
 
 		// Agree to terms
 		if ($this->config->get('config_account_id')) {
-			$this->load->model('catalog/information');
 
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
 
@@ -446,8 +434,6 @@ class ControllerAccountRegister extends Controller {
 
 	public function customfield() {
 		$json = array();
-
-		$this->load->model('account/custom_field');
 
 		// Customer Group
 		if (isset($this->request->get['customer_group_id']) && is_array($this->config->get('config_customer_group_display')) && in_array($this->request->get['customer_group_id'], $this->config->get('config_customer_group_display'))) {

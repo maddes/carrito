@@ -7,8 +7,6 @@ class ControllerTotalKlarnaFee extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$status = false;
 
@@ -107,8 +105,6 @@ class ControllerTotalKlarnaFee extends Controller {
 		} else {
 			$data['klarna_fee'] = $this->config->get('klarna_fee');
 		}
-
-		$this->load->model('localisation/tax_class');
 
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 

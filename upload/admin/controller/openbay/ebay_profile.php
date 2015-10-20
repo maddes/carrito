@@ -5,8 +5,6 @@ class ControllerOpenbayEbayProfile extends Controller {
 	public function profileAll() {
 		$data = $this->load->language('openbay/ebay_profile');
 
-		$this->load->model('openbay/ebay_profile');
-
 		$this->document->setTitle($data['heading_title']);
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
@@ -62,8 +60,6 @@ class ControllerOpenbayEbayProfile extends Controller {
 	public function add() {
 		$data = $this->load->language('openbay/ebay_profile');
 
-		$this->load->model('openbay/ebay_profile');
-
 		$data['btn_save'] = $this->url->link('openbay/ebay_profile/add', 'token=' . $this->session->data['token'], 'SSL');
 		$data['cancel'] = $this->url->link('openbay/ebay_profile/profileall', 'token=' . $this->session->data['token'], 'SSL');
 
@@ -81,7 +77,6 @@ class ControllerOpenbayEbayProfile extends Controller {
 	}
 
 	public function delete() {
-		$this->load->model('openbay/ebay_profile');
 
 		if (!$this->user->hasPermission('modify', 'openbay/ebay_profile')) {
 			$this->error['warning'] = $this->language->get('error_permission');
@@ -97,8 +92,6 @@ class ControllerOpenbayEbayProfile extends Controller {
 	public function edit() {
 		$data = $this->load->language('openbay/ebay_profile');
 
-		$this->load->model('openbay/ebay_profile');
-
 		if ($this->request->post && $this->profileValidate()) {
 			$this->session->data['success'] = $data['text_updated'];
 
@@ -111,8 +104,6 @@ class ControllerOpenbayEbayProfile extends Controller {
 	}
 
 	public function profileForm($data) {
-		$this->load->model('openbay/ebay');
-		$this->load->model('openbay/ebay_template');
 
 		$data['token']                            = $this->session->data['token'];
 		$data['shipping_international_zones']     = $this->model_openbay_ebay->getShippingLocations();
@@ -284,8 +275,6 @@ class ControllerOpenbayEbayProfile extends Controller {
 	}
 
 	public function profileGet() {
-		$this->load->model('openbay/ebay_profile');
-		$this->load->model('openbay/ebay');
 		$this->load->language('openbay/ebay_profile');
 
 		$profile_info = $this->model_openbay_ebay_profile->get($this->request->get['ebay_profile_id']);

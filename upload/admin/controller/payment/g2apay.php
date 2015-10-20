@@ -9,8 +9,6 @@ class ControllerPaymentG2APay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('g2apay', $this->request->post);
 
@@ -136,8 +134,6 @@ class ControllerPaymentG2APay extends Controller {
 			'text' => $this->language->get('heading_title'),
 			'href' => $this->url->link('payment/g2apay', 'token=' . $this->session->data['token'], 'SSL')
 		);
-
-		$this->load->model('localisation/order_status');
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		$data['action'] = $this->url->link('payment/g2apay', 'token=' . $this->session->data['token'], 'SSL');
@@ -196,8 +192,6 @@ class ControllerPaymentG2APay extends Controller {
 			$data['g2apay_order_status_id'] = $this->config->get('g2apay_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['g2apay_geo_zone_id'])) {
@@ -205,8 +199,6 @@ class ControllerPaymentG2APay extends Controller {
 		} else {
 			$data['g2apay_geo_zone_id'] = $this->config->get('g2apay_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -238,8 +230,6 @@ class ControllerPaymentG2APay extends Controller {
 	public function order() {
 
 		if ($this->config->get('g2apay_status')) {
-
-			$this->load->model('payment/g2apay');
 
 			$g2apay_order = $this->model_payment_g2apay->getOrder($this->request->get['order_id']);
 
@@ -280,7 +270,6 @@ class ControllerPaymentG2APay extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('payment/g2apay');
 
 			$g2apay_order = $this->model_payment_g2apay->getOrder($this->request->post['order_id']);
 
@@ -324,12 +313,10 @@ class ControllerPaymentG2APay extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/g2apay');
 		$this->model_payment_g2apay->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/g2apay');
 		$this->model_payment_g2apay->uninstall();
 	}
 

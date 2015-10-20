@@ -7,8 +7,6 @@ class ControllerLocalisationGeoZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/geo_zone');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerLocalisationGeoZone extends Controller {
 		$this->load->language('localisation/geo_zone');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/geo_zone');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_geo_zone->addGeoZone($this->request->post);
@@ -49,8 +45,6 @@ class ControllerLocalisationGeoZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/geo_zone');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_geo_zone->editGeoZone($this->request->get['geo_zone_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerLocalisationGeoZone extends Controller {
 		$this->load->language('localisation/geo_zone');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/geo_zone');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $geo_zone_id) {
@@ -348,8 +340,6 @@ class ControllerLocalisationGeoZone extends Controller {
 			$data['description'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		if (isset($this->request->post['zone_to_geo_zone'])) {
@@ -388,8 +378,6 @@ class ControllerLocalisationGeoZone extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('localisation/tax_rate');
-
 		foreach ($this->request->post['selected'] as $geo_zone_id) {
 			$tax_rate_total = $this->model_localisation_tax_rate->getTotalTaxRatesByGeoZoneId($geo_zone_id);
 
@@ -403,8 +391,6 @@ class ControllerLocalisationGeoZone extends Controller {
 
 	public function zone() {
 		$output = '<option value="0">' . $this->language->get('text_all_zones') . '</option>';
-
-		$this->load->model('localisation/zone');
 
 		$results = $this->model_localisation_zone->getZonesByCountryId($this->request->get['country_id']);
 

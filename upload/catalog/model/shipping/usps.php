@@ -16,7 +16,6 @@ class ModelShippingUsps extends Model {
 		$method_data = array();
 
 		if ($status) {
-			$this->load->model('localisation/country');
 
 			$quote_data = array();
 

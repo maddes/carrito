@@ -7,8 +7,6 @@ class ControllerToolUpload extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('tool/upload');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerToolUpload extends Controller {
 		$this->load->language('tool/upload');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('tool/upload');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $upload_id) {
@@ -259,7 +255,6 @@ class ControllerToolUpload extends Controller {
 	}
 
 	public function download() {
-		$this->load->model('tool/upload');
 
 		if (isset($this->request->get['code'])) {
 			$code = $this->request->get['code'];
@@ -392,7 +387,6 @@ class ControllerToolUpload extends Controller {
 			move_uploaded_file($this->request->files['file']['tmp_name'], DIR_UPLOAD . $file);
 
 			// Hide the uploaded file name so people can not link to it directly.
-			$this->load->model('tool/upload');
 
 			$json['code'] = $this->model_tool_upload->addUpload($filename, $file);
 

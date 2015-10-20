@@ -7,8 +7,6 @@ class ControllerPaymentPayza extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('payza', $this->request->post);
 
@@ -104,8 +102,6 @@ class ControllerPaymentPayza extends Controller {
 			$data['payza_order_status_id'] = $this->config->get('payza_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['payza_geo_zone_id'])) {
@@ -113,8 +109,6 @@ class ControllerPaymentPayza extends Controller {
 		} else {
 			$data['payza_geo_zone_id'] = $this->config->get('payza_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

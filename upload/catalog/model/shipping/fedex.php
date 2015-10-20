@@ -39,11 +39,7 @@ class ModelShippingFedex extends Model {
 				$date += 86400;
 			}
 
-			$this->load->model('localisation/country');
-
 			$country_info = $this->model_localisation_country->getCountry($this->config->get('config_country_id'));
-
-			$this->load->model('localisation/zone');
 
 			$zone_info = $this->model_localisation_zone->getZone($this->config->get('config_zone_id'));
 

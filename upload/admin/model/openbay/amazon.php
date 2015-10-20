@@ -82,7 +82,6 @@ class ModelOpenbayAmazon extends Model {
 			) DEFAULT COLLATE=utf8_general_ci;");
 
 		// add the event triggers
-		$this->load->model('extension/event');
 		$this->model_extension_event->addEvent('openbaypro_amazon', 'post.order.history.add', 'openbay/amazon/eventAddOrderHistory');
 	}
 
@@ -102,7 +101,6 @@ class ModelOpenbayAmazon extends Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE `code` = 'openbay_amazon'");
 
 		// remove the event triggers
-		$this->load->model('extension/event');
 		$this->model_extension_event->deleteEvent('openbaypro_amazon');
 	}
 
@@ -112,7 +110,6 @@ class ModelOpenbayAmazon extends Model {
 			 * Manual flag to true is set when the user runs the patch method manually
 			 * false is when the module is updated using the update system
 			 */
-			$this->load->model('setting/setting');
 
 			$settings = $this->model_setting_setting->getSetting('openbay_amazon');
 
@@ -429,8 +426,6 @@ class ModelOpenbayAmazon extends Model {
 		$this->load->library('openbay/amazon');
 
 		if ($this->openbay->addonLoad('openstock')) {
-			$this->load->model('module/openstock');
-			$this->load->model('tool/image');
 
 			foreach ($product_links as $key => $product_link) {
 				$variants = $this->model_module_openstock->getVariants($product_link['product_id']);
@@ -463,8 +458,6 @@ class ModelOpenbayAmazon extends Model {
 				AND `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'")->rows;
 
 			$result = array();
-			$this->load->model('module/openstock');
-			$this->load->model('tool/image');
 			foreach($rows as $row) {
 				if ($row['has_option'] == 1) {
 					$stock_opts = $this->model_module_openstock->getVariants($row['product_id']);
@@ -574,8 +567,6 @@ class ModelOpenbayAmazon extends Model {
 		$result = null;
 
 		if ($var !== '' && $this->openbay->addonLoad('openstock')) {
-			$this->load->model('tool/image');
-			$this->load->model('module/openstock');
 			$option_stocks = $this->model_module_openstock->getVariants($product_id);
 
 			$option = null;
@@ -590,7 +581,6 @@ class ModelOpenbayAmazon extends Model {
 				$result = $option['stock'];
 			}
 		} else {
-			$this->load->model('catalog/product');
 			$product_info = $this->model_catalog_product->getProduct($product_id);
 
 			if (isset($product_info['quantity'])) {
@@ -714,7 +704,6 @@ class ModelOpenbayAmazon extends Model {
 		$start = $limit * ($page - 1);
 
 		if ($this->openbay->addonLoad('openstock')) {
-			$this->load->model('module/openstock');
 			$rows = $this->db->query("
 				SELECT alr.sku AS 'amazon_sku', alr.quantity AS 'amazon_quantity', alr.asin, alr.price AS 'amazon_price', oc_sku.product_id, pd.name, oc_sku.sku, oc_sku.var, oc_sku.quantity, oc_sku.pov_id
 				FROM " . DB_PREFIX . "amazon_listing_report alr

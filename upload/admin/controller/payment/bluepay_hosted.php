@@ -7,8 +7,6 @@ class ControllerPaymentBluePayHosted extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('bluepay_hosted', $this->request->post);
 
@@ -153,8 +151,6 @@ class ControllerPaymentBluePayHosted extends Controller {
 			$data['bluepay_hosted_order_status_id'] = $this->config->get('bluepay_hosted_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['bluepay_hosted_geo_zone_id'])) {
@@ -162,8 +158,6 @@ class ControllerPaymentBluePayHosted extends Controller {
 		} else {
 			$data['bluepay_hosted_geo_zone_id'] = $this->config->get('bluepay_hosted_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -193,20 +187,17 @@ class ControllerPaymentBluePayHosted extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/bluepay_hosted');
 
 		$this->model_payment_bluepay_hosted->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/bluepay_hosted');
 
 		$this->model_payment_bluepay_hosted->uninstall();
 	}
 
 	public function order() {
 		if ($this->config->get('bluepay_hosted_status')) {
-			$this->load->model('payment/bluepay_hosted');
 
 			$bluepay_hosted_order = $this->model_payment_bluepay_hosted->getOrder($this->request->get['order_id']);
 
@@ -253,7 +244,6 @@ class ControllerPaymentBluePayHosted extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/bluepay_hosted');
 
 			$bluepay_hosted_order = $this->model_payment_bluepay_hosted->getOrder($this->request->post['order_id']);
 
@@ -287,7 +277,6 @@ class ControllerPaymentBluePayHosted extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($this->request->post['amount']) && $this->request->post['amount'] > 0) {
-			$this->load->model('payment/bluepay_hosted');
 
 			$bluepay_hosted_order = $this->model_payment_bluepay_hosted->getOrder($this->request->post['order_id']);
 
@@ -333,7 +322,6 @@ class ControllerPaymentBluePayHosted extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('payment/bluepay_hosted');
 
 			$bluepay_hosted_order = $this->model_payment_bluepay_hosted->getOrder($this->request->post['order_id']);
 

@@ -28,7 +28,6 @@ class ControllerApiCart extends Controller {
 				unset($this->session->data['payment_method']);
 				unset($this->session->data['payment_methods']);
 			} elseif (isset($this->request->post['product_id'])) {
-				$this->load->model('catalog/product');
 
 				$product_info = $this->model_catalog_product->getProduct($this->request->post['product_id']);
 
@@ -223,7 +222,6 @@ class ControllerApiCart extends Controller {
 			}
 
 			// Totals
-			$this->load->model('extension/extension');
 
 			$total_data = array();
 			$total = 0;
@@ -241,7 +239,6 @@ class ControllerApiCart extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
 
 					$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 				}

@@ -10,7 +10,6 @@ class ControllerDashboardCustomer extends Controller {
 		$data['token'] = $this->session->data['token'];
 
 		// Total Orders
-		$this->load->model('customer/customer');
 
 		$today = $this->model_customer_customer->getTotalCustomers(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
 

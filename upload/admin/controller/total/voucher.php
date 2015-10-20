@@ -7,8 +7,6 @@ class ControllerTotalVoucher extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('voucher', $this->request->post);
 
@@ -85,14 +83,12 @@ class ControllerTotalVoucher extends Controller {
 
 	public function install() {
 		// Register the event triggers
-		$this->load->model('extension/event');
 
 		$this->model_extension_event->addEvent('voucher', 'post.order.history.add', 'total/voucher/send');
 	}
 
 	public function uninstall() {
 		// delete the event triggers
-		$this->load->model('extension/event');
 
 		$this->model_extension_event->deleteEvent('voucher');
 	}

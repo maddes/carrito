@@ -69,8 +69,6 @@ class ControllerReportSaleReturn extends Controller {
 			'href' => $this->url->link('report/sale_return', 'token=' . $this->session->data['token'] . $url, 'SSL')
 		);
 
-		$this->load->model('report/return');
-
 		$data['returns'] = array();
 
 		$filter_data = array(
@@ -114,8 +112,6 @@ class ControllerReportSaleReturn extends Controller {
 		$data['button_filter'] = $this->language->get('button_filter');
 
 		$data['token'] = $this->session->data['token'];
-
-		$this->load->model('localisation/return_status');
 
 		$data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
 

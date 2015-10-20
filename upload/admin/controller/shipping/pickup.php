@@ -7,8 +7,6 @@ class ControllerShippingPickup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('pickup', $this->request->post);
 
@@ -64,8 +62,6 @@ class ControllerShippingPickup extends Controller {
 		} else {
 			$data['pickup_geo_zone_id'] = $this->config->get('pickup_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

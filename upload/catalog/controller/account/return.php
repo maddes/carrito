@@ -49,8 +49,6 @@ class ControllerAccountReturn extends Controller {
 		$data['button_view'] = $this->language->get('button_view');
 		$data['button_continue'] = $this->language->get('button_continue');
 
-		$this->load->model('account/return');
-
 		if (isset($this->request->get['page'])) {
 			$page = $this->request->get['page'];
 		} else {
@@ -110,8 +108,6 @@ class ControllerAccountReturn extends Controller {
 
 			$this->response->redirect($this->url->link('account/login', '', 'SSL'));
 		}
-
-		$this->load->model('account/return');
 
 		$return_info = $this->model_account_return->getReturn($return_id);
 
@@ -264,13 +260,10 @@ class ControllerAccountReturn extends Controller {
 	public function add() {
 		$this->load->language('account/return');
 
-		$this->load->model('account/return');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$return_id = $this->model_account_return->addReturn($this->request->post);
 
 			// Add to activity log
-			$this->load->model('account/activity');
 
 			if ($this->customer->isLogged()) {
 				$activity_data = array(
@@ -394,13 +387,9 @@ class ControllerAccountReturn extends Controller {
 
 		$data['action'] = $this->url->link('account/return/add', '', 'SSL');
 
-		$this->load->model('account/order');
-
 		if (isset($this->request->get['order_id'])) {
 			$order_info = $this->model_account_order->getOrder($this->request->get['order_id']);
 		}
-
-		$this->load->model('catalog/product');
 
 		if (isset($this->request->get['product_id'])) {
 			$product_info = $this->model_catalog_product->getProduct($this->request->get['product_id']);
@@ -488,8 +477,6 @@ class ControllerAccountReturn extends Controller {
 			$data['return_reason_id'] = '';
 		}
 
-		$this->load->model('localisation/return_reason');
-
 		$data['return_reasons'] = $this->model_localisation_return_reason->getReturnReasons();
 
 		if (isset($this->request->post['comment'])) {
@@ -506,7 +493,6 @@ class ControllerAccountReturn extends Controller {
 		}
 
 		if ($this->config->get('config_return_id')) {
-			$this->load->model('catalog/information');
 
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_return_id'));
 
@@ -579,7 +565,6 @@ class ControllerAccountReturn extends Controller {
 		}
 
 		if ($this->config->get('config_return_id')) {
-			$this->load->model('catalog/information');
 
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_return_id'));
 

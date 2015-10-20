@@ -13,15 +13,12 @@ class ControllerAffiliateEdit extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('affiliate/affiliate');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_affiliate_affiliate->editAffiliate($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			// Add to activity log
-			$this->load->model('affiliate/activity');
 
 			$activity_data = array(
 				'affiliate_id' => $this->affiliate->getId(),
@@ -243,8 +240,6 @@ class ControllerAffiliateEdit extends Controller {
 			$data['zone_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		$data['back'] = $this->url->link('affiliate/account', '', 'SSL');
@@ -287,8 +282,6 @@ class ControllerAffiliateEdit extends Controller {
 			$this->error['city'] = $this->language->get('error_city');
 		}
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 		if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -309,12 +302,9 @@ class ControllerAffiliateEdit extends Controller {
 	public function country() {
 		$json = array();
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->get['country_id']);
 
 		if ($country_info) {
-			$this->load->model('localisation/zone');
 
 			$json = array(
 				'country_id'        => $country_info['country_id'],

@@ -91,8 +91,6 @@ class ControllerPaymentPPPro extends Controller {
 			$payment_type = 'Sale';
 		}
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$request  = 'METHOD=DoDirectPayment';

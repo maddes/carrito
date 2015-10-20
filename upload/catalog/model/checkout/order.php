@@ -21,7 +21,6 @@ class ModelCheckoutOrder extends Model {
 		}
 
 		// Gift Voucher
-		$this->load->model('total/voucher');
 
 		// Vouchers
 		if (isset($data['vouchers'])) {
@@ -73,7 +72,6 @@ class ModelCheckoutOrder extends Model {
 		}
 
 		// Gift Voucher
-		$this->load->model('total/voucher');
 
 		$this->model_total_voucher->disableVoucher($order_id);
 
@@ -120,7 +118,6 @@ class ModelCheckoutOrder extends Model {
 		$this->db->query("DELETE FROM `" . DB_PREFIX . "affiliate_transaction` WHERE order_id = '" . (int)$order_id . "'");
 
 		// Gift Voucher
-		$this->load->model('total/voucher');
 
 		$this->model_total_voucher->disableVoucher($order_id);
 
@@ -166,8 +163,6 @@ class ModelCheckoutOrder extends Model {
 			} else {
 				$shipping_zone_code = '';
 			}
-
-			$this->load->model('localisation/language');
 
 			$language_info = $this->model_localisation_language->getLanguage($order_query->row['language_id']);
 
@@ -267,7 +262,6 @@ class ModelCheckoutOrder extends Model {
 
 		if ($order_info) {
 			// Fraud Detection
-			$this->load->model('account/customer');
 
 			$customer_info = $this->model_account_customer->getCustomer($order_info['customer_id']);
 
@@ -280,13 +274,11 @@ class ModelCheckoutOrder extends Model {
 			// Only do the fraud check if the customer is not on the safe list and the order status is changing into the complete or process order status
 			if (!$safe && !$override && in_array($order_status_id, array_merge($this->config->get('config_processing_status'), $this->config->get('config_complete_status')))) {
 				// Anti-Fraud
-				$this->load->model('extension/extension');
 
 				$extensions = $this->model_extension_extension->getExtensions('fraud');
 
 				foreach ($extensions as $extension) {
 					if ($this->config->get($extension['code'] . '_status')) {
-						$this->load->model('fraud/' . $extension['code']);
 
 						$fraud_status_id = $this->{'model_fraud_' . $extension['code']}->check($order_info);
 
@@ -303,7 +295,6 @@ class ModelCheckoutOrder extends Model {
 				$order_total_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order ASC");
 
 				foreach ($order_total_query->rows as $order_total) {
-					$this->load->model('total/' . $order_total['code']);
 
 					if (method_exists($this->{'model_total_' . $order_total['code']}, 'confirm')) {
 					  // Confirm coupon, vouchers and reward points
@@ -318,7 +309,6 @@ class ModelCheckoutOrder extends Model {
 
 				// Add commission if sale is linked to affiliate referral.
 				if ($order_info['affiliate_id'] && $this->config->get('config_affiliate_auto')) {
-					$this->load->model('affiliate/affiliate');
 
 					$this->model_affiliate_affiliate->addTransaction($order_info['affiliate_id'], $order_info['commission'], $order_id);
 				}
@@ -358,12 +348,10 @@ class ModelCheckoutOrder extends Model {
 				}
 
 				// Remove coupon, vouchers and reward points history
-				$this->load->model('account/order');
 
 				$order_total_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order ASC");
 
 				foreach ($order_total_query->rows as $order_total) {
-					$this->load->model('total/' . $order_total['code']);
 
 					if (method_exists($this->{'model_total_' . $order_total['code']}, 'unconfirm')) {
 						$this->{'model_total_' . $order_total['code']}->unconfirm($order_id);
@@ -372,7 +360,6 @@ class ModelCheckoutOrder extends Model {
 
 				// Remove commission if sale is linked to affiliate referral.
 				if ($order_info['affiliate_id']) {
-					$this->load->model('affiliate/affiliate');
 
 					$this->model_affiliate_affiliate->deleteTransaction($order_id);
 				}
@@ -532,8 +519,6 @@ class ModelCheckoutOrder extends Model {
 				);
 
 				$data['shipping_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
-
-				$this->load->model('tool/upload');
 
 				// Products
 				$data['products'] = array();

@@ -8,8 +8,6 @@ class ControllerModuleInformation extends Controller {
 		$data['text_contact'] = $this->language->get('text_contact');
 		$data['text_sitemap'] = $this->language->get('text_sitemap');
 
-		$this->load->model('catalog/information');
-
 		$data['informations'] = array();
 
 		foreach ($this->model_catalog_information->getInformations() as $result) {

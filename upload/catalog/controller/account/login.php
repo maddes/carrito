@@ -3,7 +3,6 @@ class ControllerAccountLogin extends Controller {
 	private $error = array();
 
 	public function index() {
-		$this->load->model('account/customer');
 
 		// Login override for admin users
 		if (!empty($this->request->get['token'])) {
@@ -27,7 +26,6 @@ class ControllerAccountLogin extends Controller {
 
 			if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
 				// Default Addresses
-				$this->load->model('account/address');
 
 				if ($this->config->get('config_tax_customer') == 'payment') {
 					$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
@@ -58,7 +56,6 @@ class ControllerAccountLogin extends Controller {
 			unset($this->session->data['guest']);
 
 			// Default Shipping Address
-			$this->load->model('account/address');
 
 			if ($this->config->get('config_tax_customer') == 'payment') {
 				$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
@@ -70,7 +67,6 @@ class ControllerAccountLogin extends Controller {
 
 			// Wishlist
 			if (isset($this->session->data['wishlist']) && is_array($this->session->data['wishlist'])) {
-				$this->load->model('account/wishlist');
 
 				foreach ($this->session->data['wishlist'] as $key => $product_id) {
 					$this->model_account_wishlist->addWishlist($product_id);
@@ -80,7 +76,6 @@ class ControllerAccountLogin extends Controller {
 			}
 
 			// Add to activity log
-			$this->load->model('account/activity');
 
 			$activity_data = array(
 				'customer_id' => $this->customer->getId(),

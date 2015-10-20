@@ -165,7 +165,6 @@ class ModelOpenbayAmazonListing extends Model {
 	}
 
 	public function doBulkListing($data) {
-		$this->load->model('catalog/product');
 		$request = array();
 
 		$marketplace_mapping = array(

@@ -1,7 +1,6 @@
 <?php
 class ControllerModuleAmazonLogin extends Controller {
 	public function index() {
-		$this->load->model('payment/amazon_login_pay');
 
 		if ($this->config->get('amazon_login_pay_status') && $this->config->get('amazon_login_status') && !$this->customer->isLogged() && !empty($this->request->server['HTTPS'])) {
 			// capital L in Amazon cookie name is required, do not alter for coding standards
@@ -41,9 +40,6 @@ class ControllerModuleAmazonLogin extends Controller {
 	}
 
 	public function login() {
-		$this->load->model('payment/amazon_login_pay');
-		$this->load->model('account/customer');
-		$this->load->model('account/customer_group');
 		$this->load->language('payment/amazon_login_pay');
 
 		unset($this->session->data['lpa']);
@@ -68,8 +64,6 @@ class ControllerModuleAmazonLogin extends Controller {
 				if ($this->validate($user->email)) {
 					unset($this->session->data['guest']);
 
-					$this->load->model('account/address');
-
 					if ($this->config->get('config_tax_customer') == 'payment') {
 						$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 					}
@@ -77,8 +71,6 @@ class ControllerModuleAmazonLogin extends Controller {
 					if ($this->config->get('config_tax_customer') == 'shipping') {
 						$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 					}
-
-					$this->load->model('account/activity');
 
 					$activity_data = array(
 						'customer_id' => $this->customer->getId(),
@@ -125,8 +117,6 @@ class ControllerModuleAmazonLogin extends Controller {
 				if ($this->validate($user->email)) {
 					unset($this->session->data['guest']);
 
-					$this->load->model('account/address');
-
 					if ($this->config->get('config_tax_customer') == 'payment') {
 						$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 					}
@@ -134,8 +124,6 @@ class ControllerModuleAmazonLogin extends Controller {
 					if ($this->config->get('config_tax_customer') == 'shipping') {
 						$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 					}
-
-					$this->load->model('account/activity');
 
 					$activity_data = array(
 						'customer_id' => $this->customer->getId(),

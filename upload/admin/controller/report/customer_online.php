@@ -49,9 +49,6 @@ class ControllerReportCustomerOnline extends Controller {
 			'text' => $this->language->get('heading_title')
 		);
 
-		$this->load->model('report/customer');
-		$this->load->model('customer/customer');
-
 		$data['customers'] = array();
 
 		$filter_data = array(

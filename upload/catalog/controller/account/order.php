@@ -58,8 +58,6 @@ class ControllerAccountOrder extends Controller {
 
 		$data['orders'] = array();
 
-		$this->load->model('account/order');
-
 		$order_total = $this->model_account_order->getTotalOrders();
 
 		$results = $this->model_account_order->getOrders(($page - 1) * 10, 10);
@@ -115,8 +113,6 @@ class ControllerAccountOrder extends Controller {
 
 			$this->response->redirect($this->url->link('account/login', '', 'SSL'));
 		}
-
-		$this->load->model('account/order');
 
 		$order_info = $this->model_account_order->getOrder($order_id);
 
@@ -275,9 +271,6 @@ class ControllerAccountOrder extends Controller {
 
 			$data['shipping_method'] = $order_info['shipping_method'];
 
-			$this->load->model('catalog/product');
-			$this->load->model('tool/upload');
-
 			// Products
 			$data['products'] = array();
 
@@ -429,8 +422,6 @@ class ControllerAccountOrder extends Controller {
 			$order_id = 0;
 		}
 
-		$this->load->model('account/order');
-
 		$order_info = $this->model_account_order->getOrder($order_id);
 
 		if ($order_info) {
@@ -443,7 +434,6 @@ class ControllerAccountOrder extends Controller {
 			$order_product_info = $this->model_account_order->getOrderProduct($order_id, $order_product_id);
 
 			if ($order_product_info) {
-				$this->load->model('catalog/product');
 
 				$product_info = $this->model_catalog_product->getProduct($order_product_info['product_id']);
 

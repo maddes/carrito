@@ -7,7 +7,6 @@ class ControllerCheckoutSuccess extends Controller {
 			$this->cart->clear();
 
 			// Add to activity log
-			$this->load->model('account/activity');
 
 			if ($this->customer->isLogged()) {
 				$activity_data = array(

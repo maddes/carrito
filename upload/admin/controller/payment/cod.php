@@ -7,8 +7,6 @@ class ControllerPaymentCod extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('cod', $this->request->post);
 
@@ -74,8 +72,6 @@ class ControllerPaymentCod extends Controller {
 			$data['cod_order_status_id'] = $this->config->get('cod_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['cod_geo_zone_id'])) {
@@ -83,8 +79,6 @@ class ControllerPaymentCod extends Controller {
 		} else {
 			$data['cod_geo_zone_id'] = $this->config->get('cod_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

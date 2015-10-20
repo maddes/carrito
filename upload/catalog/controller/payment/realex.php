@@ -9,8 +9,6 @@ class ControllerPaymentRealex extends Controller {
 
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		if ($this->config->get('realex_live_demo') == 1) {
@@ -86,7 +84,6 @@ class ControllerPaymentRealex extends Controller {
 	}
 
 	public function notify() {
-		$this->load->model('payment/realex');
 
 		$this->model_payment_realex->logger(print_r($this->request->post, 1));
 
@@ -101,7 +98,6 @@ class ControllerPaymentRealex extends Controller {
 			$data['text_response'] = $this->language->get('text_hash_failed');
 			$data['text_link'] = sprintf($this->language->get('text_link'), $this->url->link('checkout/checkout', '', 'SSL'));
 		} else {
-			$this->load->model('checkout/order');
 
 			$order_id_parts = explode('T', $this->request->post['ORDER_ID']);
 			$order_id = (int)$order_id_parts[0];

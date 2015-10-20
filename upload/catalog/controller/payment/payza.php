@@ -3,8 +3,6 @@ class ControllerPaymentPayza extends Controller {
 	public function index() {
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$data['action'] = 'https://secure.payza.com/checkout';
@@ -23,7 +21,6 @@ class ControllerPaymentPayza extends Controller {
 
 	public function callback() {
 		if (isset($this->request->post['ap_securitycode']) && ($this->request->post['ap_securitycode'] == $this->config->get('payza_security'))) {
-			$this->load->model('checkout/order');
 
 			$this->model_checkout_order->addOrderHistory($this->request->post['ap_itemcode'], $this->config->get('payza_order_status_id'));
 		}

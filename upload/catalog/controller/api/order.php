@@ -237,7 +237,6 @@ class ControllerApiOrder extends Controller {
 				}
 
 				// Order Totals
-				$this->load->model('extension/extension');
 
 				$order_data['totals'] = array();
 				$total = 0;
@@ -255,7 +254,6 @@ class ControllerApiOrder extends Controller {
 
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {
-						$this->load->model('total/' . $result['code']);
 
 						$this->{'model_total_' . $result['code']}->getTotal($order_data['totals'], $total, $taxes);
 					}
@@ -281,7 +279,6 @@ class ControllerApiOrder extends Controller {
 					$subtotal = $this->cart->getSubTotal();
 
 					// Affiliate
-					$this->load->model('affiliate/affiliate');
 
 					$affiliate_info = $this->model_affiliate_affiliate->getAffiliate($this->request->post['affiliate_id']);
 
@@ -329,8 +326,6 @@ class ControllerApiOrder extends Controller {
 					$order_data['accept_language'] = '';
 				}
 
-				$this->load->model('checkout/order');
-
 				$json['order_id'] = $this->model_checkout_order->addOrder($order_data);
 
 				// Set the order history
@@ -365,7 +360,6 @@ class ControllerApiOrder extends Controller {
 		if (!isset($this->session->data['api_id'])) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('checkout/order');
 
 			if (isset($this->request->get['order_id'])) {
 				$order_id = $this->request->get['order_id'];
@@ -604,7 +598,6 @@ class ControllerApiOrder extends Controller {
 					}
 
 					// Order Totals
-					$this->load->model('extension/extension');
 
 					$order_data['totals'] = array();
 					$total = 0;
@@ -622,7 +615,6 @@ class ControllerApiOrder extends Controller {
 
 					foreach ($results as $result) {
 						if ($this->config->get($result['code'] . '_status')) {
-							$this->load->model('total/' . $result['code']);
 
 							$this->{'model_total_' . $result['code']}->getTotal($order_data['totals'], $total, $taxes);
 						}
@@ -648,7 +640,6 @@ class ControllerApiOrder extends Controller {
 						$subtotal = $this->cart->getSubTotal();
 
 						// Affiliate
-						$this->load->model('affiliate/affiliate');
 
 						$affiliate_info = $this->model_affiliate_affiliate->getAffiliate($this->request->post['affiliate_id']);
 
@@ -701,7 +692,6 @@ class ControllerApiOrder extends Controller {
 		if (!isset($this->session->data['api_id'])) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('checkout/order');
 
 			if (isset($this->request->get['order_id'])) {
 				$order_id = $this->request->get['order_id'];
@@ -752,8 +742,6 @@ class ControllerApiOrder extends Controller {
 					$this->request->post[$key] = '';
 				}
 			}
-
-			$this->load->model('checkout/order');
 
 			if (isset($this->request->get['order_id'])) {
 				$order_id = $this->request->get['order_id'];

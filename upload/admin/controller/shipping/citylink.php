@@ -7,8 +7,6 @@ class ControllerShippingCitylink extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('citylink', $this->request->post);
 
@@ -77,8 +75,6 @@ class ControllerShippingCitylink extends Controller {
 			$data['citylink_tax_class_id'] = $this->config->get('citylink_tax_class_id');
 		}
 
-		$this->load->model('localisation/tax_class');
-
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		if (isset($this->request->post['citylink_geo_zone_id'])) {
@@ -86,8 +82,6 @@ class ControllerShippingCitylink extends Controller {
 		} else {
 			$data['citylink_geo_zone_id'] = $this->config->get('citylink_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

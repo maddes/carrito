@@ -28,8 +28,6 @@ class ControllerCheckoutPaymentAddress extends Controller {
 			$data['address_id'] = $this->customer->getAddressId();
 		}
 
-		$this->load->model('account/address');
-
 		$data['addresses'] = $this->model_account_address->getAddresses();
 
 		if (isset($this->session->data['payment_address']['country_id'])) {
@@ -44,12 +42,9 @@ class ControllerCheckoutPaymentAddress extends Controller {
 			$data['zone_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		// Custom Fields
-		$this->load->model('account/custom_field');
 
 		$data['custom_fields'] = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
 
@@ -98,7 +93,6 @@ class ControllerCheckoutPaymentAddress extends Controller {
 
 		if (!$json) {
 			if (isset($this->request->post['payment_address']) && $this->request->post['payment_address'] == 'existing') {
-				$this->load->model('account/address');
 
 				if (empty($this->request->post['address_id'])) {
 					$json['error']['warning'] = $this->language->get('error_address');
@@ -108,7 +102,6 @@ class ControllerCheckoutPaymentAddress extends Controller {
 
 				if (!$json) {
 					// Default Payment Address
-					$this->load->model('account/address');
 
 					$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->request->post['address_id']);
 
@@ -132,8 +125,6 @@ class ControllerCheckoutPaymentAddress extends Controller {
 					$json['error']['city'] = $this->language->get('error_city');
 				}
 
-				$this->load->model('localisation/country');
-
 				$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 				if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -149,7 +140,6 @@ class ControllerCheckoutPaymentAddress extends Controller {
 				}
 
 				// Custom field validation
-				$this->load->model('account/custom_field');
 
 				$custom_fields = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
 
@@ -161,7 +151,6 @@ class ControllerCheckoutPaymentAddress extends Controller {
 
 				if (!$json) {
 					// Default Payment Address
-					$this->load->model('account/address');
 
 					$address_id = $this->model_account_address->addAddress($this->request->post);
 
@@ -169,8 +158,6 @@ class ControllerCheckoutPaymentAddress extends Controller {
 
 					unset($this->session->data['payment_method']);
 					unset($this->session->data['payment_methods']);
-
-					$this->load->model('account/activity');
 
 					$activity_data = array(
 						'customer_id' => $this->customer->getId(),

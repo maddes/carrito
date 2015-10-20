@@ -37,8 +37,6 @@ class ModelPaymentWorldpay extends Model {
 
 		$card_data = array();
 
-		$this->load->model('account/address');
-
 		foreach ($query->rows as $row) {
 
 			$card_data[] = array(
@@ -101,9 +99,6 @@ class ModelPaymentWorldpay extends Model {
 	}
 
 	public function recurringPayment($item, $order_id_rand, $token) {
-
-		$this->load->model('checkout/recurring');
-		$this->load->model('payment/worldpay');
 		//trial information
 		if ($item['recurring']['trial'] == 1) {
 			$price = $item['recurring']['trial_price'];
@@ -179,9 +174,6 @@ class ModelPaymentWorldpay extends Model {
 	}
 
 	public function cronPayment() {
-
-		$this->load->model('account/order');
-		$this->load->model('checkout/order');
 		$profiles = $this->getProfiles();
 		$cron_data = array();
 		$i = 1;

@@ -49,8 +49,6 @@ class ControllerReportSaleCoupon extends Controller {
 			'href' => $this->url->link('report/sale_coupon', 'token=' . $this->session->data['token'] . $url, 'SSL')
 		);
 
-		$this->load->model('report/coupon');
-
 		$data['coupons'] = array();
 
 		$filter_data = array(

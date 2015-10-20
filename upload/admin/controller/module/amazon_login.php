@@ -6,9 +6,6 @@ class ControllerModuleAmazonLogin extends Controller {
 	public function index() {
 		$this->language->load('module/amazon_login');
 
-		$this->load->model('setting/setting');
-		$this->load->model('design/layout');
-
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
@@ -133,12 +130,10 @@ class ControllerModuleAmazonLogin extends Controller {
 	}
 
 	public function install() {
-			$this->load->model('extension/event');
 			$this->model_extension_event->addEvent('amazon_login', 'post.customer.logout', 'module/amazon_login/logout');
 	}
 
 	public function uninstall() {
-			$this->load->model('extension/event');
 			$this->model_extension_event->deleteEvent('amazon_login');
 	}
 

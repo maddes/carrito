@@ -7,8 +7,6 @@ class ControllerShippingAusPost extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('auspost', $this->request->post);
 
@@ -104,8 +102,6 @@ class ControllerShippingAusPost extends Controller {
 			$data['auspost_weight_class_id'] = $this->config->get('auspost_weight_class_id');
 		}
 
-		$this->load->model('localisation/weight_class');
-
 		$data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 
 		if (isset($this->request->post['auspost_tax_class_id'])) {
@@ -114,8 +110,6 @@ class ControllerShippingAusPost extends Controller {
 			$data['auspost_tax_class_id'] = $this->config->get('auspost_tax_class_id');
 		}
 
-		$this->load->model('localisation/tax_class');
-
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		if (isset($this->request->post['auspost_geo_zone_id'])) {
@@ -123,8 +117,6 @@ class ControllerShippingAusPost extends Controller {
 		} else {
 			$data['auspost_geo_zone_id'] = $this->config->get('auspost_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

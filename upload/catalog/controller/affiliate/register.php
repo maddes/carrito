@@ -11,19 +11,15 @@ class ControllerAffiliateRegister extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('affiliate/affiliate');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$affiliate_id = $this->model_affiliate_affiliate->addAffiliate($this->request->post);
 
 			// Clear any previous login attempts in not registered.
-    		$this->load->model('account/customer');
 			$this->model_account_customer->deleteLoginAttempts($this->request->post['email']);
 
 			$this->affiliate->login($this->request->post['email'], $this->request->post['password']);
 
 			// Add to activity log
-			$this->load->model('affiliate/activity');
 
 			$activity_data = array(
 				'affiliate_id' => $affiliate_id,
@@ -245,8 +241,6 @@ class ControllerAffiliateRegister extends Controller {
 			$data['zone_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		if (isset($this->request->post['tax'])) {
@@ -323,7 +317,6 @@ class ControllerAffiliateRegister extends Controller {
 		}
 
 		if ($this->config->get('config_affiliate_id')) {
-			$this->load->model('catalog/information');
 
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_affiliate_id'));
 
@@ -381,8 +374,6 @@ class ControllerAffiliateRegister extends Controller {
 			$this->error['city'] = $this->language->get('error_city');
 		}
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 		if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -415,7 +406,6 @@ class ControllerAffiliateRegister extends Controller {
 		}
 
 		if ($this->config->get('config_affiliate_id')) {
-			$this->load->model('catalog/information');
 
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_affiliate_id'));
 
@@ -430,12 +420,9 @@ class ControllerAffiliateRegister extends Controller {
 	public function country() {
 		$json = array();
 
-		$this->load->model('localisation/country');
-
 		$country_info = $this->model_localisation_country->getCountry($this->request->get['country_id']);
 
 		if ($country_info) {
-			$this->load->model('localisation/zone');
 
 			$json = array(
 				'country_id'        => $country_info['country_id'],

@@ -7,8 +7,6 @@ class ControllerSaleReturn extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/return');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerSaleReturn extends Controller {
 		$this->load->language('sale/return');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('sale/return');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_sale_return->addReturn($this->request->post);
@@ -81,8 +77,6 @@ class ControllerSaleReturn extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/return');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_sale_return->editReturn($this->request->get['return_id'], $this->request->post);
 
@@ -144,8 +138,6 @@ class ControllerSaleReturn extends Controller {
 		$this->load->language('sale/return');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('sale/return');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $return_id) {
@@ -540,8 +532,6 @@ class ControllerSaleReturn extends Controller {
 		$data['filter_date_added'] = $filter_date_added;
 		$data['filter_date_modified'] = $filter_date_modified;
 
-		$this->load->model('localisation/return_status');
-
 		$data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
 
 		$data['sort'] = $sort;
@@ -830,8 +820,6 @@ class ControllerSaleReturn extends Controller {
 			$data['return_reason_id'] = '';
 		}
 
-		$this->load->model('localisation/return_reason');
-
 		$data['return_reasons'] = $this->model_localisation_return_reason->getReturnReasons();
 
 		if (isset($this->request->post['return_action_id'])) {
@@ -841,8 +829,6 @@ class ControllerSaleReturn extends Controller {
 		} else {
 			$data['return_action_id'] = '';
 		}
-
-		$this->load->model('localisation/return_action');
 
 		$data['return_actions'] = $this->model_localisation_return_action->getReturnActions();
 
@@ -861,8 +847,6 @@ class ControllerSaleReturn extends Controller {
 		} else {
 			$data['return_status_id'] = '';
 		}
-
-		$this->load->model('localisation/return_status');
 
 		$data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
 
@@ -930,8 +914,6 @@ class ControllerSaleReturn extends Controller {
 
 		$data['error'] = '';
 		$data['success'] = '';
-
-		$this->load->model('sale/return');
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
 			if (!$this->user->hasPermission('modify', 'sale/return')) {

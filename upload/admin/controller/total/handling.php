@@ -7,8 +7,6 @@ class ControllerTotalHandling extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('handling', $this->request->post);
 
@@ -79,8 +77,6 @@ class ControllerTotalHandling extends Controller {
 		} else {
 			$data['handling_tax_class_id'] = $this->config->get('handling_tax_class_id');
 		}
-
-		$this->load->model('localisation/tax_class');
 
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 

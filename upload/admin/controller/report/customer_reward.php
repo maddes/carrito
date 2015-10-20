@@ -49,8 +49,6 @@ class ControllerReportCustomerReward extends Controller {
 			'href' => $this->url->link('report/customer_reward', 'token=' . $this->session->data['token'] . $url, 'SSL')
 		);
 
-		$this->load->model('report/customer');
-
 		$data['customers'] = array();
 
 		$filter_data = array(

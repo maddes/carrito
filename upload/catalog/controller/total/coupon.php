@@ -27,8 +27,6 @@ class ControllerTotalCoupon extends Controller {
 
 		$json = array();
 
-		$this->load->model('total/coupon');
-
 		if (isset($this->request->post['coupon'])) {
 			$coupon = $this->request->post['coupon'];
 		} else {

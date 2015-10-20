@@ -7,8 +7,6 @@ class ControllerCustomerCustomerGroup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer_group');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCustomerCustomerGroup extends Controller {
 		$this->load->language('customer/customer_group');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('customer/customer_group');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_customer_customer_group->addCustomerGroup($this->request->post);
@@ -49,8 +45,6 @@ class ControllerCustomerCustomerGroup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer_group');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_customer_customer_group->editCustomerGroup($this->request->get['customer_group_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerCustomerCustomerGroup extends Controller {
 		$this->load->language('customer/customer_group');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('customer/customer_group');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $customer_group_id) {
@@ -326,8 +318,6 @@ class ControllerCustomerCustomerGroup extends Controller {
 			$customer_group_info = $this->model_customer_customer_group->getCustomerGroup($this->request->get['customer_group_id']);
 		}
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['customer_group_description'])) {
@@ -379,9 +369,6 @@ class ControllerCustomerCustomerGroup extends Controller {
 		if (!$this->user->hasPermission('modify', 'customer/customer_group')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('setting/store');
-		$this->load->model('customer/customer');
 
 		foreach ($this->request->post['selected'] as $customer_group_id) {
 			if ($this->config->get('config_customer_group_id') == $customer_group_id) {

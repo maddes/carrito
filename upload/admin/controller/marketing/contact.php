@@ -51,11 +51,7 @@ class ControllerMarketingContact extends Controller {
 
 		$data['cancel'] = $this->url->link('marketing/contact', 'token=' . $this->session->data['token'], 'SSL');
 
-		$this->load->model('setting/store');
-
 		$data['stores'] = $this->model_setting_store->getStores();
-
-		$this->load->model('customer/customer_group');
 
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 
@@ -85,7 +81,6 @@ class ControllerMarketingContact extends Controller {
 			}
 
 			if (!$json) {
-				$this->load->model('setting/store');
 
 				$store_info = $this->model_setting_store->getStore($this->request->post['store_id']);
 
@@ -94,14 +89,6 @@ class ControllerMarketingContact extends Controller {
 				} else {
 					$store_name = $this->config->get('config_name');
 				}
-
-				$this->load->model('customer/customer');
-
-				$this->load->model('customer/customer_group');
-
-				$this->load->model('marketing/affiliate');
-
-				$this->load->model('sale/order');
 
 				if (isset($this->request->get['page'])) {
 					$page = $this->request->get['page'];

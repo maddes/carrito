@@ -4,8 +4,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 		$this->load->language('payment/amazon_login_pay');
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('payment/amazon_login_pay');
-
 		// capital L in Amazon cookie name is required, do not alter for coding standards
 		if (!$this->customer->isLogged() || !isset($this->request->cookie['amazon_Login_state_cache'])) {
 			$this->session->data['lpa']['error'] = $this->language->get('error_login');
@@ -59,8 +57,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 		$this->load->language('payment/amazon_login_pay');
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('payment/amazon_login_pay');
-
 		// capital L in Amazon cookie name is required, do not alter for coding standards
 		if (!$this->customer->isLogged() || !isset($this->request->cookie['amazon_Login_state_cache'])) {
 			$this->session->data['lpa']['error'] = $this->language->get('error_login');
@@ -106,9 +102,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 		$this->load->language('payment/amazon_login_pay');
 		$this->load->language('checkout/checkout');
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('extension/extension');
-		$this->load->model('payment/amazon_login_pay');
 
 		// capital L in Amazon cookie name is required, do not alter for coding standards
 		if (!$this->customer->isLogged() || !isset($this->request->cookie['amazon_Login_state_cache'])) {
@@ -196,7 +189,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 				$code = $result['key'];
 			}
 			if ($this->config->get($code . '_status')) {
-				$this->load->model('total/' . $code);
 
 				$this->{'model_total_' . $code}->getTotal($total_data, $total, $taxes);
 
@@ -259,7 +251,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 		$order_data['fax'] = '';
 
 		if (isset($this->session->data['coupon'])) {
-			$this->load->model('total/coupon');
 
 			$coupon = $this->model_total_coupon->getCoupon($this->session->data['coupon']);
 
@@ -363,8 +354,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 
 			$subtotal = $this->cart->getSubTotal();
 
-			$this->load->model('affiliate/affiliate');
-
 			$affiliate_info = $this->model_affiliate_affiliate->getAffiliateByCode($this->request->cookie['tracking']);
 
 			if ($affiliate_info) {
@@ -374,8 +363,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 				$order_data['affiliate_id'] = 0;
 				$order_data['commission'] = 0;
 			}
-
-			$this->load->model('checkout/marketing');
 
 			$marketing_info = $this->model_checkout_marketing->getMarketingByCode($this->request->cookie['tracking']);
 
@@ -418,8 +405,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 		} else {
 			$order_data['accept_language'] = '';
 		}
-
-		$this->load->model('checkout/order');
 
 		$this->session->data['order_id'] = $this->model_checkout_order->addOrder($order_data);
 
@@ -485,10 +470,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 
 	public function processOrder() {
 		$this->load->language('payment/amazon_login_pay');
-		$this->load->model('checkout/order');
-		$this->load->model('total/coupon');
-		$this->load->model('account/order');
-		$this->load->model('payment/amazon_login_pay');
 
 		if (!isset($this->session->data['order_id'])) {
 			$this->response->redirect($this->url->link('common/home'));
@@ -611,9 +592,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 	public function shippingQuotes() {
 		$this->load->language('payment/amazon_login_pay');
 
-		$this->load->model('extension/extension');
-		$this->load->model('payment/amazon_login_pay');
-
 		$json = array();
 
 		if (isset($this->request->get['AmazonOrderReferenceId'])) {
@@ -714,7 +692,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 				}
 
 				if ($this->config->get($code . '_status')) {
-					$this->load->model('shipping/' . $code);
 
 					$quote = $this->{'model_shipping_' . $code}->getQuote($address);
 
@@ -785,7 +762,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 	}
 
 	public function setBillingAddress($order_info, $billing_address) {
-		$this->load->model('payment/amazon_login_pay');
 
 		$full_name = explode(' ', $billing_address->Name);
 		$last_name = array_pop($full_name);
@@ -832,7 +808,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 	}
 
 	public function ipn() {
-		$this->load->model('payment/amazon_login_pay');
 		$this->model_payment_amazon_login_pay->logger('IPN received');
 		if (isset($this->request->get['token']) && $this->request->get['token'] == $this->config->get('amazon_login_pay_ipn_token')) {
 			$body = file_get_contents('php://input');
@@ -859,8 +834,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 	}
 
 	public function capture($order_id) {
-		$this->load->model('payment/amazon_login_pay');
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 		if ($order_info['order_status_id'] == $this->config->get('amazon_login_pay_capture_status')) {

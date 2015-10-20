@@ -74,8 +74,6 @@ class ModelTotalVoucher extends Model {
 		if (isset($this->session->data['voucher'])) {
 			$this->load->language('total/voucher');
 
-			$this->load->model('total/coupon');
-
 			$voucher_info = $this->getVoucher($this->session->data['voucher']);
 
 			if ($voucher_info) {

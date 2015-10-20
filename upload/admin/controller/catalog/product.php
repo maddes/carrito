@@ -7,8 +7,6 @@ class ControllerCatalogProduct extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/product');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCatalogProduct extends Controller {
 		$this->language->load('catalog/product');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/product');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_product->addProduct($this->request->post);
@@ -69,8 +65,6 @@ class ControllerCatalogProduct extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/product');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_product->editProduct($this->request->get['product_id'], $this->request->post);
 
@@ -120,8 +114,6 @@ class ControllerCatalogProduct extends Controller {
 		$this->language->load('catalog/product');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/product');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $product_id) {
@@ -174,8 +166,6 @@ class ControllerCatalogProduct extends Controller {
 		$this->language->load('catalog/product');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/product');
 
 		if (isset($this->request->post['selected']) && $this->validateCopy()) {
 			foreach ($this->request->post['selected'] as $product_id) {
@@ -336,8 +326,6 @@ class ControllerCatalogProduct extends Controller {
 			'start'           => ($page - 1) * $this->config->get('config_limit_admin'),
 			'limit'           => $this->config->get('config_limit_admin')
 		);
-
-		$this->load->model('tool/image');
 
 		$product_total = $this->model_catalog_product->getTotalProducts($filter_data);
 
@@ -723,8 +711,6 @@ class ControllerCatalogProduct extends Controller {
 
 		$data['token'] = $this->session->data['token'];
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['product_description'])) {
@@ -742,8 +728,6 @@ class ControllerCatalogProduct extends Controller {
 		} else {
 			$data['image'] = '';
 		}
-
-		$this->load->model('tool/image');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
@@ -819,8 +803,6 @@ class ControllerCatalogProduct extends Controller {
 			$data['location'] = '';
 		}
 
-		$this->load->model('setting/store');
-
 		$data['stores'] = $this->model_setting_store->getStores();
 
 		if (isset($this->request->post['product_store'])) {
@@ -855,8 +837,6 @@ class ControllerCatalogProduct extends Controller {
 			$data['price'] = '';
 		}
 
-		$this->load->model('catalog/recurring');
-
 		$data['recurrings'] = $this->model_catalog_recurring->getRecurrings();
 
 		if (isset($this->request->post['product_recurrings'])) {
@@ -866,8 +846,6 @@ class ControllerCatalogProduct extends Controller {
 		} else {
 			$data['product_recurrings'] = array();
 		}
-
-		$this->load->model('localisation/tax_class');
 
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
@@ -919,8 +897,6 @@ class ControllerCatalogProduct extends Controller {
 			$data['sort_order'] = 1;
 		}
 
-		$this->load->model('localisation/stock_status');
-
 		$data['stock_statuses'] = $this->model_localisation_stock_status->getStockStatuses();
 
 		if (isset($this->request->post['stock_status_id'])) {
@@ -946,8 +922,6 @@ class ControllerCatalogProduct extends Controller {
 		} else {
 			$data['weight'] = '';
 		}
-
-		$this->load->model('localisation/weight_class');
 
 		$data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 
@@ -983,8 +957,6 @@ class ControllerCatalogProduct extends Controller {
 			$data['height'] = '';
 		}
 
-		$this->load->model('localisation/length_class');
-
 		$data['length_classes'] = $this->model_localisation_length_class->getLengthClasses();
 
 		if (isset($this->request->post['length_class_id'])) {
@@ -994,8 +966,6 @@ class ControllerCatalogProduct extends Controller {
 		} else {
 			$data['length_class_id'] = $this->config->get('config_length_class_id');
 		}
-
-		$this->load->model('catalog/manufacturer');
 
 		if (isset($this->request->post['manufacturer_id'])) {
 			$data['manufacturer_id'] = $this->request->post['manufacturer_id'];
@@ -1020,7 +990,6 @@ class ControllerCatalogProduct extends Controller {
 		}
 
 		// Categories
-		$this->load->model('catalog/category');
 
 		if (isset($this->request->post['product_category'])) {
 			$categories = $this->request->post['product_category'];
@@ -1044,7 +1013,6 @@ class ControllerCatalogProduct extends Controller {
 		}
 
 		// Filters
-		$this->load->model('catalog/filter');
 
 		if (isset($this->request->post['product_filter'])) {
 			$filters = $this->request->post['product_filter'];
@@ -1068,7 +1036,6 @@ class ControllerCatalogProduct extends Controller {
 		}
 
 		// Attributes
-		$this->load->model('catalog/attribute');
 
 		if (isset($this->request->post['product_attribute'])) {
 			$product_attributes = $this->request->post['product_attribute'];
@@ -1093,7 +1060,6 @@ class ControllerCatalogProduct extends Controller {
 		}
 
 		// Options
-		$this->load->model('catalog/option');
 
 		if (isset($this->request->post['product_option'])) {
 			$product_options = $this->request->post['product_option'];
@@ -1145,8 +1111,6 @@ class ControllerCatalogProduct extends Controller {
 				}
 			}
 		}
-
-		$this->load->model('customer/customer_group');
 
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 
@@ -1219,7 +1183,6 @@ class ControllerCatalogProduct extends Controller {
 		}
 
 		// Downloads
-		$this->load->model('catalog/download');
 
 		if (isset($this->request->post['product_download'])) {
 			$product_downloads = $this->request->post['product_download'];
@@ -1287,8 +1250,6 @@ class ControllerCatalogProduct extends Controller {
 			$data['product_layout'] = array();
 		}
 
-		$this->load->model('design/layout');
-
 		$data['layouts'] = $this->model_design_layout->getLayouts();
 
 		$data['header'] = $this->load->controller('common/header');
@@ -1318,7 +1279,6 @@ class ControllerCatalogProduct extends Controller {
 		}
 
 		if (utf8_strlen($this->request->post['keyword']) > 0) {
-			$this->load->model('catalog/url_alias');
 
 			$url_alias_info = $this->model_catalog_url_alias->getUrlAlias($this->request->post['keyword']);
 
@@ -1358,8 +1318,6 @@ class ControllerCatalogProduct extends Controller {
 		$json = array();
 
 		if (isset($this->request->get['filter_name']) || isset($this->request->get['filter_model'])) {
-			$this->load->model('catalog/product');
-			$this->load->model('catalog/option');
 
 			if (isset($this->request->get['filter_name'])) {
 				$filter_name = $this->request->get['filter_name'];

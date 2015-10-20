@@ -7,8 +7,6 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('web_payment_software', $this->request->post);
 
@@ -111,8 +109,6 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 			$data['web_payment_software_order_status_id'] = $this->config->get('web_payment_software_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['web_payment_software_geo_zone_id'])) {
@@ -120,8 +116,6 @@ class ControllerPaymentWebPaymentSoftware extends Controller {
 		} else {
 			$data['web_payment_software_geo_zone_id'] = $this->config->get('web_payment_software_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

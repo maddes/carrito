@@ -7,8 +7,6 @@ class ControllerPaymentFirstdataRemote extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('firstdata_remote', $this->request->post);
 
@@ -69,11 +67,7 @@ class ControllerPaymentFirstdataRemote extends Controller {
 		$data['button_save'] = $this->language->get('button_save');
 		$data['button_cancel'] = $this->language->get('button_cancel');
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -315,18 +309,15 @@ class ControllerPaymentFirstdataRemote extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/firstdata_remote');
 		$this->model_payment_firstdata_remote->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/firstdata_remote');
 		$this->model_payment_firstdata_remote->uninstall();
 	}
 
 	public function order() {
 		if ($this->config->get('firstdata_remote_status')) {
-			$this->load->model('payment/firstdata_remote');
 
 			$firstdata_order = $this->model_payment_firstdata_remote->getOrder($this->request->get['order_id']);
 
@@ -375,7 +366,6 @@ class ControllerPaymentFirstdataRemote extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/firstdata_remote');
 
 			$firstdata_order = $this->model_payment_firstdata_remote->getOrder($this->request->post['order_id']);
 
@@ -410,7 +400,6 @@ class ControllerPaymentFirstdataRemote extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/firstdata_remote');
 
 			$firstdata_order = $this->model_payment_firstdata_remote->getOrder($this->request->post['order_id']);
 
@@ -452,7 +441,6 @@ class ControllerPaymentFirstdataRemote extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/firstdata_remote');
 
 			$firstdata_order = $this->model_payment_firstdata_remote->getOrder($this->request->post['order_id']);
 

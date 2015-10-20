@@ -8,10 +8,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
-		$this->load->model('payment/amazon_login_pay');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('amazon_login_pay', $this->request->post);
 
@@ -277,11 +273,7 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 
 		$data['text_amazon_no_declined'] = $this->language->get('text_amazon_no_declined');
 
-		$this->load->model('localisation/geo_zone');
-
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
-
-		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
@@ -295,16 +287,12 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/amazon_login_pay');
-		$this->load->model('extension/event');
 		$this->model_payment_amazon_login_pay->install();
 		$this->model_extension_event->addEvent('amazon_edit_capture', 'post.order.edit', 'payment/amazon_login_pay/capture');
 		$this->model_extension_event->addEvent('amazon_history_capture', 'post.order.history.add', 'payment/amazon_login_pay/capture');
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/amazon_login_pay');
-		$this->load->model('extension/event');
 		$this->model_payment_amazon_login_pay->uninstall();
 		$this->model_extension_event->deleteEvent('amazon_edit_capture');
 		$this->model_extension_event->deleteEvent('amazon_history_capture');
@@ -313,8 +301,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 	public function order() {
 
 		if ($this->config->get('amazon_login_pay_status')) {
-
-			$this->load->model('payment/amazon_login_pay');
 
 			$amazon_login_pay_order = $this->model_payment_amazon_login_pay->getOrder($this->request->get['order_id']);
 
@@ -367,7 +353,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/amazon_login_pay');
 
 			$amazon_login_pay_order = $this->model_payment_amazon_login_pay->getOrder($this->request->post['order_id']);
 
@@ -402,7 +387,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($this->request->post['amount']) && $this->request->post['amount'] > 0) {
-			$this->load->model('payment/amazon_login_pay');
 
 			$amazon_login_pay_order = $this->model_payment_amazon_login_pay->getOrder($this->request->post['order_id']);
 
@@ -451,7 +435,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 		$json = array();
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('payment/amazon_login_pay');
 
 			$amazon_login_pay_order = $this->model_payment_amazon_login_pay->getOrder($this->request->post['order_id']);
 
@@ -504,7 +487,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 	}
 
 	protected function validate() {
-		$this->load->model('localisation/currency');
 
 		if (!$this->user->hasPermission('modify', 'payment/amazon_login_pay')) {
 			$this->error['warning'] = $this->language->get('error_permission');
@@ -519,7 +501,6 @@ class ControllerPaymentAmazonLoginPay extends Controller {
 		}
 
 		if (empty($this->error)) {
-			$this->load->model('payment/amazon_login_pay');
 			$errors = $this->model_payment_amazon_login_pay->validateDetails($this->request->post);
 			if (isset($errors['error_code']) && $errors['error_code'] == 'InvalidParameterValue') {
 				$this->error['error_merchant_id'] = $errors['status_detail'];

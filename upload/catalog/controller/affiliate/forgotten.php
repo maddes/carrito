@@ -11,8 +11,6 @@ class ControllerAffiliateForgotten extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('affiliate/affiliate');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->load->language('mail/forgotten');
 
@@ -48,7 +46,6 @@ class ControllerAffiliateForgotten extends Controller {
 			$affiliate_info = $this->model_affiliate_affiliate->getAffiliateByEmail($this->request->post['email']);
 
 			if ($affiliate_info) {
-				$this->load->model('affiliate/activity');
 
 				$activity_data = array(
 					'affiliate_id' => $affiliate_info['affiliate_id'],

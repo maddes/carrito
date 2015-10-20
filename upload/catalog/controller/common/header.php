@@ -2,7 +2,6 @@
 class ControllerCommonHeader extends Controller {
 	public function index() {
 		// Analytics
-		$this->load->model('extension/extension');
 
 		$data['analytics'] = array();
 
@@ -49,7 +48,6 @@ class ControllerCommonHeader extends Controller {
 
 		// Wishlist
 		if ($this->customer->isLogged()) {
-			$this->load->model('account/wishlist');
 
 			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), $this->model_account_wishlist->getTotalWishlist());
 		} else {
@@ -100,9 +98,6 @@ class ControllerCommonHeader extends Controller {
 		}
 
 		// Menu
-		$this->load->model('catalog/category');
-
-		$this->load->model('catalog/product');
 
 		$data['categories'] = array();
 

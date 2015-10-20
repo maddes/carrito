@@ -4,7 +4,6 @@ class ControllerCommonCart extends Controller {
 		$this->load->language('common/cart');
 
 		// Totals
-		$this->load->model('extension/extension');
 
 		$total_data = array();
 		$total = 0;
@@ -24,7 +23,6 @@ class ControllerCommonCart extends Controller {
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('total/' . $result['code']);
 
 					$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 				}
@@ -47,9 +45,6 @@ class ControllerCommonCart extends Controller {
 		$data['text_loading'] = $this->language->get('text_loading');
 
 		$data['button_remove'] = $this->language->get('button_remove');
-
-		$this->load->model('tool/image');
-		$this->load->model('tool/upload');
 
 		$data['products'] = array();
 

@@ -9,8 +9,6 @@ class ControllerModuleFilter extends Controller {
 
 		$category_id = end($parts);
 
-		$this->load->model('catalog/category');
-
 		$category_info = $this->model_catalog_category->getCategory($category_id);
 
 		if ($category_info) {
@@ -41,8 +39,6 @@ class ControllerModuleFilter extends Controller {
 			} else {
 				$data['filter_category'] = array();
 			}
-
-			$this->load->model('catalog/product');
 
 			$data['filter_groups'] = array();
 

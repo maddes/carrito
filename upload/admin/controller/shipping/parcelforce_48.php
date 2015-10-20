@@ -7,8 +7,6 @@ class ControllerShippingParcelforce48 extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('parcelforce_48', $this->request->post);
 
@@ -115,8 +113,6 @@ class ControllerShippingParcelforce48 extends Controller {
 			$data['parcelforce_48_tax_class_id'] = $this->config->get('parcelforce_48_tax_class_id');
 		}
 
-		$this->load->model('localisation/tax_class');
-
 		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		if (isset($this->request->post['parcelforce_48_geo_zone_id'])) {
@@ -124,8 +120,6 @@ class ControllerShippingParcelforce48 extends Controller {
 		} else {
 			$data['parcelforce_48_geo_zone_id'] = $this->config->get('parcelforce_48_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

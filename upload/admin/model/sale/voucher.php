@@ -79,13 +79,10 @@ class ModelSaleVoucher extends Model {
 				$order_id = 0;
 			}
 
-			$this->load->model('sale/order');
-
 			$order_info = $this->model_sale_order->getOrder($order_id);
 
 			// If voucher belongs to an order
 			if ($order_info) {
-				$this->load->model('localisation/language');
 
 				$language = new Language($order_info['language_directory']);
 				$language->load($order_info['language_directory']);
@@ -101,8 +98,6 @@ class ModelSaleVoucher extends Model {
 				$data['text_message'] = $language->get('text_message');
 				$data['text_redeem'] = sprintf($language->get('text_redeem'), $voucher_info['code']);
 				$data['text_footer'] = $language->get('text_footer');
-
-				$this->load->model('sale/voucher_theme');
 
 				$voucher_theme_info = $this->model_sale_voucher_theme->getVoucherTheme($voucher_info['voucher_theme_id']);
 
@@ -145,8 +140,6 @@ class ModelSaleVoucher extends Model {
 				$data['text_message'] = $this->language->get('text_message');
 				$data['text_redeem'] = sprintf($this->language->get('text_redeem'), $voucher_info['code']);
 				$data['text_footer'] = $this->language->get('text_footer');
-
-				$this->load->model('sale/voucher_theme');
 
 				$voucher_theme_info = $this->model_sale_voucher_theme->getVoucherTheme($voucher_info['voucher_theme_id']);
 

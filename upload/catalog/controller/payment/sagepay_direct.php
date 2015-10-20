@@ -112,7 +112,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 
 		$data['existing_cards'] = array();
 		if ($this->customer->isLogged() && $data['sagepay_direct_card']) {
-			$this->load->model('payment/sagepay_direct');
 			$data['existing_cards'] = $this->model_payment_sagepay_direct->getCards($this->customer->getId());
 		}
 
@@ -121,8 +120,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 
 	public function send() {
 		$this->load->language('payment/sagepay_direct');
-		$this->load->model('checkout/order');
-		$this->load->model('payment/sagepay_direct');
 
 		$payment_data = array();
 
@@ -316,11 +313,8 @@ class ControllerPaymentSagepayDirect extends Controller {
 	}
 
 	public function callback() {
-		$this->load->model('payment/sagepay_direct');
 
 		$this->load->language('payment/sagepay_direct');
-
-		$this->load->model('checkout/order');
 
 		if (isset($this->session->data['order_id'])) {
 			if ($this->config->get('sagepay_direct_test') == 'live') {
@@ -408,7 +402,6 @@ class ControllerPaymentSagepayDirect extends Controller {
 
 	public function cron() {
 		if ($this->request->get['token'] == $this->config->get('sagepay_direct_cron_job_token')) {
-			$this->load->model('payment/sagepay_direct');
 
 			$orders = $this->model_payment_sagepay_direct->cronPayment();
 

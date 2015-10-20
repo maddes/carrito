@@ -48,8 +48,6 @@ class ControllerApiPayment extends Controller {
 				$json['error']['city'] = $this->language->get('error_city');
 			}
 
-			$this->load->model('localisation/country');
-
 			$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 			if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -65,7 +63,6 @@ class ControllerApiPayment extends Controller {
 			}
 
 			// Custom field validation
-			$this->load->model('account/custom_field');
 
 			$custom_fields = $this->model_account_custom_field->getCustomFields($this->config->get('config_customer_group_id'));
 
@@ -76,7 +73,6 @@ class ControllerApiPayment extends Controller {
 			}
 
 			if (!$json) {
-				$this->load->model('localisation/country');
 
 				$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
@@ -91,8 +87,6 @@ class ControllerApiPayment extends Controller {
 					$iso_code_3 = '';
 					$address_format = '';
 				}
-
-				$this->load->model('localisation/zone');
 
 				$zone_info = $this->model_localisation_zone->getZone($this->request->post['zone_id']);
 
@@ -164,8 +158,6 @@ class ControllerApiPayment extends Controller {
 				$total = 0;
 				$taxes = $this->cart->getTaxes();
 
-				$this->load->model('extension/extension');
-
 				$sort_order = array();
 
 				$results = $this->model_extension_extension->getExtensions('total');
@@ -178,7 +170,6 @@ class ControllerApiPayment extends Controller {
 
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {
-						$this->load->model('total/' . $result['code']);
 
 						$this->{'model_total_' . $result['code']}->getTotal($total_data, $total, $taxes);
 					}
@@ -187,15 +178,12 @@ class ControllerApiPayment extends Controller {
 				// Payment Methods
 				$json['payment_methods'] = array();
 
-				$this->load->model('extension/extension');
-
 				$results = $this->model_extension_extension->getExtensions('payment');
 
 				$recurring = $this->cart->hasRecurringProducts();
 
 				foreach ($results as $result) {
 					if ($this->config->get($result['code'] . '_status')) {
-						$this->load->model('payment/' . $result['code']);
 
 						$method = $this->{'model_payment_' . $result['code']}->getMethod($this->session->data['payment_address'], $total);
 

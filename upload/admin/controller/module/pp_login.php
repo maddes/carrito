@@ -5,8 +5,6 @@ class ControllerModulePPLogin extends Controller {
 	public function index() {
 		$this->language->load('module/pp_login');
 
-		$this->load->model('setting/setting');
-
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
@@ -113,8 +111,6 @@ class ControllerModulePPLogin extends Controller {
 			$data['pp_login_debug'] = $this->config->get('pp_login_debug');
 		}
 
-		$this->load->model('customer/customer_group');
-
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 
 		if (isset($this->request->post['pp_login_customer_group_id'])) {
@@ -136,8 +132,6 @@ class ControllerModulePPLogin extends Controller {
 		} else {
 			$data['pp_login_seamless'] = $this->config->get('pp_login_seamless');
 		}
-
-		$this->load->model('localisation/language');
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
@@ -315,13 +309,11 @@ class ControllerModulePPLogin extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/event');
 
 		$this->model_extension_event->addEvent('pp_login', 'post.customer.logout', 'module/pp_login/logout');
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/event');
 
 		$this->model_extension_event->deleteEvent('pp_login');
 	}

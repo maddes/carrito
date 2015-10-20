@@ -7,8 +7,6 @@ class ControllerMarketingCoupon extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/coupon');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerMarketingCoupon extends Controller {
 		$this->load->language('marketing/coupon');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('marketing/coupon');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_marketing_coupon->addCoupon($this->request->post);
@@ -49,8 +45,6 @@ class ControllerMarketingCoupon extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/coupon');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_marketing_coupon->editCoupon($this->request->get['coupon_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerMarketingCoupon extends Controller {
 		$this->load->language('marketing/coupon');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('marketing/coupon');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $coupon_id) {
@@ -453,8 +445,6 @@ class ControllerMarketingCoupon extends Controller {
 			$products = array();
 		}
 
-		$this->load->model('catalog/product');
-
 		$data['coupon_product'] = array();
 
 		foreach ($products as $product_id) {
@@ -475,8 +465,6 @@ class ControllerMarketingCoupon extends Controller {
 		} else {
 			$categories = array();
 		}
-
-		$this->load->model('catalog/category');
 
 		$data['coupon_category'] = array();
 
@@ -574,8 +562,6 @@ class ControllerMarketingCoupon extends Controller {
 
 	public function history() {
 		$this->load->language('marketing/coupon');
-
-		$this->load->model('marketing/coupon');
 
 		$data['text_no_results'] = $this->language->get('text_no_results');
 

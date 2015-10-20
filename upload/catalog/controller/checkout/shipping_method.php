@@ -7,13 +7,10 @@ class ControllerCheckoutShippingMethod extends Controller {
 			// Shipping Methods
 			$method_data = array();
 
-			$this->load->model('extension/extension');
-
 			$results = $this->model_extension_extension->getExtensions('shipping');
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
-					$this->load->model('shipping/' . $result['code']);
 
 					$quote = $this->{'model_shipping_' . $result['code']}->getQuote($this->session->data['shipping_address']);
 

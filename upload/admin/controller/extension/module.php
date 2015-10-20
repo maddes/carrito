@@ -7,10 +7,6 @@ class ControllerExtensionModule extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
-		$this->load->model('extension/module');
-
 		$this->getList();
 	}
 
@@ -19,14 +15,8 @@ class ControllerExtensionModule extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
-		$this->load->model('extension/module');
-
 		if ($this->validate()) {
 			$this->model_extension_extension->install('module', $this->request->get['extension']);
-
-			$this->load->model('user/user_group');
 
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'module/' . $this->request->get['extension']);
 			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'module/' . $this->request->get['extension']);
@@ -47,16 +37,10 @@ class ControllerExtensionModule extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/extension');
-
-		$this->load->model('extension/module');
-
 		if ($this->validate()) {
 			$this->model_extension_extension->uninstall('module', $this->request->get['extension']);
 
 			$this->model_extension_module->deleteModulesByCode($this->request->get['extension']);
-
-			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 
@@ -75,10 +59,6 @@ class ControllerExtensionModule extends Controller {
 		$this->load->language('extension/module');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('extension/extension');
-
-		$this->load->model('extension/module');
 
 		if (isset($this->request->get['module_id']) && $this->validateDelete()) {
 			$this->model_extension_module->deleteModule($this->request->get['module_id']);

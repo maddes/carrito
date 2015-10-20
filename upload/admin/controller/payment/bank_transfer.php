@@ -7,8 +7,6 @@ class ControllerPaymentBankTransfer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('bank_transfer', $this->request->post);
 
@@ -42,8 +40,6 @@ class ControllerPaymentBankTransfer extends Controller {
 			$data['error_warning'] = '';
 		}
 
-		$this->load->model('localisation/language');
-
 		$languages = $this->model_localisation_language->getLanguages();
 
 		foreach ($languages as $language) {
@@ -75,8 +71,6 @@ class ControllerPaymentBankTransfer extends Controller {
 
 		$data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
 
-		$this->load->model('localisation/language');
-
 		foreach ($languages as $language) {
 			if (isset($this->request->post['bank_transfer_bank' . $language['language_id']])) {
 				$data['bank_transfer_bank' . $language['language_id']] = $this->request->post['bank_transfer_bank' . $language['language_id']];
@@ -99,8 +93,6 @@ class ControllerPaymentBankTransfer extends Controller {
 			$data['bank_transfer_order_status_id'] = $this->config->get('bank_transfer_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['bank_transfer_geo_zone_id'])) {
@@ -108,8 +100,6 @@ class ControllerPaymentBankTransfer extends Controller {
 		} else {
 			$data['bank_transfer_geo_zone_id'] = $this->config->get('bank_transfer_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -136,8 +126,6 @@ class ControllerPaymentBankTransfer extends Controller {
 		if (!$this->user->hasPermission('modify', 'payment/bank_transfer')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('localisation/language');
 
 		$languages = $this->model_localisation_language->getLanguages();
 

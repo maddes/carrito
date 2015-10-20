@@ -28,7 +28,6 @@ class ControllerPaymentSagepayServer extends Controller {
 		$data['cards'] = array();
 
 		if ($this->customer->isLogged() && $data['sagepay_server_card']) {
-			$this->load->model('payment/sagepay_server');
 
 			$data['cards'] = $this->model_payment_sagepay_server->getCards($this->customer->getId());
 		}
@@ -53,9 +52,6 @@ class ControllerPaymentSagepayServer extends Controller {
 
 			$payment_data['VPSProtocol'] = '2.23';
 		}
-
-		$this->load->model('checkout/order');
-		$this->load->model('payment/sagepay_server');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -172,8 +168,6 @@ class ControllerPaymentSagepayServer extends Controller {
 	}
 
 	public function callback() {
-		$this->load->model('checkout/order');
-		$this->load->model('payment/sagepay_server');
 
 		$success_page = $this->url->link('payment/sagepay_server/success', '', 'SSL');
 		$error_page = $this->url->link('payment/sagepay_server/failure', '', 'SSL');
@@ -398,9 +392,6 @@ class ControllerPaymentSagepayServer extends Controller {
 	}
 
 	public function success() {
-		$this->load->model('checkout/order');
-		$this->load->model('payment/sagepay_server');
-		$this->load->model('checkout/recurring');
 
 		if (isset($this->session->data['order_id'])) {
 			$order_details = $this->model_payment_sagepay_server->getOrder($this->session->data['order_id']);
@@ -430,7 +421,6 @@ class ControllerPaymentSagepayServer extends Controller {
 
 	public function cron() {
 		if ($this->request->get['token'] == $this->config->get('sagepay_server_cron_job_token')) {
-			$this->load->model('payment/sagepay_server');
 
 			$orders = $this->model_payment_sagepay_server->cronPayment();
 

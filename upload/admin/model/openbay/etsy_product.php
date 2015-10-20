@@ -28,7 +28,6 @@ class ModelOpenbayEtsyProduct extends Model{
 	}
 
 	public function loadLinked($limit = 100, $page = 1) {
-		$this->load->model('tool/image');
 
 		$start = $limit * ($page - 1);
 

@@ -1,7 +1,6 @@
 <?php
 class ControllerPaymentSkrill extends Controller {
 	public function index() {
-		$this->load->model('checkout/order');
 
 		$this->load->language('payment/skrill');
 
@@ -53,8 +52,6 @@ class ControllerPaymentSkrill extends Controller {
 		} else {
 			$order_id = 0;
 		}
-
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 

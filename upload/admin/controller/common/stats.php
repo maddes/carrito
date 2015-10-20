@@ -7,8 +7,6 @@ class ControllerCommonStats extends Controller {
 		$data['text_processing_status'] = $this->language->get('text_processing_status');
 		$data['text_other_status'] = $this->language->get('text_other_status');
 
-		$this->load->model('sale/order');
-
 		$order_total = $this->model_sale_order->getTotalOrders();
 
 		$complete_total = $this->model_sale_order->getTotalOrders(array('filter_order_status' => implode(',', $this->config->get('config_complete_status'))));
@@ -26,8 +24,6 @@ class ControllerCommonStats extends Controller {
 		} else {
 			$data['processing_status'] = 0;
 		}
-
-		$this->load->model('localisation/order_status');
 
 		$order_status_data = array();
 

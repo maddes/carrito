@@ -7,8 +7,6 @@ class ControllerModuleHTML extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('extension/module');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			if (!isset($this->request->get['module_id'])) {
 				$this->model_extension_module->addModule('html', $this->request->post);
@@ -98,8 +96,6 @@ class ControllerModuleHTML extends Controller {
 		} else {
 			$data['module_description'] = array();
 		}
-
-		$this->load->model('localisation/language');
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 

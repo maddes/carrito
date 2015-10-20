@@ -45,8 +45,6 @@ class ControllerPaymentAuthorizeNetAim extends Controller {
 
 		//$url = 'https://secure.networkmerchants.com/gateway/transact.dll';
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$data = array();

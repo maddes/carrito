@@ -219,7 +219,6 @@ class ModelOpenbayEbay extends Model{
 				) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
 
 		// register the event triggers
-		$this->load->model('extension/event');
 		$this->model_extension_event->addEvent('openbaypro_ebay', 'post.order.history.add', 'openbay/ebay/eventAddOrderHistory');
 	}
 
@@ -236,13 +235,11 @@ class ModelOpenbayEbay extends Model{
 		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_profile`;");
 
 		// remove the event triggers
-		$this->load->model('extension/event');
 		$this->model_extension_event->deleteEvent('openbaypro_ebay');
 	}
 
 	public function patch() {
 		if ($this->config->get('ebay_status') == 1) {
-			$this->load->model('setting/setting');
 
 			$this->openbay->ebay->updateSettings();
 
@@ -270,13 +267,11 @@ class ModelOpenbayEbay extends Model{
 	}
 
 	public function loadLinked($limit = 100, $page = 1) {
-		$this->load->model('tool/image');
 
 		$start = $limit * ($page - 1);
 
 		$has_option = '';
 		if ($this->openbay->addonLoad('openstock') ) {
-			$this->load->model('module/openstock');
 			$has_option = '`p`.`has_option`, ';
 		}
 
@@ -409,7 +404,6 @@ class ModelOpenbayEbay extends Model{
 		$this->openbay->ebay->createLink($data['pid'], $data['itemId'], $data['variants']);
 
 		if (($data['qty'] != $data['ebayqty']) || $data['variants'] == 1) {
-			$this->load->model('catalog/product');
 			$this->openbay->ebay->log('Updating eBay with new qty');
 			$this->openbay->ebay->productUpdateListen($data['pid'], $this->model_catalog_product->getProduct($data['pid']));
 		} else {
@@ -663,8 +657,6 @@ class ModelOpenbayEbay extends Model{
 
 		if (isset($res->row['has_option']) && $res->row['has_option'] == 1) {
 			if ($this->openbay->addonLoad('openstock')) {
-				$this->load->model('module/openstock');
-				$this->load->model('tool/image');
 				$variant = $this->model_module_openstock->getVariants((int)$id);
 			} else {
 				$variant = 0;
@@ -749,9 +741,6 @@ class ModelOpenbayEbay extends Model{
 			$this->openbay->ebay->log('editSave() - variant item');
 
 			$variant_data = array();
-			$this->load->model('tool/image');
-			$this->load->model('catalog/product');
-			$this->load->model('module/openstock');
 
 			//get the options list for this product
 			$options = $this->model_module_openstock->getVariants($product_id);

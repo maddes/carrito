@@ -7,8 +7,6 @@ class ControllerToolBackup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('tool/backup');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->user->hasPermission('modify', 'tool/backup')) {
 			if (is_uploaded_file($this->request->files['import']['tmp_name'])) {
 				$content = file_get_contents($this->request->files['import']['tmp_name']);
@@ -95,8 +93,6 @@ class ControllerToolBackup extends Controller {
 			$this->response->addheader('Content-Type: application/octet-stream');
 			$this->response->addheader('Content-Disposition: attachment; filename=' . DB_DATABASE . '_' . date('Y-m-d_H-i-s', time()) . '_backup.sql');
 			$this->response->addheader('Content-Transfer-Encoding: binary');
-
-			$this->load->model('tool/backup');
 
 			$this->response->setOutput($this->model_tool_backup->backup($this->request->post['backup']));
 		} else {

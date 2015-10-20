@@ -11,13 +11,8 @@ class ControllerPaymentG2APay extends Controller {
 	}
 
 	public function checkout() {
-		$this->load->model('checkout/order');
-		$this->load->model('account/order');
-		$this->load->model('payment/g2apay');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
-
-		$this->load->model('extension/extension');
 		$results = $this->model_extension_extension->getExtensions('total');
 		$order_data = array();
 		$total = 0;
@@ -27,7 +22,6 @@ class ControllerPaymentG2APay extends Controller {
 		$i = 0;
 		foreach ($results as $result) {
 			if ($this->config->get($result['code'] . '_status')) {
-				$this->load->model('total/' . $result['code']);
 
 				$this->{'model_total_' . $result['code']}->getTotal($order_data['totals'], $total, $taxes);
 
@@ -112,12 +106,9 @@ class ControllerPaymentG2APay extends Controller {
 			$g2apay_transaction_id = '';
 		}
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($order_id);
 
 		if ($order_info) {
-			$this->load->model('payment/g2apay');
 			$g2apay_order_info = $this->model_payment_g2apay->getG2aOrder($order_id);
 
 			$this->model_payment_g2apay->updateOrder($g2apay_order_info['g2apay_order_id'], $g2apay_transaction_id, 'payment', $order_info);
@@ -129,7 +120,6 @@ class ControllerPaymentG2APay extends Controller {
 	}
 
 	public function ipn() {
-		$this->load->model('payment/g2apay');
 		$this->model_payment_g2apay->logger('ipn');
 
 		if (isset($this->request->get['token']) && $this->request->get['token'] == $this->config->get('g2apay_secret_token')) {
@@ -162,8 +152,6 @@ class ControllerPaymentG2APay extends Controller {
 						$order_status_id = $this->config->get('g2apay_refunded_status_id');
 						break;
 				}
-
-				$this->load->model('checkout/order');
 				$this->model_checkout_order->addOrderHistory($this->request->post['userOrderId'], $order_status_id);
 			}
 		}

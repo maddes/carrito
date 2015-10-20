@@ -7,8 +7,6 @@ class ControllerSaleVoucherTheme extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/voucher_theme');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerSaleVoucherTheme extends Controller {
 		$this->load->language('sale/voucher_theme');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('sale/voucher_theme');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_sale_voucher_theme->addVoucherTheme($this->request->post);
@@ -49,8 +45,6 @@ class ControllerSaleVoucherTheme extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/voucher_theme');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_sale_voucher_theme->editVoucherTheme($this->request->get['voucher_theme_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerSaleVoucherTheme extends Controller {
 		$this->load->language('sale/voucher_theme');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('sale/voucher_theme');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $voucher_theme_id) {
@@ -325,8 +317,6 @@ class ControllerSaleVoucherTheme extends Controller {
 
 		$data['token'] = $this->session->data['token'];
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['voucher_theme_description'])) {
@@ -344,8 +334,6 @@ class ControllerSaleVoucherTheme extends Controller {
 		} else {
 			$data['image'] = '';
 		}
-
-		$this->load->model('tool/image');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
@@ -386,8 +374,6 @@ class ControllerSaleVoucherTheme extends Controller {
 		if (!$this->user->hasPermission('modify', 'sale/voucher_theme')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('sale/voucher');
 
 		foreach ($this->request->post['selected'] as $voucher_theme_id) {
 			$voucher_total = $this->model_sale_voucher->getTotalVouchersByVoucherThemeId($voucher_theme_id);

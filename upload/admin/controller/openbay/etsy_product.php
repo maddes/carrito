@@ -4,8 +4,6 @@ class ControllerOpenbayEtsyProduct extends Controller {
 
 	public function create() {
 		$data = $this->load->language('openbay/etsy_create');
-		$this->load->model('catalog/product');
-		$this->load->model('tool/image');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
@@ -33,8 +31,6 @@ class ControllerOpenbayEtsyProduct extends Controller {
 		);
 
 		$product_info = $this->model_catalog_product->getProduct($this->request->get['product_id']);
-
-		$this->load->model('tool/image');
 
 		if (!empty($product_info) && is_file(DIR_IMAGE . $product_info['image'])) {
 			$product_info['image_url'] = $this->model_tool_image->resize($product_info['image'], 800, 800);
@@ -126,7 +122,6 @@ class ControllerOpenbayEtsyProduct extends Controller {
 
 	public function createSubmit() {
 		$this->load->language('openbay/etsy_create');
-		$this->load->model('openbay/etsy_product');
 
 		$data = $this->request->post;
 
@@ -201,8 +196,6 @@ class ControllerOpenbayEtsyProduct extends Controller {
 
 	public function edit() {
 		$data = $this->load->language('openbay/etsy_edit');
-		$this->load->model('openbay/etsy_product');
-		$this->load->model('tool/image');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
@@ -259,7 +252,6 @@ class ControllerOpenbayEtsyProduct extends Controller {
 
 	public function editSubmit() {
 		$this->load->language('openbay/etsy_edit');
-		$this->load->model('openbay/etsy_product');
 
 		$data = $this->request->post;
 
@@ -355,8 +347,6 @@ class ControllerOpenbayEtsyProduct extends Controller {
 
 	public function addLink() {
 		$this->load->language('openbay/etsy_links');
-		$this->load->model('openbay/etsy_product');
-		$this->load->model('catalog/product');
 
 		$data = $this->request->post;
 
@@ -430,7 +420,6 @@ class ControllerOpenbayEtsyProduct extends Controller {
 	}
 
 	public function links() {
-		$this->load->model('openbay/etsy_product');
 
 		$data = $this->load->language('openbay/etsy_links');
 
@@ -500,8 +489,6 @@ class ControllerOpenbayEtsyProduct extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
-
-		$this->load->model('openbay/etsy_product');
 
 		$data['token'] = $this->session->data['token'];
 

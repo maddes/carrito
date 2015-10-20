@@ -160,8 +160,6 @@ class ModelCustomerCustomer extends Model {
 
 			$this->load->language('mail/customer');
 
-			$this->load->model('setting/store');
-
 			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
 
 			if ($store_info) {
@@ -372,8 +370,6 @@ class ModelCustomerCustomer extends Model {
 
 			$this->load->language('mail/customer');
 
-			$this->load->model('setting/store');
-
 			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
 
 			if ($store_info) {
@@ -446,8 +442,6 @@ class ModelCustomerCustomer extends Model {
 			$this->db->query("INSERT INTO " . DB_PREFIX . "customer_reward SET customer_id = '" . (int)$customer_id . "', order_id = '" . (int)$order_id . "', points = '" . (int)$points . "', description = '" . $this->db->escape($description) . "', date_added = NOW()");
 
 			$this->load->language('mail/customer');
-
-			$this->load->model('setting/store');
 
 			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
 

@@ -23,10 +23,6 @@ class ControllerModuleCategory extends Controller {
 			$data['child_id'] = 0;
 		}
 
-		$this->load->model('catalog/category');
-
-		$this->load->model('catalog/product');
-
 		$data['categories'] = array();
 
 		$categories = $this->model_catalog_category->getCategories(0);

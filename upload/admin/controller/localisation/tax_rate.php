@@ -7,8 +7,6 @@ class ControllerLocalisationTaxRate extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/tax_rate');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/tax_rate');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_tax_rate->addTaxRate($this->request->post);
@@ -49,8 +45,6 @@ class ControllerLocalisationTaxRate extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/tax_rate');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_tax_rate->editTaxRate($this->request->get['tax_rate_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerLocalisationTaxRate extends Controller {
 		$this->load->language('localisation/tax_rate');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/tax_rate');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $tax_rate_id) {
@@ -375,8 +367,6 @@ class ControllerLocalisationTaxRate extends Controller {
 			$data['tax_rate_customer_group'] = array($this->config->get('config_customer_group_id'));
 		}
 
-		$this->load->model('customer/customer_group');
-
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 
 		if (isset($this->request->post['geo_zone_id'])) {
@@ -386,8 +376,6 @@ class ControllerLocalisationTaxRate extends Controller {
 		} else {
 			$data['geo_zone_id'] = '';
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
@@ -418,8 +406,6 @@ class ControllerLocalisationTaxRate extends Controller {
 		if (!$this->user->hasPermission('modify', 'localisation/tax_rate')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('localisation/tax_class');
 
 		foreach ($this->request->post['selected'] as $tax_rate_id) {
 			$tax_rule_total = $this->model_localisation_tax_class->getTotalTaxRulesByTaxRateId($tax_rate_id);

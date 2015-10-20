@@ -18,8 +18,6 @@ class ControllerPaymentPPPayflow extends Controller {
 
 		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		$this->load->model('checkout/order');
-
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
 		$data['owner'] = $order_info['payment_firstname'] . ' ' . $order_info['payment_lastname'];
@@ -80,8 +78,6 @@ class ControllerPaymentPPPayflow extends Controller {
 
 	public function send() {
 		$this->language->load('payment/pp_payflow');
-
-		$this->load->model('checkout/order');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 

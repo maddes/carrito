@@ -1,8 +1,6 @@
 <?php
 class ModelOpenbayEtsyOrder extends Model {
 	public function inbound($orders) {
-		$this->load->model('checkout/order');
-		$this->load->model('localisation/currency');
 
 		$this->language->load('openbay/etsy_order');
 

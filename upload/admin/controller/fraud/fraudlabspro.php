@@ -7,8 +7,6 @@ class ControllerFraudFraudLabsPro extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('fraudlabspro', $this->request->post);
 
@@ -120,8 +118,6 @@ class ControllerFraudFraudLabsPro extends Controller {
 			$data['fraudlabspro_simulate_ip'] = $this->config->get('fraudlabspro_simulate_ip');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['fraudlabspro_status'])) {
@@ -138,13 +134,11 @@ class ControllerFraudFraudLabsPro extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('fraud/fraudlabspro');
 
 		$this->model_fraud_fraudlabspro->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('fraud/fraudlabspro');
 
 		$this->model_fraud_fraudlabspro->uninstall();
 	}
@@ -163,8 +157,6 @@ class ControllerFraudFraudLabsPro extends Controller {
 
 	public function order() {
 		$this->load->language('fraud/fraudlabspro');
-
-		$this->load->model('fraud/fraudlabspro');
 
 		// Action of the Approve/Reject button click
 		if (isset($_POST['flp_id'])){

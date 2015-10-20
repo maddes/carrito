@@ -28,8 +28,6 @@ class ControllerAccountReward extends Controller {
 			'href' => $this->url->link('account/reward', '', 'SSL')
 		);
 
-		$this->load->model('account/reward');
-
 		$data['heading_title'] = $this->language->get('heading_title');
 
 		$data['column_date_added'] = $this->language->get('column_date_added');

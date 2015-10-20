@@ -7,8 +7,6 @@ class ControllerLocalisationCurrency extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/currency');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->load->language('localisation/currency');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/currency');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_currency->addCurrency($this->request->post);
@@ -49,8 +45,6 @@ class ControllerLocalisationCurrency extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/currency');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_currency->editCurrency($this->request->get['currency_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->load->language('localisation/currency');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/currency');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $currency_id) {
@@ -114,8 +106,6 @@ class ControllerLocalisationCurrency extends Controller {
 		$this->load->language('localisation/currency');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/currency');
 
 		if ($this->validateRefresh()) {
 			$this->model_localisation_currency->refresh(true);
@@ -461,9 +451,6 @@ class ControllerLocalisationCurrency extends Controller {
 		if (!$this->user->hasPermission('modify', 'localisation/currency')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('setting/store');
-		$this->load->model('sale/order');
 
 		foreach ($this->request->post['selected'] as $currency_id) {
 			$currency_info = $this->model_localisation_currency->getCurrency($currency_id);

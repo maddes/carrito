@@ -1,7 +1,6 @@
 <?php
 class ControllerCommonColumnRight extends Controller {
 	public function index() {
-		$this->load->model('design/layout');
 
 		if (isset($this->request->get['route'])) {
 			$route = (string)$this->request->get['route'];
@@ -12,7 +11,6 @@ class ControllerCommonColumnRight extends Controller {
 		$layout_id = 0;
 
 		if ($route == 'product/category' && isset($this->request->get['path'])) {
-			$this->load->model('catalog/category');
 
 			$path = explode('_', (string)$this->request->get['path']);
 
@@ -20,13 +18,11 @@ class ControllerCommonColumnRight extends Controller {
 		}
 
 		if ($route == 'product/product' && isset($this->request->get['product_id'])) {
-			$this->load->model('catalog/product');
 
 			$layout_id = $this->model_catalog_product->getProductLayoutId($this->request->get['product_id']);
 		}
 
 		if ($route == 'information/information' && isset($this->request->get['information_id'])) {
-			$this->load->model('catalog/information');
 
 			$layout_id = $this->model_catalog_information->getInformationLayoutId($this->request->get['information_id']);
 		}
@@ -38,8 +34,6 @@ class ControllerCommonColumnRight extends Controller {
 		if (!$layout_id) {
 			$layout_id = $this->config->get('config_layout_id');
 		}
-
-		$this->load->model('extension/module');
 
 		$data['modules'] = array();
 

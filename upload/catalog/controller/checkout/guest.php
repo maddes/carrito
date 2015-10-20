@@ -31,7 +31,6 @@ class ControllerCheckoutGuest extends Controller {
 		$data['customer_groups'] = array();
 
 		if (is_array($this->config->get('config_customer_group_display'))) {
-			$this->load->model('account/customer_group');
 
 			$customer_groups = $this->model_account_customer_group->getCustomerGroups();
 
@@ -126,12 +125,9 @@ class ControllerCheckoutGuest extends Controller {
 			$data['zone_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		// Custom Fields
-		$this->load->model('account/custom_field');
 
 		$data['custom_fields'] = $this->model_account_custom_field->getCustomFields();
 
@@ -216,8 +212,6 @@ class ControllerCheckoutGuest extends Controller {
 				$json['error']['city'] = $this->language->get('error_city');
 			}
 
-			$this->load->model('localisation/country');
-
 			$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 			if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -240,7 +234,6 @@ class ControllerCheckoutGuest extends Controller {
 			}
 
 			// Custom field validation
-			$this->load->model('account/custom_field');
 
 			$custom_fields = $this->model_account_custom_field->getCustomFields($customer_group_id);
 
@@ -286,8 +279,6 @@ class ControllerCheckoutGuest extends Controller {
 			$this->session->data['payment_address']['country_id'] = $this->request->post['country_id'];
 			$this->session->data['payment_address']['zone_id'] = $this->request->post['zone_id'];
 
-			$this->load->model('localisation/country');
-
 			$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 			if ($country_info) {
@@ -307,8 +298,6 @@ class ControllerCheckoutGuest extends Controller {
 			} else {
 				$this->session->data['payment_address']['custom_field'] = array();
 			}
-
-			$this->load->model('localisation/zone');
 
 			$zone_info = $this->model_localisation_zone->getZone($this->request->post['zone_id']);
 

@@ -35,7 +35,6 @@ class ControllerCheckoutRegister extends Controller {
 		$data['customer_groups'] = array();
 
 		if (is_array($this->config->get('config_customer_group_display'))) {
-			$this->load->model('account/customer_group');
 
 			$customer_groups = $this->model_account_customer_group->getCustomerGroups();
 
@@ -66,12 +65,9 @@ class ControllerCheckoutRegister extends Controller {
 			$data['zone_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		// Custom Fields
-		$this->load->model('account/custom_field');
 
 		$data['custom_fields'] = $this->model_account_custom_field->getCustomFields();
 
@@ -83,7 +79,6 @@ class ControllerCheckoutRegister extends Controller {
 		}
 
 		if ($this->config->get('config_account_id')) {
-			$this->load->model('catalog/information');
 
 			$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
 
@@ -136,7 +131,6 @@ class ControllerCheckoutRegister extends Controller {
 		}
 
 		if (!$json) {
-			$this->load->model('account/customer');
 
 			if ((utf8_strlen(trim($this->request->post['firstname'])) < 1) || (utf8_strlen(trim($this->request->post['firstname'])) > 32)) {
 				$json['error']['firstname'] = $this->language->get('error_firstname');
@@ -166,8 +160,6 @@ class ControllerCheckoutRegister extends Controller {
 				$json['error']['city'] = $this->language->get('error_city');
 			}
 
-			$this->load->model('localisation/country');
-
 			$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
 			if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
@@ -191,7 +183,6 @@ class ControllerCheckoutRegister extends Controller {
 			}
 
 			if ($this->config->get('config_account_id')) {
-				$this->load->model('catalog/information');
 
 				$information_info = $this->model_catalog_information->getInformation($this->config->get('config_account_id'));
 
@@ -208,7 +199,6 @@ class ControllerCheckoutRegister extends Controller {
 			}
 
 			// Custom field validation
-			$this->load->model('account/custom_field');
 
 			$custom_fields = $this->model_account_custom_field->getCustomFields($customer_group_id);
 
@@ -236,15 +226,12 @@ class ControllerCheckoutRegister extends Controller {
 
 			$this->session->data['account'] = 'register';
 
-			$this->load->model('account/customer_group');
-
 			$customer_group_info = $this->model_account_customer_group->getCustomerGroup($customer_group_id);
 
 			if ($customer_group_info && !$customer_group_info['approval']) {
 				$this->customer->login($this->request->post['email'], $this->request->post['password']);
 
 				// Default Payment Address
-				$this->load->model('account/address');
 
 				$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
 
@@ -262,7 +249,6 @@ class ControllerCheckoutRegister extends Controller {
 			unset($this->session->data['payment_methods']);
 
 			// Add to activity log
-			$this->load->model('account/activity');
 
 			$activity_data = array(
 				'customer_id' => $customer_id,

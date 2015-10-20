@@ -35,8 +35,6 @@ class ModelPaymentSagePayServer extends Model {
 
 		$card_data = array();
 
-		$this->load->model('account/address');
-
 		foreach ($query->rows as $row) {
 
 			$card_data[] = array(
@@ -101,8 +99,6 @@ class ModelPaymentSagePayServer extends Model {
 	}
 
 	public function addRecurringPayment($item, $vendor_tx_code) {
-
-		$this->load->model('checkout/recurring');
 		$this->load->language('payment/sagepay_server');
 
 		//trial information
@@ -126,8 +122,6 @@ class ModelPaymentSagePayServer extends Model {
 	}
 
 	public function updateRecurringPayment($item, $order_details) {
-
-		$this->load->model('checkout/recurring');
 
 		$order_info = $this->model_checkout_order->getOrder($order_details['order_id']);
 
@@ -246,8 +240,6 @@ class ModelPaymentSagePayServer extends Model {
 	}
 
 	public function cronPayment() {
-
-		$this->load->model('account/order');
 		$recurrings = $this->getProfiles();
 		$cron_data = array();
 		$i = 0;

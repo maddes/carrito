@@ -7,8 +7,6 @@ class ControllerPaymentPPProIframe extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('pp_pro_iframe', $this->request->post);
 
@@ -129,8 +127,6 @@ class ControllerPaymentPPProIframe extends Controller {
 		} else {
 			$data['pp_pro_iframe_total'] = $this->config->get('pp_pro_iframe_total');
 		}
-
-		$this->load->model('localisation/order_status');
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['pp_pro_iframe_canceled_reversal_status_id'])) {
@@ -199,8 +195,6 @@ class ControllerPaymentPPProIframe extends Controller {
 			$data['pp_pro_iframe_geo_zone_id'] = $this->config->get('pp_pro_iframe_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
-
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 
 		if (isset($this->request->post['pp_pro_iframe_status'])) {
@@ -237,20 +231,17 @@ class ControllerPaymentPPProIframe extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('payment/pp_pro_iframe');
 
 		$this->model_payment_pp_pro_iframe->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('payment/pp_pro_iframe');
 
 		$this->model_payment_pp_pro_iframe->uninstall();
 	}
 
 	public function refund() {
 		$this->load->language('payment/pp_pro_iframe');
-		$this->load->model('payment/pp_pro_iframe');
 
 		$this->document->setTitle($this->language->get('text_refund'));
 
@@ -332,8 +323,6 @@ class ControllerPaymentPPProIframe extends Controller {
 		 * refund can be full or partial
 		 */
 		if (isset($this->request->post['transaction_id']) && isset($this->request->post['refund_full'])) {
-
-			$this->load->model('payment/pp_pro_iframe');
 			$this->load->language('payment/pp_pro_iframe');
 
 			if ($this->request->post['refund_full'] == 0 && $this->request->post['amount'] == 0) {
@@ -420,7 +409,6 @@ class ControllerPaymentPPProIframe extends Controller {
 
 	public function reauthorise() {
 		$this->load->language('payment/pp_pro_iframe');
-		$this->load->model('payment/pp_pro_iframe');
 
 		$json = array();
 
@@ -474,7 +462,6 @@ class ControllerPaymentPPProIframe extends Controller {
 	}
 
 	public function viewTransaction() {
-		$this->load->model('payment/pp_pro_iframe');
 		$this->load->language('payment/pp_pro_iframe');
 
 		$data['text_transaction'] = $this->language->get('text_transaction');
@@ -606,8 +593,6 @@ class ControllerPaymentPPProIframe extends Controller {
 		 */
 		if (isset($this->request->post['order_id']) && $this->request->post['amount'] > 0 && isset($this->request->post['order_id']) && isset($this->request->post['complete'])) {
 
-			$this->load->model('payment/pp_pro_iframe');
-
 			$paypal_order = $this->model_payment_pp_pro_iframe->getOrder($this->request->post['order_id']);
 
 			if ($this->request->post['complete'] == 1) {
@@ -721,7 +706,6 @@ class ControllerPaymentPPProIframe extends Controller {
 		$this->load->language('payment/pp_pro_iframe');
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('payment/pp_pro_iframe');
 
 			$paypal_order = $this->model_payment_pp_pro_iframe->getOrder($this->request->post['order_id']);
 
@@ -770,7 +754,6 @@ class ControllerPaymentPPProIframe extends Controller {
 	}
 
 	public function order() {
-		$this->load->model('payment/pp_pro_iframe');
 		$this->load->language('payment/pp_pro_iframe');
 
 		$paypal_order = $this->model_payment_pp_pro_iframe->getOrder($this->request->get['order_id']);
@@ -852,7 +835,6 @@ class ControllerPaymentPPProIframe extends Controller {
 	}
 
 	public function resend() {
-		$this->load->model('payment/pp_pro_iframe');
 		$this->load->language('payment/pp_pro_iframe');
 
 		$json = array();

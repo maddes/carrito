@@ -5,8 +5,6 @@ class ControllerApiLogin extends Controller {
 
 		$json = array();
 
-		$this->load->model('account/api');
-
 		// Check if IP is allowed
 		$ip_data = array();
 

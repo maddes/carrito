@@ -3,10 +3,6 @@ class ControllerCommonProfile extends Controller {
 	public function index() {
 		$this->load->language('common/menu');
 
-		$this->load->model('user/user');
-
-		$this->load->model('tool/image');
-
 		$user_info = $this->model_user_user->getUser($this->user->getId());
 
 		if ($user_info) {

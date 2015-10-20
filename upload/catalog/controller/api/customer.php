@@ -30,7 +30,6 @@ class ControllerApiCustomer extends Controller {
 
 			// Customer
 			if ($this->request->post['customer_id']) {
-				$this->load->model('account/customer');
 
 				$customer_info = $this->model_account_customer->getCustomer($this->request->post['customer_id']);
 
@@ -63,7 +62,6 @@ class ControllerApiCustomer extends Controller {
 			}
 
 			// Custom field validation
-			$this->load->model('account/custom_field');
 
 			$custom_fields = $this->model_account_custom_field->getCustomFields($customer_group_id);
 

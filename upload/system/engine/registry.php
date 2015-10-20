@@ -30,10 +30,10 @@ final class Registry {
 			if ( ! isset($this->data[$key]))
 			{
 				// Load the requested model
-				$this->get('load')->model(str_replace('_', '/', substr($model, 6)));
+				// Due to name colissions, only one folder deep is allowed
+				$this->get('load')->model($key);
 			}
 		}
-
 		// Return the object or null if unnavailable
 		return (isset($this->data[$key]) ? $this->data[$key] : null);
 	}

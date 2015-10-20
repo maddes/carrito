@@ -57,8 +57,6 @@ class ModelOpenbayAmazonProduct extends Model {
 		$result = null;
 
 		if ($var !== '' && $this->openbay->addonLoad('openstock')) {
-			$this->load->model('tool/image');
-			$this->load->model('module/openstock');
 			$option_stocks = $this->model_module_openstock->getVariants($product_id);
 
 			$option = null;
@@ -73,7 +71,6 @@ class ModelOpenbayAmazonProduct extends Model {
 				$result = $option['stock'];
 			}
 		} else {
-			$this->load->model('catalog/product');
 			$product_info = $this->model_catalog_product->getProduct($product_id);
 
 			if (isset($product_info['quantity'])) {

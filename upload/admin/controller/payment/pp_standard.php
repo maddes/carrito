@@ -7,8 +7,6 @@ class ControllerPaymentPPStandard extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('pp_standard', $this->request->post);
 
@@ -180,8 +178,6 @@ class ControllerPaymentPPStandard extends Controller {
 			$data['pp_standard_voided_status_id'] = $this->config->get('pp_standard_voided_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['pp_standard_geo_zone_id'])) {
@@ -189,8 +185,6 @@ class ControllerPaymentPPStandard extends Controller {
 		} else {
 			$data['pp_standard_geo_zone_id'] = $this->config->get('pp_standard_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

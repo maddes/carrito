@@ -7,13 +7,10 @@ class ControllerSettingSetting extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('config', $this->request->post);
 
 			if ($this->config->get('config_currency_auto')) {
-				$this->load->model('localisation/currency');
 
 				$this->model_localisation_currency->refresh();
 			}
@@ -520,8 +517,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_image'] = $this->config->get('config_image');
 		}
 
-		$this->load->model('tool/image');
-
 		if (isset($this->request->post['config_image']) && is_file(DIR_IMAGE . $this->request->post['config_image'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['config_image'], 100, 100);
 		} elseif ($this->config->get('config_image') && is_file(DIR_IMAGE . $this->config->get('config_image'))) {
@@ -543,8 +538,6 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$data['config_comment'] = $this->config->get('config_comment');
 		}
-
-		$this->load->model('localisation/location');
 
 		$data['locations'] = $this->model_localisation_location->getLocations();
 
@@ -580,8 +573,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_layout_id'] = $this->config->get('config_layout_id');
 		}
 
-		$this->load->model('design/layout');
-
 		$data['layouts'] = $this->model_design_layout->getLayouts();
 
 		if (isset($this->request->post['config_template'])) {
@@ -604,8 +595,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_country_id'] = $this->config->get('config_country_id');
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		if (isset($this->request->post['config_zone_id'])) {
@@ -619,8 +608,6 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$data['config_language'] = $this->config->get('config_language');
 		}
-
-		$this->load->model('localisation/language');
 
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
@@ -642,8 +629,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_currency_auto'] = $this->config->get('config_currency_auto');
 		}
 
-		$this->load->model('localisation/currency');
-
 		$data['currencies'] = $this->model_localisation_currency->getCurrencies();
 
 		if (isset($this->request->post['config_length_class_id'])) {
@@ -652,8 +637,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_length_class_id'] = $this->config->get('config_length_class_id');
 		}
 
-		$this->load->model('localisation/length_class');
-
 		$data['length_classes'] = $this->model_localisation_length_class->getLengthClasses();
 
 		if (isset($this->request->post['config_weight_class_id'])) {
@@ -661,8 +644,6 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$data['config_weight_class_id'] = $this->config->get('config_weight_class_id');
 		}
-
-		$this->load->model('localisation/weight_class');
 
 		$data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 
@@ -750,8 +731,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_customer_group_id'] = $this->config->get('config_customer_group_id');
 		}
 
-		$this->load->model('customer/customer_group');
-
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 
 		if (isset($this->request->post['config_customer_group_display'])) {
@@ -781,8 +760,6 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$data['config_account_id'] = $this->config->get('config_account_id');
 		}
-
-		$this->load->model('catalog/information');
 
 		$data['informations'] = $this->model_catalog_information->getInformations();
 
@@ -846,8 +823,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_fraud_status_id'] = $this->config->get('config_fraud_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['config_order_mail'])) {
@@ -861,8 +836,6 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$data['config_api_id'] = $this->config->get('config_api_id');
 		}
-
-		$this->load->model('user/api');
 
 		$data['apis'] = $this->model_user_api->getApis();
 
@@ -934,8 +907,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_return_status_id'] = $this->config->get('config_return_status_id');
 		}
 
-		$this->load->model('localisation/return_status');
-
 		$data['return_statuses'] = $this->model_localisation_return_status->getReturnStatuses();
 
 		if (isset($this->request->post['config_captcha'])) {
@@ -943,8 +914,6 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$data['config_captcha'] = $this->config->get('config_captcha');
 		}
-
-		$this->load->model('extension/extension');
 
 		$data['captchas'] = array();
 

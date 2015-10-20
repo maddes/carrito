@@ -7,8 +7,6 @@ class ControllerLocalisationLocation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/location');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerLocalisationLocation extends Controller {
 		$this->load->language('localisation/location');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/location');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_location->addLocation($this->request->post);
@@ -49,8 +45,6 @@ class ControllerLocalisationLocation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/location');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_localisation_location->editLocation($this->request->get['location_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerLocalisationLocation extends Controller {
 		$this->load->language('localisation/location');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('localisation/location');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $location_id) {
@@ -348,8 +340,6 @@ class ControllerLocalisationLocation extends Controller {
 
 		$data['token'] = $this->session->data['token'];
 
-		$this->load->model('setting/store');
-
 		if (isset($this->request->post['name'])) {
 			$data['name'] = $this->request->post['name'];
 		} elseif (!empty($location_info)) {
@@ -397,8 +387,6 @@ class ControllerLocalisationLocation extends Controller {
 		} else {
 			$data['image'] = '';
 		}
-
-		$this->load->model('tool/image');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);

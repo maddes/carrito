@@ -2,8 +2,6 @@
 class ControllerPaymentBluePayHostedForm extends Controller {
 	public function index() {
 		$this->load->language('payment/bluepay_hosted');
-		$this->load->model('checkout/order');
-		$this->load->model('payment/bluepay_hosted');
 
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 
@@ -56,10 +54,6 @@ class ControllerPaymentBluePayHostedForm extends Controller {
 
 	public function callback() {
 		$this->load->language('payment/bluepay_hosted');
-
-		$this->load->model('checkout/order');
-
-		$this->load->model('payment/bluepay_hosted');
 
 		$response_data = $this->request->get;
 

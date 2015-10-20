@@ -47,24 +47,22 @@ final class Loader {
 		return $output;
 	}
 
-	public function model($model, $data = array()) {
-		// $this->event->trigger('pre.model.' . str_replace('/', '.', (string)$model), $data);
+	/**
+	 * Loads a model into the IOC
+	 *
+	 * @param string $model The model IOC key
+	 */
+	public function model($model)
+	{
+		// Load the model file, only one folder deep is allowed.
+		// Notice that the 'model/' folder is still hardcoded, should fix.
+		require_once(DIR_APPLICATION.implode('/', explode('_', $model, 3)).'.php');
 
-		$model = str_replace('../', '', (string)$model);
+		// Calculate the model Class name (case insensitively)
+		$class = preg_replace('/[^a-zA-Z0-9]/', '', $model);
 
-		$file = DIR_APPLICATION . 'model/' . $model . '.php';
-		$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $model);
-
-		if (file_exists($file)) {
-			include_once($file);
-
-			$this->registry->set('model_' . str_replace('/', '_', $model), new $class($this->registry));
-		} else {
-			trigger_error('Error: Could not load model ' . $file . '!');
-			exit();
-		}
-
-		// $this->event->trigger('post.model.' . str_replace('/', '.', (string)$model), $output);
+		// Instance the model and insert it on the IOC
+		$this->registry->set($model, new $class($this->registry));
 	}
 
 	public function view($template, $data = array()) {

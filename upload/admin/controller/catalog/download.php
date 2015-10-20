@@ -7,8 +7,6 @@ class ControllerCatalogDownload extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/download');
-
 		$this->getList();
 	}
 
@@ -16,8 +14,6 @@ class ControllerCatalogDownload extends Controller {
 		$this->language->load('catalog/download');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/download');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_download->addDownload($this->request->post);
@@ -49,8 +45,6 @@ class ControllerCatalogDownload extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/download');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_catalog_download->editDownload($this->request->get['download_id'], $this->request->post);
 
@@ -80,8 +74,6 @@ class ControllerCatalogDownload extends Controller {
 		$this->language->load('catalog/download');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('catalog/download');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $download_id) {
@@ -334,8 +326,6 @@ class ControllerCatalogDownload extends Controller {
 
 		$data['cancel'] = $this->url->link('catalog/download', 'token=' . $this->session->data['token'] . $url, 'SSL');
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->get['download_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
@@ -411,8 +401,6 @@ class ControllerCatalogDownload extends Controller {
 		if (!$this->user->hasPermission('modify', 'catalog/download')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('catalog/product');
 
 		foreach ($this->request->post['selected'] as $download_id) {
 			$product_total = $this->model_catalog_product->getTotalProductsByDownloadId($download_id);
@@ -510,7 +498,6 @@ class ControllerCatalogDownload extends Controller {
 		$json = array();
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/download');
 
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],

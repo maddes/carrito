@@ -7,8 +7,6 @@ class ControllerPaymentSkrill extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('skrill', $this->request->post);
 
@@ -124,8 +122,6 @@ class ControllerPaymentSkrill extends Controller {
 			$data['skrill_chargeback_status_id'] = $this->config->get('skrill_chargeback_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
-
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
 		if (isset($this->request->post['skrill_geo_zone_id'])) {
@@ -133,8 +129,6 @@ class ControllerPaymentSkrill extends Controller {
 		} else {
 			$data['skrill_geo_zone_id'] = $this->config->get('skrill_geo_zone_id');
 		}
-
-		$this->load->model('localisation/geo_zone');
 
 		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 

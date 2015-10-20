@@ -7,8 +7,6 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store');
-
 		$this->getList();
 	}
 
@@ -17,12 +15,8 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$store_id = $this->model_setting_store->addStore($this->request->post);
-
-			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('config', $this->request->post, $store_id);
 
@@ -39,12 +33,8 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store');
-
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_setting_store->editStore($this->request->get['store_id'], $this->request->post);
-
-			$this->load->model('setting/setting');
 
 			$this->model_setting_setting->editSetting('config', $this->request->post, $this->request->get['store_id']);
 
@@ -60,10 +50,6 @@ class ControllerSettingStore extends Controller {
 		$this->load->language('setting/store');
 
 		$this->document->setTitle($this->language->get('heading_title'));
-
-		$this->load->model('setting/store');
-
-		$this->load->model('setting/setting');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $store_id) {
@@ -435,7 +421,6 @@ class ControllerSettingStore extends Controller {
 		$data['cancel'] = $this->url->link('setting/store', 'token=' . $this->session->data['token'], 'SSL');
 
 		if (isset($this->request->get['store_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$this->load->model('setting/setting');
 
 			$store_info = $this->model_setting_setting->getSetting('config', $this->request->get['store_id']);
 		}
@@ -522,8 +507,6 @@ class ControllerSettingStore extends Controller {
 			$data['config_image'] = '';
 		}
 
-		$this->load->model('tool/image');
-
 		if (isset($this->request->post['config_image']) && is_file(DIR_IMAGE . $this->request->post['config_image'])) {
 			$data['thumb'] = $this->model_tool_image->resize($this->request->post['config_image'], 100, 100);
 		} elseif (isset($store_info['config_image']) && is_file(DIR_IMAGE . $store_info['config_image'])) {
@@ -549,8 +532,6 @@ class ControllerSettingStore extends Controller {
 		} else {
 			$data['config_comment'] = '';
 		}
-
-		$this->load->model('localisation/location');
 
 		$data['locations'] = $this->model_localisation_location->getLocations();
 
@@ -594,8 +575,6 @@ class ControllerSettingStore extends Controller {
 			$data['config_layout_id'] = '';
 		}
 
-		$this->load->model('design/layout');
-
 		$data['layouts'] = $this->model_design_layout->getLayouts();
 
 		if (isset($this->request->post['config_template'])) {
@@ -622,8 +601,6 @@ class ControllerSettingStore extends Controller {
 			$data['config_country_id'] = $this->config->get('config_country_id');
 		}
 
-		$this->load->model('localisation/country');
-
 		$data['countries'] = $this->model_localisation_country->getCountries();
 
 		if (isset($this->request->post['config_zone_id'])) {
@@ -642,8 +619,6 @@ class ControllerSettingStore extends Controller {
 			$data['config_language'] = $this->config->get('config_language');
 		}
 
-		$this->load->model('localisation/language');
-
 		$data['languages'] = $this->model_localisation_language->getLanguages();
 
 		if (isset($this->request->post['config_currency'])) {
@@ -653,8 +628,6 @@ class ControllerSettingStore extends Controller {
 		} else {
 			$data['config_currency'] = $this->config->get('config_currency');
 		}
-
-		$this->load->model('localisation/currency');
 
 		$data['currencies'] = $this->model_localisation_currency->getCurrencies();
 
@@ -706,8 +679,6 @@ class ControllerSettingStore extends Controller {
 			$data['config_customer_group_id'] = '';
 		}
 
-		$this->load->model('customer/customer_group');
-
 		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
 
 		if (isset($this->request->post['config_customer_group_display'])) {
@@ -733,8 +704,6 @@ class ControllerSettingStore extends Controller {
 		} else {
 			$data['config_account_id'] = '';
 		}
-
-		$this->load->model('catalog/information');
 
 		$data['informations'] = $this->model_catalog_information->getInformations();
 
@@ -769,8 +738,6 @@ class ControllerSettingStore extends Controller {
 		} else {
 			$data['config_order_status_id'] = '';
 		}
-
-		$this->load->model('localisation/order_status');
 
 		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
@@ -1095,8 +1062,6 @@ class ControllerSettingStore extends Controller {
 		if (!$this->user->hasPermission('modify', 'setting/store')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
-
-		$this->load->model('sale/order');
 
 		foreach ($this->request->post['selected'] as $store_id) {
 			if (!$store_id) {

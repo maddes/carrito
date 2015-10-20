@@ -62,8 +62,6 @@ class ControllerPaymentGlobalpayRemote extends Controller {
 	}
 
 	public function send() {
-		$this->load->model('checkout/order');
-		$this->load->model('payment/globalpay_remote');
 
 		$this->load->language('payment/globalpay_remote');
 
@@ -233,8 +231,6 @@ class ControllerPaymentGlobalpayRemote extends Controller {
 
 	public function acsReturn() {
 		if (isset($this->session->data['order_id'])) {
-			$this->load->model('checkout/order');
-			$this->load->model('payment/globalpay_remote');
 
 			$post = $this->request->post;
 

@@ -4,9 +4,6 @@ class ControllerModuleEbayListing extends Controller {
 		if ($this->config->get('ebay_status') == 1) {
 			$this->language->load('module/ebay');
 
-			$this->load->model('tool/image');
-			$this->load->model('openbay/ebay_product');
-
 			$data['heading_title'] = $this->language->get('heading_title');
 
 			$data['products'] = array();

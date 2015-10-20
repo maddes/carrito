@@ -124,7 +124,6 @@ class ModelOpenbayAmazonusListing extends Model {
 	}
 
 	public function doBulkListing($data) {
-		$this->load->model('catalog/product');
 		$request = array();
 
 		foreach($data['products'] as $product_id => $asin) {

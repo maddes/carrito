@@ -21,9 +21,6 @@ class ControllerDashboardChart extends Controller {
 
 		$json = array();
 
-		$this->load->model('report/sale');
-		$this->load->model('report/customer');
-
 		$json['order'] = array();
 		$json['customer'] = array();
 		$json['xaxis'] = array();

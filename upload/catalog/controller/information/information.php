@@ -3,8 +3,6 @@ class ControllerInformationInformation extends Controller {
 	public function index() {
 		$this->load->language('information/information');
 
-		$this->load->model('catalog/information');
-
 		$data['breadcrumbs'] = array();
 
 		$data['breadcrumbs'][] = array(
@@ -76,7 +74,6 @@ class ControllerInformationInformation extends Controller {
 	}
 
 	public function agree() {
-		$this->load->model('catalog/information');
 
 		if (isset($this->request->get['information_id'])) {
 			$information_id = (int)$this->request->get['information_id'];

@@ -2,10 +2,6 @@
 class ControllerOpenbayAmazonusListing extends Controller{
 	public function create() {
 		$this->load->language('openbay/amazonus_listing');
-		$this->load->model('openbay/amazonus_listing');
-		$this->load->model('openbay/amazonus');
-		$this->load->model('catalog/product');
-		$this->load->model('localisation/country');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
@@ -213,8 +209,6 @@ class ControllerOpenbayAmazonusListing extends Controller{
 	}
 
 	public function edit() {
-		$this->load->model('openbay/amazonus_listing');
-		$this->load->model('openbay/amazonus');
 		$this->load->language('openbay/amazonus_listing');
 
 		$this->document->setTitle($this->language->get('text_edit_heading'));
@@ -415,7 +409,6 @@ class ControllerOpenbayAmazonusListing extends Controller{
 		} else {
 			$this->response->redirect($this->url->link('extension/openbay/items', 'token=' . $this->session->data['token'] . $url, 'SSL'));
 		}
-		$this->load->model('openbay/amazonus');
 		$this->model_openbay_amazonus->deleteProduct($product_id);
 		$this->response->redirect($this->url->link('openbay/amazonus_listing/create', 'token=' . $this->session->data['token'] . '&product_id=' . $product_id . $url, 'SSL'));
 	}
@@ -486,8 +479,6 @@ class ControllerOpenbayAmazonusListing extends Controller{
 			$this->response->redirect($this->url->link('extension/openbay/items', 'token=' . $this->session->data['token'] . $url, 'SSL'));
 		}
 
-		$this->load->model('openbay/amazonus');
-
 		$links = $this->model_openbay_amazonus->getProductLinks($product_id);
 		foreach ($links as $link) {
 			$this->model_openbay_amazonus->removeProductLink($link['amazonus_sku']);
@@ -500,7 +491,6 @@ class ControllerOpenbayAmazonusListing extends Controller{
 	}
 
 	public function search() {
-		$this->load->model('openbay/amazonus_listing');
 		$this->load->language('openbay/amazonus_listing');
 
 		$error = '';
@@ -526,7 +516,6 @@ class ControllerOpenbayAmazonusListing extends Controller{
 	}
 
 	public function bestPrice() {
-		$this->load->model('openbay/amazonus_listing');
 		$this->load->language('openbay/amazonus_listing');
 
 		$error = '';
@@ -565,7 +554,6 @@ class ControllerOpenbayAmazonusListing extends Controller{
 	}
 
 	public function getProductByAsin() {
-		$this->load->model('openbay/amazonus_listing');
 
 		$data = $this->model_openbay_amazonus_listing->getProductByAsin($this->request->post['asin']);
 
@@ -579,7 +567,6 @@ class ControllerOpenbayAmazonusListing extends Controller{
 	}
 
 	public function getBrowseNodes() {
-		$this->load->model('openbay/amazonus_listing');
 
 		$data = array(
 			'node' => (isset($this->request->post['node']) ? $this->request->post['node'] : ''),
