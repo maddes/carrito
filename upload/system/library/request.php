@@ -28,4 +28,15 @@ class Request {
 
 		return $data;
 	}
+
+	public function get($key, $default = null)
+	{
+		if (array_key_exists($key, $this->get))
+		{
+			return $this->get[$key];
+		}
+		else {
+			return $default;
+		}
+	}
 }
