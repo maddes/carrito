@@ -1,71 +1,80 @@
 <?php
-namespace DB;
-final class Postgre {
-	private $link;
 
-	public function __construct($hostname, $username, $password, $database, $port = '5432') {
-		if (!$this->link = pg_connect('hostname=' . $hostname . ' port=' . $port .  ' username=' . $username . ' password='	. $password . ' database=' . $database)) {
-			trigger_error('Error: Could not make a database link using ' . $username . '@' . $hostname);
-			exit();
-		}
+namespace db;
 
-		if (!mysql_select_db($database, $this->link)) {
-			trigger_error('Error: Could not connect to database ' . $database);
-			exit();
-		}
+final class postgre
+{
+    private $link;
 
-		pg_query($this->link, "SET CLIENT_ENCODING TO 'UTF8'");
-	}
+    public function __construct($hostname, $username, $password, $database, $port = '5432')
+    {
+        if (!$this->link = pg_connect('hostname='.$hostname.' port='.$port.' username='.$username.' password='.$password.' database='.$database)) {
+            trigger_error('Error: Could not make a database link using '.$username.'@'.$hostname);
+            exit();
+        }
 
-	public function query($sql) {
-		$resource = pg_query($this->link, $sql);
+        if (!mysql_select_db($database, $this->link)) {
+            trigger_error('Error: Could not connect to database '.$database);
+            exit();
+        }
 
-		if ($resource) {
-			if (is_resource($resource)) {
-				$i = 0;
+        pg_query($this->link, "SET CLIENT_ENCODING TO 'UTF8'");
+    }
 
-				$data = array();
+    public function query($sql)
+    {
+        $resource = pg_query($this->link, $sql);
 
-				while ($result = pg_fetch_assoc($resource)) {
-					$data[$i] = $result;
+        if ($resource) {
+            if (is_resource($resource)) {
+                $i = 0;
 
-					$i++;
-				}
+                $data = array();
 
-				pg_free_result($resource);
+                while ($result = pg_fetch_assoc($resource)) {
+                    $data[$i] = $result;
 
-				$query = new \stdClass();
-				$query->row = isset($data[0]) ? $data[0] : array();
-				$query->rows = $data;
-				$query->num_rows = $i;
+                    ++$i;
+                }
 
-				unset($data);
+                pg_free_result($resource);
 
-				return $query;
-			} else {
-				return true;
-			}
-		} else {
-			trigger_error('Error: ' . pg_result_error($this->link) . '<br />' . $sql);
-			exit();
-		}
-	}
+                $query = new \stdClass();
+                $query->row = isset($data[0]) ? $data[0] : array();
+                $query->rows = $data;
+                $query->num_rows = $i;
 
-	public function escape($value) {
-		return pg_escape_string($this->link, $value);
-	}
+                unset($data);
 
-	public function countAffected() {
-		return pg_affected_rows($this->link);
-	}
+                return $query;
+            } else {
+                return true;
+            }
+        } else {
+            trigger_error('Error: '.pg_result_error($this->link).'<br />'.$sql);
+            exit();
+        }
+    }
 
-	public function getLastId() {
-		$query = $this->query("SELECT LASTVAL() AS `id`");
+    public function escape($value)
+    {
+        return pg_escape_string($this->link, $value);
+    }
 
-		return $query->row['id'];
-	}
+    public function countAffected()
+    {
+        return pg_affected_rows($this->link);
+    }
 
-	public function __destruct() {
-		pg_close($this->link);
-	}
+    public function getLastId()
+    {
+        $query = $this->query('SELECT LASTVAL() AS `id`');
+
+        return $query->row['id'];
+    }
+
+    public function __destruct()
+    {
+        pg_close($this->link);
+    }
 }

@@ -1,60 +1,65 @@
 <?php
-class ControllerCaptchaBasicCaptcha extends Controller {
-	public function index($error = array()) {
-		$this->load->language('captcha/basic_captcha');
 
-		$data['heading_title'] = $this->language->get('heading_title');
+class ControllerCaptchaBasicCaptcha extends Controller
+{
+    public function index($error = array())
+    {
+        $this->load->language('captcha/basic_captcha');
 
-		$data['entry_captcha'] = $this->language->get('entry_captcha');
+        $data['heading_title'] = $this->language->get('heading_title');
 
-		if (isset($error['captcha'])) {
-			$data['error_captcha'] = $error['captcha'];
-		} else {
-			$data['error_captcha'] = '';
-		}
+        $data['entry_captcha'] = $this->language->get('entry_captcha');
 
-		$data['route'] = $this->request->get['route'];
+        if (isset($error['captcha'])) {
+            $data['error_captcha'] = $error['captcha'];
+        } else {
+            $data['error_captcha'] = '';
+        }
 
-		return $this->load->view('captcha/basic_captcha', $data);
-	}
+        $data['route'] = $this->request->get['route'];
 
-	public function validate() {
-		$this->load->language('captcha/basic_captcha');
+        return $this->load->view('captcha/basic_captcha', $data);
+    }
 
-		if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $this->request->post['captcha'])) {
-			return $this->language->get('error_captcha');
-		}
-	}
+    public function validate()
+    {
+        $this->load->language('captcha/basic_captcha');
 
-	public function captcha() {
-		$this->session->data['captcha'] = substr(sha1(mt_rand()), 17, 6);
+        if (empty($this->session->data['captcha']) || ($this->session->data['captcha'] != $this->request->post['captcha'])) {
+            return $this->language->get('error_captcha');
+        }
+    }
 
-		$image = imagecreatetruecolor(150, 35);
+    public function captcha()
+    {
+        $this->session->data['captcha'] = substr(sha1(mt_rand()), 17, 6);
 
-		$width = imagesx($image);
-		$height = imagesy($image);
+        $image = imagecreatetruecolor(150, 35);
 
-		$black = imagecolorallocate($image, 0, 0, 0);
-		$white = imagecolorallocate($image, 255, 255, 255);
-		$red = imagecolorallocatealpha($image, 255, 0, 0, 75);
-		$green = imagecolorallocatealpha($image, 0, 255, 0, 75);
-		$blue = imagecolorallocatealpha($image, 0, 0, 255, 75);
+        $width = imagesx($image);
+        $height = imagesy($image);
 
-		imagefilledrectangle($image, 0, 0, $width, $height, $white);
-		imagefilledellipse($image, ceil(rand(5, 145)), ceil(rand(0, 35)), 30, 30, $red);
-		imagefilledellipse($image, ceil(rand(5, 145)), ceil(rand(0, 35)), 30, 30, $green);
-		imagefilledellipse($image, ceil(rand(5, 145)), ceil(rand(0, 35)), 30, 30, $blue);
-		imagefilledrectangle($image, 0, 0, $width, 0, $black);
-		imagefilledrectangle($image, $width - 1, 0, $width - 1, $height - 1, $black);
-		imagefilledrectangle($image, 0, 0, 0, $height - 1, $black);
-		imagefilledrectangle($image, 0, $height - 1, $width, $height - 1, $black);
+        $black = imagecolorallocate($image, 0, 0, 0);
+        $white = imagecolorallocate($image, 255, 255, 255);
+        $red = imagecolorallocatealpha($image, 255, 0, 0, 75);
+        $green = imagecolorallocatealpha($image, 0, 255, 0, 75);
+        $blue = imagecolorallocatealpha($image, 0, 0, 255, 75);
 
-		imagestring($image, 10, intval(($width - (strlen($this->session->data['captcha']) * 9)) / 2), intval(($height - 15) / 2), $this->session->data['captcha'], $black);
+        imagefilledrectangle($image, 0, 0, $width, $height, $white);
+        imagefilledellipse($image, ceil(rand(5, 145)), ceil(rand(0, 35)), 30, 30, $red);
+        imagefilledellipse($image, ceil(rand(5, 145)), ceil(rand(0, 35)), 30, 30, $green);
+        imagefilledellipse($image, ceil(rand(5, 145)), ceil(rand(0, 35)), 30, 30, $blue);
+        imagefilledrectangle($image, 0, 0, $width, 0, $black);
+        imagefilledrectangle($image, $width - 1, 0, $width - 1, $height - 1, $black);
+        imagefilledrectangle($image, 0, 0, 0, $height - 1, $black);
+        imagefilledrectangle($image, 0, $height - 1, $width, $height - 1, $black);
 
-		header('Content-type: image/jpeg');
+        imagestring($image, 10, intval(($width - (strlen($this->session->data['captcha']) * 9)) / 2), intval(($height - 15) / 2), $this->session->data['captcha'], $black);
 
-		imagejpeg($image);
+        header('Content-type: image/jpeg');
 
-		imagedestroy($image);
-	}
+        imagejpeg($image);
+
+        imagedestroy($image);
+    }
 }

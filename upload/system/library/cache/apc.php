@@ -1,18 +1,24 @@
 <?php
-namespace Cache;
-class APC {
-	private $expire = CACHE_EXPIRE;
-	private $cache;
 
-	public function get($key) {
-		return apc_fetch(CACHE_PREFIX . $key);
-	}
+namespace cache;
 
-	public function set($key, $value) {
-		return apc_store(CACHE_PREFIX . $key, $value, $this->expire);
-	}
+class apc
+{
+    private $expire = CACHE_EXPIRE;
+    private $cache;
 
-	public function delete($key) {
-		apc_delete(CACHE_PREFIX . $key);
-	}
+    public function get($key)
+    {
+        return apc_fetch(CACHE_PREFIX.$key);
+    }
+
+    public function set($key, $value)
+    {
+        return apc_store(CACHE_PREFIX.$key, $value, $this->expire);
+    }
+
+    public function delete($key)
+    {
+        apc_delete(CACHE_PREFIX.$key);
+    }
 }

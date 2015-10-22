@@ -1,153 +1,160 @@
 <?php
-class ControllerExtensionPayment extends Controller {
-	private $error = array();
 
-	public function index() {
-		$this->load->language('extension/payment');
+class ControllerExtensionPayment extends Controller
+{
+    private $error = array();
 
-		$this->document->setTitle($this->language->get('heading_title'));
+    public function index()
+    {
+        $this->load->language('extension/payment');
 
-		$this->getList();
-	}
+        $this->document->setTitle($this->language->get('heading_title'));
 
-	public function install() {
-		$this->load->language('extension/payment');
+        $this->getList();
+    }
 
-		$this->document->setTitle($this->language->get('heading_title'));
+    public function install()
+    {
+        $this->load->language('extension/payment');
 
-		if ($this->validate()) {
-			$this->model_extension_extension->install('payment', $this->request->get['extension']);
+        $this->document->setTitle($this->language->get('heading_title'));
 
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'payment/' . $this->request->get['extension']);
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'payment/' . $this->request->get['extension']);
+        if ($this->validate()) {
+            $this->model_extension_extension->install('payment', $this->request->get['extension']);
 
-			// Call install method if it exsits
-			$this->load->controller('payment/' . $this->request->get['extension'] . '/install');
+            $this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'payment/'.$this->request->get['extension']);
+            $this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'payment/'.$this->request->get['extension']);
 
-			$this->session->data['success'] = $this->language->get('text_success');
+            // Call install method if it exsits
+            $this->load->controller('payment/'.$this->request->get['extension'].'/install');
 
-			$this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
-		}
+            $this->session->data['success'] = $this->language->get('text_success');
 
-		$this->getList();
-	}
+            $this->response->redirect($this->url->link('extension/payment', 'token='.$this->session->data['token'], 'SSL'));
+        }
 
-	public function uninstall() {
-		$this->load->language('extension/payment');
+        $this->getList();
+    }
 
-		$this->document->setTitle($this->language->get('heading_title'));
+    public function uninstall()
+    {
+        $this->load->language('extension/payment');
 
-		if ($this->validate()) {
-			$this->model_extension_extension->uninstall('payment', $this->request->get['extension']);
+        $this->document->setTitle($this->language->get('heading_title'));
 
-			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
+        if ($this->validate()) {
+            $this->model_extension_extension->uninstall('payment', $this->request->get['extension']);
 
-			// Call uninstall method if it exsits
-			$this->load->controller('payment/' . $this->request->get['extension'] . '/uninstall');
+            $this->model_setting_setting->deleteSetting($this->request->get['extension']);
 
-			$this->session->data['success'] = $this->language->get('text_success');
+            // Call uninstall method if it exsits
+            $this->load->controller('payment/'.$this->request->get['extension'].'/uninstall');
 
-			$this->response->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
-		}
+            $this->session->data['success'] = $this->language->get('text_success');
 
-		$this->getList();
-	}
+            $this->response->redirect($this->url->link('extension/payment', 'token='.$this->session->data['token'], 'SSL'));
+        }
 
-	public function getList() {
-		$data['breadcrumbs'] = array();
+        $this->getList();
+    }
 
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], 'SSL')
-		);
+    public function getList()
+    {
+        $data['breadcrumbs'] = array();
 
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL')
-		);
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('text_home'),
+            'href' => $this->url->link('common/dashboard', 'token='.$this->session->data['token'], 'SSL'),
+        );
 
-		$data['heading_title'] = $this->language->get('heading_title');
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('heading_title'),
+            'href' => $this->url->link('extension/payment', 'token='.$this->session->data['token'], 'SSL'),
+        );
 
-		$data['text_list'] = $this->language->get('text_list');
-		$data['text_no_results'] = $this->language->get('text_no_results');
-		$data['text_confirm'] = $this->language->get('text_confirm');
+        $data['heading_title'] = $this->language->get('heading_title');
 
-		$data['column_name'] = $this->language->get('column_name');
-		$data['column_status'] = $this->language->get('column_status');
-		$data['column_sort_order'] = $this->language->get('column_sort_order');
-		$data['column_action'] = $this->language->get('column_action');
+        $data['text_list'] = $this->language->get('text_list');
+        $data['text_no_results'] = $this->language->get('text_no_results');
+        $data['text_confirm'] = $this->language->get('text_confirm');
 
-		$data['button_edit'] = $this->language->get('button_edit');
-		$data['button_install'] = $this->language->get('button_install');
-		$data['button_uninstall'] = $this->language->get('button_uninstall');
+        $data['column_name'] = $this->language->get('column_name');
+        $data['column_status'] = $this->language->get('column_status');
+        $data['column_sort_order'] = $this->language->get('column_sort_order');
+        $data['column_action'] = $this->language->get('column_action');
 
-		if (isset($this->error['warning'])) {
-			$data['error_warning'] = $this->error['warning'];
-		} else {
-			$data['error_warning'] = '';
-		}
+        $data['button_edit'] = $this->language->get('button_edit');
+        $data['button_install'] = $this->language->get('button_install');
+        $data['button_uninstall'] = $this->language->get('button_uninstall');
 
-		if (isset($this->session->data['success'])) {
-			$data['success'] = $this->session->data['success'];
+        if (isset($this->error['warning'])) {
+            $data['error_warning'] = $this->error['warning'];
+        } else {
+            $data['error_warning'] = '';
+        }
 
-			unset($this->session->data['success']);
-		} else {
-			$data['success'] = '';
-		}
+        if (isset($this->session->data['success'])) {
+            $data['success'] = $this->session->data['success'];
 
-		$extensions = $this->model_extension_extension->getInstalled('payment');
+            unset($this->session->data['success']);
+        } else {
+            $data['success'] = '';
+        }
 
-		foreach ($extensions as $key => $value) {
-			if (!file_exists(DIR_APPLICATION . 'controller/payment/' . $value . '.php')) {
-				$this->model_extension_extension->uninstall('payment', $value);
+        $extensions = $this->model_extension_extension->getInstalled('payment');
 
-				unset($extensions[$key]);
-			}
-		}
+        foreach ($extensions as $key => $value) {
+            if (!file_exists(DIR_APPLICATION.'controller/payment/'.$value.'.php')) {
+                $this->model_extension_extension->uninstall('payment', $value);
 
-		$data['extensions'] = array();
+                unset($extensions[$key]);
+            }
+        }
 
-		$files = glob(DIR_APPLICATION . 'controller/payment/*.php');
+        $data['extensions'] = array();
 
-		if ($files) {
-			foreach ($files as $file) {
-				$extension = basename($file, '.php');
+        $files = glob(DIR_APPLICATION.'controller/payment/*.php');
 
-				$this->load->language('payment/' . $extension);
+        if ($files) {
+            foreach ($files as $file) {
+                $extension = basename($file, '.php');
 
-				$text_link = $this->language->get('text_' . $extension);
+                $this->load->language('payment/'.$extension);
 
-				if ($text_link != 'text_' . $extension) {
-					$link = $this->language->get('text_' . $extension);
-				} else {
-					$link = '';
-				}
+                $text_link = $this->language->get('text_'.$extension);
 
-				$data['extensions'][] = array(
-					'name'       => $this->language->get('heading_title'),
-					'link'       => $link,
-					'status'     => $this->config->get($extension . '_status') ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
-					'sort_order' => $this->config->get($extension . '_sort_order'),
-					'install'   => $this->url->link('extension/payment/install', 'token=' . $this->session->data['token'] . '&extension=' . $extension, 'SSL'),
-					'uninstall' => $this->url->link('extension/payment/uninstall', 'token=' . $this->session->data['token'] . '&extension=' . $extension, 'SSL'),
-					'installed' => in_array($extension, $extensions),
-					'edit'      => $this->url->link('payment/' . $extension . '', 'token=' . $this->session->data['token'], 'SSL')
-				);
-			}
-		}
+                if ($text_link != 'text_'.$extension) {
+                    $link = $this->language->get('text_'.$extension);
+                } else {
+                    $link = '';
+                }
 
-		$data['header'] = $this->load->controller('common/header');
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['footer'] = $this->load->controller('common/footer');
+                $data['extensions'][] = array(
+                    'name' => $this->language->get('heading_title'),
+                    'link' => $link,
+                    'status' => $this->config->get($extension.'_status') ? $this->language->get('text_enabled') : $this->language->get('text_disabled'),
+                    'sort_order' => $this->config->get($extension.'_sort_order'),
+                    'install' => $this->url->link('extension/payment/install', 'token='.$this->session->data['token'].'&extension='.$extension, 'SSL'),
+                    'uninstall' => $this->url->link('extension/payment/uninstall', 'token='.$this->session->data['token'].'&extension='.$extension, 'SSL'),
+                    'installed' => in_array($extension, $extensions),
+                    'edit' => $this->url->link('payment/'.$extension.'', 'token='.$this->session->data['token'], 'SSL'),
+                );
+            }
+        }
 
-		$this->response->setOutput($this->load->view('extension/payment', $data));
-	}
+        $data['header'] = $this->load->controller('common/header');
+        $data['column_left'] = $this->load->controller('common/column_left');
+        $data['footer'] = $this->load->controller('common/footer');
 
-	protected function validate() {
-		if (!$this->user->hasPermission('modify', 'extension/payment')) {
-			$this->error['warning'] = $this->language->get('error_permission');
-		}
+        $this->response->setOutput($this->load->view('extension/payment', $data));
+    }
 
-		return !$this->error;
-	}
+    protected function validate()
+    {
+        if (!$this->user->hasPermission('modify', 'extension/payment')) {
+            $this->error['warning'] = $this->language->get('error_permission');
+        }
+
+        return !$this->error;
+    }
 }

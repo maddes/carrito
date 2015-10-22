@@ -6,12 +6,12 @@
  * This will be instantiated at index.php and shared across all controllers and
  * many other objects.
  */
-final class Registry
+final class registry
 {
     /** @var array Contains the DI Container hash to Class associations */
     private $mapper = [
         'affiliate' => 'Affiliate',
-		'cache' => 'Cache\\File',
+        'cache' => 'Cache\\File',
         'cart' => 'Cart',
         'config' => 'Config',
         'currency' => 'Currency',

@@ -1,6 +1,6 @@
 <?php
 
-class Language
+class language
 {
     private $default = 'english';
     private $directory;

@@ -1,22 +1,26 @@
 <?php
-class ModelLocalisationCountry extends Model {
-	public function getCountry($country_id) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$country_id . "' AND status = '1'");
 
-		return $query->row;
-	}
+class ModelLocalisationCountry extends Model
+{
+    public function getCountry($country_id)
+    {
+        $query = $this->db->query('SELECT * FROM '.DB_PREFIX."country WHERE country_id = '".(int) $country_id."' AND status = '1'");
 
-	public function getCountries() {
-		$country_data = $this->cache->get('country.status');
+        return $query->row;
+    }
 
-		if (!$country_data) {
-			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "country WHERE status = '1' ORDER BY name ASC");
+    public function getCountries()
+    {
+        $country_data = $this->cache->get('country.status');
 
-			$country_data = $query->rows;
+        if (!$country_data) {
+            $query = $this->db->query('SELECT * FROM '.DB_PREFIX."country WHERE status = '1' ORDER BY name ASC");
 
-			$this->cache->set('country.status', $country_data);
-		}
+            $country_data = $query->rows;
 
-		return $country_data;
-	}
+            $this->cache->set('country.status', $country_data);
+        }
+
+        return $country_data;
+    }
 }

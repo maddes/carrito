@@ -1,392 +1,408 @@
 <?php
-class ModelReportCustomer extends Model {
-	public function getTotalCustomersByDay() {
-		$customer_data = array();
-
-		for ($i = 0; $i < 24; $i++) {
-			$customer_data[$i] = array(
-				'hour'  => $i,
-				'total' => 0
-			);
-		}
-
-		$query = $this->db->query("SELECT COUNT(*) AS total, HOUR(date_added) AS hour FROM `" . DB_PREFIX . "customer` WHERE DATE(date_added) = DATE(NOW()) GROUP BY HOUR(date_added) ORDER BY date_added ASC");
-
-		foreach ($query->rows as $result) {
-			$customer_data[$result['hour']] = array(
-				'hour'  => $result['hour'],
-				'total' => $result['total']
-			);
-		}
-
-		return $customer_data;
-	}
-
-	public function getTotalCustomersByWeek() {
-		$customer_data = array();
-
-		$date_start = strtotime('-' . date('w') . ' days');
-
-		for ($i = 0; $i < 7; $i++) {
-			$date = date('Y-m-d', $date_start + ($i * 86400));
 
-			$order_data[date('w', strtotime($date))] = array(
-				'day'   => date('D', strtotime($date)),
-				'total' => 0
-			);
-		}
+class ModelReportCustomer extends Model
+{
+    public function getTotalCustomersByDay()
+    {
+        $customer_data = array();
+
+        for ($i = 0; $i < 24; ++$i) {
+            $customer_data[$i] = array(
+                'hour' => $i,
+                'total' => 0,
+            );
+        }
+
+        $query = $this->db->query('SELECT COUNT(*) AS total, HOUR(date_added) AS hour FROM `'.DB_PREFIX.'customer` WHERE DATE(date_added) = DATE(NOW()) GROUP BY HOUR(date_added) ORDER BY date_added ASC');
+
+        foreach ($query->rows as $result) {
+            $customer_data[$result['hour']] = array(
+                'hour' => $result['hour'],
+                'total' => $result['total'],
+            );
+        }
+
+        return $customer_data;
+    }
+
+    public function getTotalCustomersByWeek()
+    {
+        $customer_data = array();
+
+        $date_start = strtotime('-'.date('w').' days');
+
+        for ($i = 0; $i < 7; ++$i) {
+            $date = date('Y-m-d', $date_start + ($i * 86400));
+
+            $order_data[date('w', strtotime($date))] = array(
+                'day' => date('D', strtotime($date)),
+                'total' => 0,
+            );
+        }
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `" . DB_PREFIX . "customer` WHERE DATE(date_added) >= DATE('" . $this->db->escape(date('Y-m-d', $date_start)) . "') GROUP BY DAYNAME(date_added)");
+        $query = $this->db->query('SELECT COUNT(*) AS total, date_added FROM `'.DB_PREFIX."customer` WHERE DATE(date_added) >= DATE('".$this->db->escape(date('Y-m-d', $date_start))."') GROUP BY DAYNAME(date_added)");
+
+        foreach ($query->rows as $result) {
+            $customer_data[date('w', strtotime($result['date_added']))] = array(
+                'day' => date('D', strtotime($result['date_added'])),
+                'total' => $result['total'],
+            );
+        }
+
+        return $customer_data;
+    }
+
+    public function getTotalCustomersByMonth()
+    {
+        $customer_data = array();
+
+        for ($i = 1; $i <= date('t'); ++$i) {
+            $date = date('Y').'-'.date('m').'-'.$i;
+
+            $customer_data[date('j', strtotime($date))] = array(
+                'day' => date('d', strtotime($date)),
+                'total' => 0,
+            );
+        }
+
+        $query = $this->db->query('SELECT COUNT(*) AS total, date_added FROM `'.DB_PREFIX."customer` WHERE DATE(date_added) >= '".$this->db->escape(date('Y').'-'.date('m').'-1')."' GROUP BY DATE(date_added)");
 
-		foreach ($query->rows as $result) {
-			$customer_data[date('w', strtotime($result['date_added']))] = array(
-				'day'   => date('D', strtotime($result['date_added'])),
-				'total' => $result['total']
-			);
-		}
-
-		return $customer_data;
-	}
+        foreach ($query->rows as $result) {
+            $customer_data[date('j', strtotime($result['date_added']))] = array(
+                'day' => date('d', strtotime($result['date_added'])),
+                'total' => $result['total'],
+            );
+        }
+
+        return $customer_data;
+    }
 
-	public function getTotalCustomersByMonth() {
-		$customer_data = array();
+    public function getTotalCustomersByYear()
+    {
+        $customer_data = array();
+
+        for ($i = 1; $i <= 12; ++$i) {
+            $customer_data[$i] = array(
+                'month' => date('M', mktime(0, 0, 0, $i)),
+                'total' => 0,
+            );
+        }
 
-		for ($i = 1; $i <= date('t'); $i++) {
-			$date = date('Y') . '-' . date('m') . '-' . $i;
+        $query = $this->db->query('SELECT COUNT(*) AS total, date_added FROM `'.DB_PREFIX.'customer` WHERE YEAR(date_added) = YEAR(NOW()) GROUP BY MONTH(date_added)');
 
-			$customer_data[date('j', strtotime($date))] = array(
-				'day'   => date('d', strtotime($date)),
-				'total' => 0
-			);
-		}
+        foreach ($query->rows as $result) {
+            $customer_data[date('n', strtotime($result['date_added']))] = array(
+                'month' => date('M', strtotime($result['date_added'])),
+                'total' => $result['total'],
+            );
+        }
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `" . DB_PREFIX . "customer` WHERE DATE(date_added) >= '" . $this->db->escape(date('Y') . '-' . date('m') . '-1') . "' GROUP BY DATE(date_added)");
+        return $customer_data;
+    }
 
-		foreach ($query->rows as $result) {
-			$customer_data[date('j', strtotime($result['date_added']))] = array(
-				'day'   => date('d', strtotime($result['date_added'])),
-				'total' => $result['total']
-			);
-		}
+    public function getOrders($data = array())
+    {
+        $sql = "SELECT c.customer_id, CONCAT(c.firstname, ' ', c.lastname) AS customer, c.email, cgd.name AS customer_group, c.status, o.order_id, SUM(op.quantity) as products, SUM(DISTINCT o.total) AS total FROM `".DB_PREFIX.'order` o LEFT JOIN `'.DB_PREFIX.'order_product` op ON (o.order_id = op.order_id)LEFT JOIN `'.DB_PREFIX.'customer` c ON (o.customer_id = c.customer_id) LEFT JOIN `'.DB_PREFIX."customer_group_description` cgd ON (c.customer_group_id = cgd.customer_group_id) WHERE o.customer_id > 0 AND cgd.language_id = '".(int) $this->config->get('config_language_id')."'";
 
-		return $customer_data;
-	}
+        if (!empty($data['filter_order_status_id'])) {
+            $sql .= " AND o.order_status_id = '".(int) $data['filter_order_status_id']."'";
+        } else {
+            $sql .= " AND o.order_status_id > '0'";
+        }
 
-	public function getTotalCustomersByYear() {
-		$customer_data = array();
+        if (!empty($data['filter_date_start'])) {
+            $sql .= " AND DATE(o.date_added) >= '".$this->db->escape($data['filter_date_start'])."'";
+        }
 
-		for ($i = 1; $i <= 12; $i++) {
-			$customer_data[$i] = array(
-				'month' => date('M', mktime(0, 0, 0, $i)),
-				'total' => 0
-			);
-		}
+        if (!empty($data['filter_date_end'])) {
+            $sql .= " AND DATE(o.date_added) <= '".$this->db->escape($data['filter_date_end'])."'";
+        }
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `" . DB_PREFIX . "customer` WHERE YEAR(date_added) = YEAR(NOW()) GROUP BY MONTH(date_added)");
+        $sql .= ' GROUP BY o.order_id';
 
-		foreach ($query->rows as $result) {
-			$customer_data[date('n', strtotime($result['date_added']))] = array(
-				'month' => date('M', strtotime($result['date_added'])),
-				'total' => $result['total']
-			);
-		}
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-		return $customer_data;
-	}
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-	public function getOrders($data = array()) {
-		$sql = "SELECT c.customer_id, CONCAT(c.firstname, ' ', c.lastname) AS customer, c.email, cgd.name AS customer_group, c.status, o.order_id, SUM(op.quantity) as products, SUM(DISTINCT o.total) AS total FROM `" . DB_PREFIX . "order` o LEFT JOIN `" . DB_PREFIX . "order_product` op ON (o.order_id = op.order_id)LEFT JOIN `" . DB_PREFIX . "customer` c ON (o.customer_id = c.customer_id) LEFT JOIN `" . DB_PREFIX . "customer_group_description` cgd ON (c.customer_group_id = cgd.customer_group_id) WHERE o.customer_id > 0 AND cgd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " AND o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
-		} else {
-			$sql .= " AND o.order_status_id > '0'";
-		}
+        $sql = 'SELECT t.customer_id, t.customer, t.email, t.customer_group, t.status, COUNT(t.order_id) AS orders, SUM(t.products) AS products, SUM(t.total) AS total FROM ('.$sql.') AS t GROUP BY t.customer_id ORDER BY total DESC';
 
-		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
-		}
+        $query = $this->db->query($sql);
 
-		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
-		}
+        return $query->rows;
+    }
 
-		$sql .= " GROUP BY o.order_id";
+    public function getTotalOrders($data = array())
+    {
+        $sql = 'SELECT COUNT(DISTINCT o.customer_id) AS total FROM `'.DB_PREFIX."order` o WHERE o.customer_id > '0'";
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (!empty($data['filter_order_status_id'])) {
+            $sql .= " AND o.order_status_id = '".(int) $data['filter_order_status_id']."'";
+        } else {
+            $sql .= " AND o.order_status_id > '0'";
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (!empty($data['filter_date_start'])) {
+            $sql .= " AND DATE(o.date_added) >= '".$this->db->escape($data['filter_date_start'])."'";
+        }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+        if (!empty($data['filter_date_end'])) {
+            $sql .= " AND DATE(o.date_added) <= '".$this->db->escape($data['filter_date_end'])."'";
+        }
 
-        $sql = "SELECT t.customer_id, t.customer, t.email, t.customer_group, t.status, COUNT(t.order_id) AS orders, SUM(t.products) AS products, SUM(t.total) AS total FROM (" . $sql . ") AS t GROUP BY t.customer_id ORDER BY total DESC";
+        $query = $this->db->query($sql);
 
-		$query = $this->db->query($sql);
+        return $query->row['total'];
+    }
 
-		return $query->rows;
-	}
+    public function getRewardPoints($data = array())
+    {
+        $sql = "SELECT cr.customer_id, CONCAT(c.firstname, ' ', c.lastname) AS customer, c.email, cgd.name AS customer_group, c.status, SUM(cr.points) AS points, COUNT(o.order_id) AS orders, SUM(o.total) AS total FROM ".DB_PREFIX.'customer_reward cr LEFT JOIN `'.DB_PREFIX.'customer` c ON (cr.customer_id = c.customer_id) LEFT JOIN '.DB_PREFIX.'customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id) LEFT JOIN `'.DB_PREFIX."order` o ON (cr.order_id = o.order_id) WHERE cgd.language_id = '".(int) $this->config->get('config_language_id')."'";
 
-	public function getTotalOrders($data = array()) {
-		$sql = "SELECT COUNT(DISTINCT o.customer_id) AS total FROM `" . DB_PREFIX . "order` o WHERE o.customer_id > '0'";
+        if (!empty($data['filter_date_start'])) {
+            $sql .= " AND DATE(cr.date_added) >= '".$this->db->escape($data['filter_date_start'])."'";
+        }
 
-		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " AND o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
-		} else {
-			$sql .= " AND o.order_status_id > '0'";
-		}
+        if (!empty($data['filter_date_end'])) {
+            $sql .= " AND DATE(cr.date_added) <= '".$this->db->escape($data['filter_date_end'])."'";
+        }
 
-		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
-		}
+        $sql .= ' GROUP BY cr.customer_id ORDER BY points DESC';
 
-		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
-		}
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-		$query = $this->db->query($sql);
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-		return $query->row['total'];
-	}
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-	public function getRewardPoints($data = array()) {
-		$sql = "SELECT cr.customer_id, CONCAT(c.firstname, ' ', c.lastname) AS customer, c.email, cgd.name AS customer_group, c.status, SUM(cr.points) AS points, COUNT(o.order_id) AS orders, SUM(o.total) AS total FROM " . DB_PREFIX . "customer_reward cr LEFT JOIN `" . DB_PREFIX . "customer` c ON (cr.customer_id = c.customer_id) LEFT JOIN " . DB_PREFIX . "customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id) LEFT JOIN `" . DB_PREFIX . "order` o ON (cr.order_id = o.order_id) WHERE cgd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+        $query = $this->db->query($sql);
 
-		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(cr.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
-		}
+        return $query->rows;
+    }
 
-		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(cr.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
-		}
+    public function getTotalRewardPoints($data = array())
+    {
+        $sql = 'SELECT COUNT(DISTINCT customer_id) AS total FROM `'.DB_PREFIX.'customer_reward`';
 
-		$sql .= " GROUP BY cr.customer_id ORDER BY points DESC";
+        $implode = array();
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (!empty($data['filter_date_start'])) {
+            $implode[] = "DATE(date_added) >= '".$this->db->escape($data['filter_date_start'])."'";
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (!empty($data['filter_date_end'])) {
+            $implode[] = "DATE(date_added) <= '".$this->db->escape($data['filter_date_end'])."'";
+        }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+        if ($implode) {
+            $sql .= ' WHERE '.implode(' AND ', $implode);
+        }
 
-		$query = $this->db->query($sql);
+        $query = $this->db->query($sql);
 
-		return $query->rows;
-	}
+        return $query->row['total'];
+    }
 
-	public function getTotalRewardPoints($data = array()) {
-		$sql = "SELECT COUNT(DISTINCT customer_id) AS total FROM `" . DB_PREFIX . "customer_reward`";
+    public function getCredit($data = array())
+    {
+        $sql = "SELECT ct.customer_id, CONCAT(c.firstname, ' ', c.lastname) AS customer, c.email, cgd.name AS customer_group, c.status, SUM(ct.amount) AS total FROM `".DB_PREFIX.'customer_transaction` ct LEFT JOIN `'.DB_PREFIX.'customer` c ON (ct.customer_id = c.customer_id) LEFT JOIN `'.DB_PREFIX."customer_group_description` cgd ON (c.customer_group_id = cgd.customer_group_id) WHERE cgd.language_id = '".(int) $this->config->get('config_language_id')."'";
 
-		$implode = array();
+        if (!empty($data['filter_date_start'])) {
+            $sql .= " AND DATE(ct.date_added) >= '".$this->db->escape($data['filter_date_start'])."'";
+        }
 
-		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
-		}
+        if (!empty($data['filter_date_end'])) {
+            $sql .= " AND DATE(ct.date_added) <= '".$this->db->escape($data['filter_date_end'])."'";
+        }
 
-		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
-		}
+        $sql .= ' GROUP BY ct.customer_id ORDER BY total DESC';
 
-		if ($implode) {
-			$sql .= " WHERE " . implode(" AND ", $implode);
-		}
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-		$query = $this->db->query($sql);
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-		return $query->row['total'];
-	}
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-	public function getCredit($data = array()) {
-		$sql = "SELECT ct.customer_id, CONCAT(c.firstname, ' ', c.lastname) AS customer, c.email, cgd.name AS customer_group, c.status, SUM(ct.amount) AS total FROM `" . DB_PREFIX . "customer_transaction` ct LEFT JOIN `" . DB_PREFIX . "customer` c ON (ct.customer_id = c.customer_id) LEFT JOIN `" . DB_PREFIX . "customer_group_description` cgd ON (c.customer_group_id = cgd.customer_group_id) WHERE cgd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+        $query = $this->db->query($sql);
 
-		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(ct.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
-		}
+        return $query->rows;
+    }
 
-		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(ct.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
-		}
+    public function getTotalCredit($data = array())
+    {
+        $sql = 'SELECT COUNT(DISTINCT customer_id) AS total FROM `'.DB_PREFIX.'customer_transaction`';
 
-		$sql .= " GROUP BY ct.customer_id ORDER BY total DESC";
+        $implode = array();
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (!empty($data['filter_date_start'])) {
+            $implode[] = "DATE(date_added) >= '".$this->db->escape($data['filter_date_start'])."'";
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (!empty($data['filter_date_end'])) {
+            $implode[] = "DATE(date_added) <= '".$this->db->escape($data['filter_date_end'])."'";
+        }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+        if ($implode) {
+            $sql .= ' WHERE '.implode(' AND ', $implode);
+        }
 
-		$query = $this->db->query($sql);
+        $query = $this->db->query($sql);
 
-		return $query->rows;
-	}
+        return $query->row['total'];
+    }
 
-	public function getTotalCredit($data = array()) {
-		$sql = "SELECT COUNT(DISTINCT customer_id) AS total FROM `" . DB_PREFIX . "customer_transaction`";
+    public function getCustomersOnline($data = array())
+    {
+        $sql = 'SELECT co.ip, co.customer_id, co.url, co.referer, co.date_added FROM '.DB_PREFIX.'customer_online co LEFT JOIN '.DB_PREFIX.'customer c ON (co.customer_id = c.customer_id)';
 
-		$implode = array();
+        $implode = array();
 
-		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
-		}
+        if (!empty($data['filter_ip'])) {
+            $implode[] = "co.ip LIKE '".$this->db->escape($data['filter_ip'])."'";
+        }
 
-		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
-		}
+        if (!empty($data['filter_customer'])) {
+            $implode[] = "co.customer_id > 0 AND CONCAT(c.firstname, ' ', c.lastname) LIKE '".$this->db->escape($data['filter_customer'])."'";
+        }
 
-		if ($implode) {
-			$sql .= " WHERE " . implode(" AND ", $implode);
-		}
+        if ($implode) {
+            $sql .= ' WHERE '.implode(' AND ', $implode);
+        }
 
-		$query = $this->db->query($sql);
+        $sql .= ' ORDER BY co.date_added DESC';
 
-		return $query->row['total'];
-	}
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-	public function getCustomersOnline($data = array()) {
-		$sql = "SELECT co.ip, co.customer_id, co.url, co.referer, co.date_added FROM " . DB_PREFIX . "customer_online co LEFT JOIN " . DB_PREFIX . "customer c ON (co.customer_id = c.customer_id)";
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-		$implode = array();
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-		if (!empty($data['filter_ip'])) {
-			$implode[] = "co.ip LIKE '" . $this->db->escape($data['filter_ip']) . "'";
-		}
+        $query = $this->db->query($sql);
 
-		if (!empty($data['filter_customer'])) {
-			$implode[] = "co.customer_id > 0 AND CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape($data['filter_customer']) . "'";
-		}
+        return $query->rows;
+    }
 
-		if ($implode) {
-			$sql .= " WHERE " . implode(" AND ", $implode);
-		}
+    public function getTotalCustomersOnline($data = array())
+    {
+        $sql = 'SELECT COUNT(*) AS total FROM `'.DB_PREFIX.'customer_online` co LEFT JOIN '.DB_PREFIX.'customer c ON (co.customer_id = c.customer_id)';
 
-		$sql .= " ORDER BY co.date_added DESC";
+        $implode = array();
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (!empty($data['filter_ip'])) {
+            $implode[] = "co.ip LIKE '".$this->db->escape($data['filter_ip'])."'";
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (!empty($data['filter_customer'])) {
+            $implode[] = "co.customer_id > 0 AND CONCAT(c.firstname, ' ', c.lastname) LIKE '".$this->db->escape($data['filter_customer'])."'";
+        }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+        if ($implode) {
+            $sql .= ' WHERE '.implode(' AND ', $implode);
+        }
 
-		$query = $this->db->query($sql);
+        $query = $this->db->query($sql);
 
-		return $query->rows;
-	}
+        return $query->row['total'];
+    }
 
-	public function getTotalCustomersOnline($data = array()) {
-		$sql = "SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_online` co LEFT JOIN " . DB_PREFIX . "customer c ON (co.customer_id = c.customer_id)";
+    public function getCustomerActivities($data = array())
+    {
+        $sql = 'SELECT ca.activity_id, ca.customer_id, ca.key, ca.data, ca.ip, ca.date_added FROM '.DB_PREFIX.'customer_activity ca LEFT JOIN '.DB_PREFIX.'customer c ON (ca.customer_id = c.customer_id)';
 
-		$implode = array();
+        $implode = array();
 
-		if (!empty($data['filter_ip'])) {
-			$implode[] = "co.ip LIKE '" . $this->db->escape($data['filter_ip']) . "'";
-		}
+        if (!empty($data['filter_customer'])) {
+            $implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE '".$this->db->escape($data['filter_customer'])."'";
+        }
 
-		if (!empty($data['filter_customer'])) {
-			$implode[] = "co.customer_id > 0 AND CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape($data['filter_customer']) . "'";
-		}
+        if (!empty($data['filter_ip'])) {
+            $implode[] = "ca.ip LIKE '".$this->db->escape($data['filter_ip'])."'";
+        }
 
-		if ($implode) {
-			$sql .= " WHERE " . implode(" AND ", $implode);
-		}
+        if (!empty($data['filter_date_start'])) {
+            $implode[] = "DATE(ca.date_added) >= '".$this->db->escape($data['filter_date_start'])."'";
+        }
 
-		$query = $this->db->query($sql);
+        if (!empty($data['filter_date_end'])) {
+            $implode[] = "DATE(ca.date_added) <= '".$this->db->escape($data['filter_date_end'])."'";
+        }
 
-		return $query->row['total'];
-	}
+        if ($implode) {
+            $sql .= ' WHERE '.implode(' AND ', $implode);
+        }
 
-	public function getCustomerActivities($data = array()) {
-		$sql = "SELECT ca.activity_id, ca.customer_id, ca.key, ca.data, ca.ip, ca.date_added FROM " . DB_PREFIX . "customer_activity ca LEFT JOIN " . DB_PREFIX . "customer c ON (ca.customer_id = c.customer_id)";
+        $sql .= ' ORDER BY ca.date_added DESC';
 
-		$implode = array();
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-		if (!empty($data['filter_customer'])) {
-			$implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape($data['filter_customer']) . "'";
-		}
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-		if (!empty($data['filter_ip'])) {
-			$implode[] = "ca.ip LIKE '" . $this->db->escape($data['filter_ip']) . "'";
-		}
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(ca.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
-		}
+        $query = $this->db->query($sql);
 
-		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(ca.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
-		}
+        return $query->rows;
+    }
 
-		if ($implode) {
-			$sql .= " WHERE " . implode(" AND ", $implode);
-		}
+    public function getTotalCustomerActivities($data = array())
+    {
+        $sql = 'SELECT COUNT(*) AS total FROM `'.DB_PREFIX.'customer_activity` ca LEFT JOIN '.DB_PREFIX.'customer c ON (ca.customer_id = c.customer_id)';
 
-		$sql .= " ORDER BY ca.date_added DESC";
+        $implode = array();
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (!empty($data['filter_customer'])) {
+            $implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE '".$this->db->escape($data['filter_customer'])."'";
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (!empty($data['filter_ip'])) {
+            $implode[] = "ca.ip LIKE '".$this->db->escape($data['filter_ip'])."'";
+        }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+        if (!empty($data['filter_date_start'])) {
+            $implode[] = "DATE(ca.date_added) >= '".$this->db->escape($data['filter_date_start'])."'";
+        }
 
-		$query = $this->db->query($sql);
+        if (!empty($data['filter_date_end'])) {
+            $implode[] = "DATE(ca.date_added) <= '".$this->db->escape($data['filter_date_end'])."'";
+        }
 
-		return $query->rows;
-	}
+        if ($implode) {
+            $sql .= ' WHERE '.implode(' AND ', $implode);
+        }
 
-	public function getTotalCustomerActivities($data = array()) {
-		$sql = "SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_activity` ca LEFT JOIN " . DB_PREFIX . "customer c ON (ca.customer_id = c.customer_id)";
+        $query = $this->db->query($sql);
 
-		$implode = array();
-
-		if (!empty($data['filter_customer'])) {
-			$implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape($data['filter_customer']) . "'";
-		}
-
-		if (!empty($data['filter_ip'])) {
-			$implode[] = "ca.ip LIKE '" . $this->db->escape($data['filter_ip']) . "'";
-		}
-
-		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(ca.date_added) >= '" . $this->db->escape($data['filter_date_start']) . "'";
-		}
-
-		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(ca.date_added) <= '" . $this->db->escape($data['filter_date_end']) . "'";
-		}
-
-		if ($implode) {
-			$sql .= " WHERE " . implode(" AND ", $implode);
-		}
-
-		$query = $this->db->query($sql);
-
-		return $query->row['total'];
-	}
+        return $query->row['total'];
+    }
 }

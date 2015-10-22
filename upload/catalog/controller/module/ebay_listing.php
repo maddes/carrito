@@ -1,39 +1,42 @@
 <?php
-class ControllerModuleEbayListing extends Controller {
-	public function index() {
-		if ($this->config->get('ebay_status') == 1) {
-			$this->language->load('module/ebay');
 
-			$data['heading_title'] = $this->language->get('heading_title');
+class ControllerModuleEbayListing extends Controller
+{
+    public function index()
+    {
+        if ($this->config->get('ebay_status') == 1) {
+            $this->language->load('module/ebay');
 
-			$data['products'] = array();
+            $data['heading_title'] = $this->language->get('heading_title');
 
-			$products = $this->cache->get('ebay_listing.' . md5(serialize($products)));
+            $data['products'] = array();
 
-			if (!$products) {
-				$products = $this->model_openbay_ebay_product->getDisplayProducts();
+            $products = $this->cache->get('ebay_listing.'.md5(serialize($products)));
 
-				$this->cache->set('ebay_listing.' . md5(serialize($products)), $products);
-			}
+            if (!$products) {
+                $products = $this->model_openbay_ebay_product->getDisplayProducts();
 
-			foreach($products['products'] as $product) {
-				if (isset($product['pictures'][0])) {
-					$image = $this->model_openbay_ebay_product->resize($product['pictures'][0], $this->config->get('ebay_listing_width'), $this->config->get('ebay_listing_height'));
-				} else {
-					$image = $this->model_tool_image->resize('placeholder.png', $this->config->get('ebay_listing_width'), $this->config->get('ebay_listing_height'));
-				}
+                $this->cache->set('ebay_listing.'.md5(serialize($products)), $products);
+            }
 
-				$data['products'][] = array(
-					'thumb' => $image,
-					'name'  => base64_decode($product['Title']),
-					'price' => $this->currency->format($product['priceGross']),
-					'href' => (string)$product['link']
-				);
-			}
+            foreach ($products['products'] as $product) {
+                if (isset($product['pictures'][0])) {
+                    $image = $this->model_openbay_ebay_product->resize($product['pictures'][0], $this->config->get('ebay_listing_width'), $this->config->get('ebay_listing_height'));
+                } else {
+                    $image = $this->model_tool_image->resize('placeholder.png', $this->config->get('ebay_listing_width'), $this->config->get('ebay_listing_height'));
+                }
 
-			$data['tracking_pixel'] = $products['tracking_pixel'];
+                $data['products'][] = array(
+                    'thumb' => $image,
+                    'name' => base64_decode($product['Title']),
+                    'price' => $this->currency->format($product['priceGross']),
+                    'href' => (string) $product['link'],
+                );
+            }
 
-			return $this->load->view('module/ebay', $data);
-		}
-	}
+            $data['tracking_pixel'] = $products['tracking_pixel'];
+
+            return $this->load->view('module/ebay', $data);
+        }
+    }
 }

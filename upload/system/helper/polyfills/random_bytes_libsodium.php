@@ -1,7 +1,7 @@
 <?php
 /**
  * Random_* Compatibility Library 
- * for using the new PHP 7 random_* API in PHP 5 projects
+ * for using the new PHP 7 random_* API in PHP 5 projects.
  * 
  * The MIT License (MIT)
  * 
@@ -31,6 +31,7 @@
  * solution.
  *
  * libsodium-php project:
+ *
  * @ref https://github.com/jedisct1/libsodium-php
  *
  * @param int $bytes
@@ -53,7 +54,7 @@ function random_bytes($bytes)
             'Length must be greater than 0'
         );
     }
-    /**
+    /*
      * \Sodium\randombytes_buf() doesn't allow more than 2147483647 bytes to be
      * generated in one invocation.
      */
@@ -75,7 +76,7 @@ function random_bytes($bytes)
         }
     }
 
-    /**
+    /*
      * If we reach here, PHP has failed us.
      */
     throw new Exception(

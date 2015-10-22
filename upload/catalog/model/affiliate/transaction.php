@@ -1,56 +1,61 @@
 <?php
-class ModelAffiliateTransaction extends Model {
-	public function getTransactions($data = array()) {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "affiliate_transaction` WHERE affiliate_id = '" . (int)$this->affiliate->getId() . "'";
 
-		$sort_data = array(
-			'amount',
-			'description',
-			'date_added'
-		);
+class ModelAffiliateTransaction extends Model
+{
+    public function getTransactions($data = array())
+    {
+        $sql = 'SELECT * FROM `'.DB_PREFIX."affiliate_transaction` WHERE affiliate_id = '".(int) $this->affiliate->getId()."'";
 
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
-		} else {
-			$sql .= " ORDER BY date_added";
-		}
+        $sort_data = array(
+            'amount',
+            'description',
+            'date_added',
+        );
 
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
-		} else {
-			$sql .= " ASC";
-		}
+        if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
+            $sql .= ' ORDER BY '.$data['sort'];
+        } else {
+            $sql .= ' ORDER BY date_added';
+        }
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (isset($data['order']) && ($data['order'] == 'DESC')) {
+            $sql .= ' DESC';
+        } else {
+            $sql .= ' ASC';
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-		$query = $this->db->query($sql);
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-		return $query->rows;
-	}
+        $query = $this->db->query($sql);
 
-	public function getTotalTransactions() {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "affiliate_transaction` WHERE affiliate_id = '" . (int)$this->affiliate->getId() . "'");
+        return $query->rows;
+    }
 
-		return $query->row['total'];
-	}
+    public function getTotalTransactions()
+    {
+        $query = $this->db->query('SELECT COUNT(*) AS total FROM `'.DB_PREFIX."affiliate_transaction` WHERE affiliate_id = '".(int) $this->affiliate->getId()."'");
 
-	public function getBalance() {
-		$query = $this->db->query("SELECT SUM(amount) AS total FROM `" . DB_PREFIX . "affiliate_transaction` WHERE affiliate_id = '" . (int)$this->affiliate->getId() . "' GROUP BY affiliate_id");
+        return $query->row['total'];
+    }
 
-		if ($query->num_rows) {
-			return $query->row['total'];
-		} else {
-			return 0;
-		}
-	}
+    public function getBalance()
+    {
+        $query = $this->db->query('SELECT SUM(amount) AS total FROM `'.DB_PREFIX."affiliate_transaction` WHERE affiliate_id = '".(int) $this->affiliate->getId()."' GROUP BY affiliate_id");
+
+        if ($query->num_rows) {
+            return $query->row['total'];
+        } else {
+            return 0;
+        }
+    }
 }

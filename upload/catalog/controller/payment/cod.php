@@ -1,19 +1,22 @@
 <?php
-class ControllerPaymentCod extends Controller {
-	public function index() {
-		$data['button_confirm'] = $this->language->get('button_confirm');
 
-		$data['text_loading'] = $this->language->get('text_loading');
+class ControllerPaymentCod extends Controller
+{
+    public function index()
+    {
+        $data['button_confirm'] = $this->language->get('button_confirm');
 
-		$data['continue'] = $this->url->link('checkout/success');
+        $data['text_loading'] = $this->language->get('text_loading');
 
-		return $this->load->view('payment/cod', $data);
-	}
+        $data['continue'] = $this->url->link('checkout/success');
 
-	public function confirm() {
-		if ($this->session->data['payment_method']['code'] == 'cod') {
+        return $this->load->view('payment/cod', $data);
+    }
 
-			$this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('cod_order_status_id'));
-		}
-	}
+    public function confirm()
+    {
+        if ($this->session->data['payment_method']['code'] == 'cod') {
+            $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('cod_order_status_id'));
+        }
+    }
 }

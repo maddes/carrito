@@ -1,14 +1,16 @@
 <?php
-class ModelFraudIp extends Model {
-    public function check($order_info) {
 
+class ModelFraudIp extends Model
+{
+    public function check($order_info)
+    {
         $status = false;
 
         if ($order_info['customer_id']) {
             $results = $this->model_account_customer->getIps($order_info['customer_id']);
 
             foreach ($results as $result) {
-                $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "fraud_ip` WHERE ip = '" . $this->db->escape($result['ip']) . "'");
+                $query = $this->db->query('SELECT * FROM `'.DB_PREFIX."fraud_ip` WHERE ip = '".$this->db->escape($result['ip'])."'");
 
                 if ($query->num_rows) {
                     $status = true;
@@ -17,7 +19,7 @@ class ModelFraudIp extends Model {
                 }
             }
         } else {
-            $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "fraud_ip` WHERE ip = '" . $this->db->escape($order_info['ip']) . "'");
+            $query = $this->db->query('SELECT * FROM `'.DB_PREFIX."fraud_ip` WHERE ip = '".$this->db->escape($order_info['ip'])."'");
 
             if ($query->num_rows) {
                 $status = true;

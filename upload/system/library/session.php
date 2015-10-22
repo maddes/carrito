@@ -4,7 +4,7 @@
  *
  * It's hardcoded to use cookies.
  */
-class Session
+class session
 {
     public $data = array();
 

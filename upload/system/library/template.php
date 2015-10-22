@@ -1,39 +1,44 @@
 <?php
-class Template {
-	private $data = array();
 
-  public function __construct($driver) {
-	    $class = 'Template\\' . $driver;
+class template
+{
+    private $data = array();
 
-		if (class_exists($class)) {
-			$this->template = new $class($expire);
-		} else {
-			exit('Error: Could not load template driver ' . $driver . ' cache!');
-		}
-	}
+    public function __construct($driver)
+    {
+        $class = 'Template\\'.$driver;
 
-	public function set($key, $value) {
-		$this->data[$key] = $value;
-	}
+        if (class_exists($class)) {
+            $this->template = new $class($expire);
+        } else {
+            exit('Error: Could not load template driver '.$driver.' cache!');
+        }
+    }
 
-	public function render() {
-		$file = DIR_TEMPLATE . $template;
+    public function set($key, $value)
+    {
+        $this->data[$key] = $value;
+    }
 
-		if (file_exists($file)) {
-			extract($data);
+    public function render()
+    {
+        $file = DIR_TEMPLATE.$template;
 
-			ob_start();
+        if (file_exists($file)) {
+            extract($data);
 
-			require($file);
+            ob_start();
 
-			$output = ob_get_contents();
+            require $file;
 
-			ob_end_clean();
+            $output = ob_get_contents();
 
-			return $output;
-		} else {
-			trigger_error('Error: Could not load template ' . $file . '!');
-			exit();
-		}
-	}
+            ob_end_clean();
+
+            return $output;
+        } else {
+            trigger_error('Error: Could not load template '.$file.'!');
+            exit();
+        }
+    }
 }

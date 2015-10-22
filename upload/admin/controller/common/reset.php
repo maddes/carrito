@@ -1,108 +1,111 @@
 <?php
-class ControllerCommonReset extends Controller {
-	private $error = array();
 
-	public function index() {
-		if ($this->user->isLogged() && isset($this->request->get['token']) && ($this->request->get['token'] == $this->session->data['token'])) {
-			$this->response->redirect($this->url->link('common/dashboard', '', 'SSL'));
-		}
+class ControllerCommonReset extends Controller
+{
+    private $error = array();
 
-		if (!$this->config->get('config_password')) {
-			$this->response->redirect($this->url->link('common/login', '', 'SSL'));
-		}
+    public function index()
+    {
+        if ($this->user->isLogged() && isset($this->request->get['token']) && ($this->request->get['token'] == $this->session->data['token'])) {
+            $this->response->redirect($this->url->link('common/dashboard', '', 'SSL'));
+        }
 
-		if (isset($this->request->get['code'])) {
-			$code = $this->request->get['code'];
-		} else {
-			$code = '';
-		}
+        if (!$this->config->get('config_password')) {
+            $this->response->redirect($this->url->link('common/login', '', 'SSL'));
+        }
 
-		$user_info = $this->model_user_user->getUserByCode($code);
+        if (isset($this->request->get['code'])) {
+            $code = $this->request->get['code'];
+        } else {
+            $code = '';
+        }
 
-		if ($user_info) {
-			$this->load->language('common/reset');
+        $user_info = $this->model_user_user->getUserByCode($code);
 
-			$this->document->setTitle($this->language->get('heading_title'));
+        if ($user_info) {
+            $this->load->language('common/reset');
 
-			if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-				$this->model_user_user->editPassword($user_info['user_id'], $this->request->post['password']);
+            $this->document->setTitle($this->language->get('heading_title'));
 
-				$this->session->data['success'] = $this->language->get('text_success');
+            if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+                $this->model_user_user->editPassword($user_info['user_id'], $this->request->post['password']);
 
-				$this->response->redirect($this->url->link('common/login', '', 'SSL'));
-			}
+                $this->session->data['success'] = $this->language->get('text_success');
 
-			$data['heading_title'] = $this->language->get('heading_title');
+                $this->response->redirect($this->url->link('common/login', '', 'SSL'));
+            }
 
-			$data['text_password'] = $this->language->get('text_password');
+            $data['heading_title'] = $this->language->get('heading_title');
 
-			$data['entry_password'] = $this->language->get('entry_password');
-			$data['entry_confirm'] = $this->language->get('entry_confirm');
+            $data['text_password'] = $this->language->get('text_password');
 
-			$data['button_save'] = $this->language->get('button_save');
-			$data['button_cancel'] = $this->language->get('button_cancel');
+            $data['entry_password'] = $this->language->get('entry_password');
+            $data['entry_confirm'] = $this->language->get('entry_confirm');
 
-			$data['breadcrumbs'] = array();
+            $data['button_save'] = $this->language->get('button_save');
+            $data['button_cancel'] = $this->language->get('button_cancel');
 
-			$data['breadcrumbs'][] = array(
-				'text' => $this->language->get('text_home'),
-				'href' => $this->url->link('common/dashboard', '', 'SSL')
-			);
+            $data['breadcrumbs'] = array();
 
-			$data['breadcrumbs'][] = array(
-				'text' => $this->language->get('heading_title'),
-				'href' => $this->url->link('common/reset', '', 'SSL')
-			);
+            $data['breadcrumbs'][] = array(
+                'text' => $this->language->get('text_home'),
+                'href' => $this->url->link('common/dashboard', '', 'SSL'),
+            );
 
-			if (isset($this->error['password'])) {
-				$data['error_password'] = $this->error['password'];
-			} else {
-				$data['error_password'] = '';
-			}
+            $data['breadcrumbs'][] = array(
+                'text' => $this->language->get('heading_title'),
+                'href' => $this->url->link('common/reset', '', 'SSL'),
+            );
 
-			if (isset($this->error['confirm'])) {
-				$data['error_confirm'] = $this->error['confirm'];
-			} else {
-				$data['error_confirm'] = '';
-			}
+            if (isset($this->error['password'])) {
+                $data['error_password'] = $this->error['password'];
+            } else {
+                $data['error_password'] = '';
+            }
 
-			$data['action'] = $this->url->link('common/reset', 'code=' . $code, 'SSL');
+            if (isset($this->error['confirm'])) {
+                $data['error_confirm'] = $this->error['confirm'];
+            } else {
+                $data['error_confirm'] = '';
+            }
 
-			$data['cancel'] = $this->url->link('common/login', '', 'SSL');
+            $data['action'] = $this->url->link('common/reset', 'code='.$code, 'SSL');
 
-			if (isset($this->request->post['password'])) {
-				$data['password'] = $this->request->post['password'];
-			} else {
-				$data['password'] = '';
-			}
+            $data['cancel'] = $this->url->link('common/login', '', 'SSL');
 
-			if (isset($this->request->post['confirm'])) {
-				$data['confirm'] = $this->request->post['confirm'];
-			} else {
-				$data['confirm'] = '';
-			}
+            if (isset($this->request->post['password'])) {
+                $data['password'] = $this->request->post['password'];
+            } else {
+                $data['password'] = '';
+            }
 
-			$data['header'] = $this->load->controller('common/header');
-			$data['footer'] = $this->load->controller('common/footer');
+            if (isset($this->request->post['confirm'])) {
+                $data['confirm'] = $this->request->post['confirm'];
+            } else {
+                $data['confirm'] = '';
+            }
 
-			$this->response->setOutput($this->load->view('common/reset', $data));
-		} else {
+            $data['header'] = $this->load->controller('common/header');
+            $data['footer'] = $this->load->controller('common/footer');
 
-			$this->model_setting_setting->editSettingValue('config', 'config_password', '0');
+            $this->response->setOutput($this->load->view('common/reset', $data));
+        } else {
+            $this->model_setting_setting->editSettingValue('config', 'config_password', '0');
 
-			return 'common/login';
-		}
-	}
+            return 'common/login';
+        }
+    }
 
-	protected function validate() {
-		if ((utf8_strlen($this->request->post['password']) < 4) || (utf8_strlen($this->request->post['password']) > 20)) {
-			$this->error['password'] = $this->language->get('error_password');
-		}
+    protected function validate()
+    {
+        if ((utf8_strlen($this->request->post['password']) < 4) || (utf8_strlen($this->request->post['password']) > 20)) {
+            $this->error['password'] = $this->language->get('error_password');
+        }
 
-		if ($this->request->post['confirm'] != $this->request->post['password']) {
-			$this->error['confirm'] = $this->language->get('error_confirm');
-		}
+        if ($this->request->post['confirm'] != $this->request->post['password']) {
+            $this->error['confirm'] = $this->language->get('error_confirm');
+        }
 
-		return !$this->error;
-	}
+        return !$this->error;
+    }
 }

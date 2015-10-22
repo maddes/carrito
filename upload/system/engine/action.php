@@ -1,6 +1,6 @@
 <?php
 
-class Action
+class action
 {
     private $file;
     private $class;

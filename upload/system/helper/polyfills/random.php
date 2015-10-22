@@ -1,7 +1,7 @@
 <?php
 /**
  * Random_* Compatibility Library 
- * for using the new PHP 7 random_* API in PHP 5 projects
+ * for using the new PHP 7 random_* API in PHP 5 projects.
  * 
  * The MIT License (MIT)
  * 
@@ -25,7 +25,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 if (!defined('PHP_VERSION_ID')) {
     // This constant was introduced in PHP 5.2.7
     $version = explode('.', PHP_VERSION);
@@ -41,7 +40,7 @@ if (PHP_VERSION_ID < 70000) {
     require_once $__DIR__.'/cast_to_int.php';
     require_once $__DIR__.'/error_polyfill.php';
     if (!function_exists('random_bytes')) {
-        /**
+        /*
          * PHP 5.2.0 - 5.6.x way to implement random_bytes()
          * 
          * We use conditional statements here to define the function in accordance
@@ -61,7 +60,7 @@ if (PHP_VERSION_ID < 70000) {
             require_once $__DIR__.'/random_bytes_libsodium.php';
         }
         if (
-            !function_exists('random_bytes') && 
+            !function_exists('random_bytes') &&
             DIRECTORY_SEPARATOR === '/' &&
             @is_readable('/dev/urandom')
         ) {
@@ -73,7 +72,7 @@ if (PHP_VERSION_ID < 70000) {
             // read it at this point. If the PHP environment is going to panic 
             // over trying to see if the file can be read in the first place,
             // that is not helpful to us here.
-            
+
             // See random_bytes_dev_urandom.php
             require_once $__DIR__.'/random_bytes_dev_urandom.php';
         }
@@ -86,7 +85,7 @@ if (PHP_VERSION_ID < 70000) {
             require_once $__DIR__.'/random_bytes_mcrypt.php';
         }
         if (
-            !function_exists('random_bytes') && 
+            !function_exists('random_bytes') &&
             extension_loaded('com_dotnet') &&
             class_exists('COM')
         ) {
@@ -101,7 +100,7 @@ if (PHP_VERSION_ID < 70000) {
             }
         }
         if (
-            !function_exists('random_bytes') && 
+            !function_exists('random_bytes') &&
             extension_loaded('openssl') &&
             PHP_VERSION_ID >= 50300
         ) {

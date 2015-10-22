@@ -1,191 +1,203 @@
 <?php
-class ModelCatalogFilter extends Model {
-	public function addFilter($data) {
-		$this->event->trigger('pre.admin.filter.add', $data);
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "filter_group` SET sort_order = '" . (int)$data['sort_order'] . "'");
+class ModelCatalogFilter extends Model
+{
+    public function addFilter($data)
+    {
+        $this->event->trigger('pre.admin.filter.add', $data);
 
-		$filter_group_id = $this->db->getLastId();
+        $this->db->query('INSERT INTO `'.DB_PREFIX."filter_group` SET sort_order = '".(int) $data['sort_order']."'");
 
-		foreach ($data['filter_group_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "filter_group_description SET filter_group_id = '" . (int)$filter_group_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
-		}
+        $filter_group_id = $this->db->getLastId();
 
-		if (isset($data['filter'])) {
-			foreach ($data['filter'] as $filter) {
-				$this->db->query("INSERT INTO " . DB_PREFIX . "filter SET filter_group_id = '" . (int)$filter_group_id . "', sort_order = '" . (int)$filter['sort_order'] . "'");
+        foreach ($data['filter_group_description'] as $language_id => $value) {
+            $this->db->query('INSERT INTO '.DB_PREFIX."filter_group_description SET filter_group_id = '".(int) $filter_group_id."', language_id = '".(int) $language_id."', name = '".$this->db->escape($value['name'])."'");
+        }
 
-				$filter_id = $this->db->getLastId();
+        if (isset($data['filter'])) {
+            foreach ($data['filter'] as $filter) {
+                $this->db->query('INSERT INTO '.DB_PREFIX."filter SET filter_group_id = '".(int) $filter_group_id."', sort_order = '".(int) $filter['sort_order']."'");
 
-				foreach ($filter['filter_description'] as $language_id => $filter_description) {
-					$this->db->query("INSERT INTO " . DB_PREFIX . "filter_description SET filter_id = '" . (int)$filter_id . "', language_id = '" . (int)$language_id . "', filter_group_id = '" . (int)$filter_group_id . "', name = '" . $this->db->escape($filter_description['name']) . "'");
-				}
-			}
-		}
+                $filter_id = $this->db->getLastId();
 
-		$this->event->trigger('post.admin.filter.add', $filter_group_id);
+                foreach ($filter['filter_description'] as $language_id => $filter_description) {
+                    $this->db->query('INSERT INTO '.DB_PREFIX."filter_description SET filter_id = '".(int) $filter_id."', language_id = '".(int) $language_id."', filter_group_id = '".(int) $filter_group_id."', name = '".$this->db->escape($filter_description['name'])."'");
+                }
+            }
+        }
 
-		return $filter_group_id;
-	}
+        $this->event->trigger('post.admin.filter.add', $filter_group_id);
 
-	public function editFilter($filter_group_id, $data) {
-		$this->event->trigger('pre.admin.filter.edit', $data);
+        return $filter_group_id;
+    }
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "filter_group` SET sort_order = '" . (int)$data['sort_order'] . "' WHERE filter_group_id = '" . (int)$filter_group_id . "'");
+    public function editFilter($filter_group_id, $data)
+    {
+        $this->event->trigger('pre.admin.filter.edit', $data);
 
-		$this->db->query("DELETE FROM " . DB_PREFIX . "filter_group_description WHERE filter_group_id = '" . (int)$filter_group_id . "'");
+        $this->db->query('UPDATE `'.DB_PREFIX."filter_group` SET sort_order = '".(int) $data['sort_order']."' WHERE filter_group_id = '".(int) $filter_group_id."'");
 
-		foreach ($data['filter_group_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "filter_group_description SET filter_group_id = '" . (int)$filter_group_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
-		}
+        $this->db->query('DELETE FROM '.DB_PREFIX."filter_group_description WHERE filter_group_id = '".(int) $filter_group_id."'");
 
-		$this->db->query("DELETE FROM " . DB_PREFIX . "filter WHERE filter_group_id = '" . (int)$filter_group_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "filter_description WHERE filter_group_id = '" . (int)$filter_group_id . "'");
+        foreach ($data['filter_group_description'] as $language_id => $value) {
+            $this->db->query('INSERT INTO '.DB_PREFIX."filter_group_description SET filter_group_id = '".(int) $filter_group_id."', language_id = '".(int) $language_id."', name = '".$this->db->escape($value['name'])."'");
+        }
 
-		if (isset($data['filter'])) {
-			foreach ($data['filter'] as $filter) {
-				if ($filter['filter_id']) {
-					$this->db->query("INSERT INTO " . DB_PREFIX . "filter SET filter_id = '" . (int)$filter['filter_id'] . "', filter_group_id = '" . (int)$filter_group_id . "', sort_order = '" . (int)$filter['sort_order'] . "'");
-				} else {
-					$this->db->query("INSERT INTO " . DB_PREFIX . "filter SET filter_group_id = '" . (int)$filter_group_id . "', sort_order = '" . (int)$filter['sort_order'] . "'");
-				}
+        $this->db->query('DELETE FROM '.DB_PREFIX."filter WHERE filter_group_id = '".(int) $filter_group_id."'");
+        $this->db->query('DELETE FROM '.DB_PREFIX."filter_description WHERE filter_group_id = '".(int) $filter_group_id."'");
 
-				$filter_id = $this->db->getLastId();
+        if (isset($data['filter'])) {
+            foreach ($data['filter'] as $filter) {
+                if ($filter['filter_id']) {
+                    $this->db->query('INSERT INTO '.DB_PREFIX."filter SET filter_id = '".(int) $filter['filter_id']."', filter_group_id = '".(int) $filter_group_id."', sort_order = '".(int) $filter['sort_order']."'");
+                } else {
+                    $this->db->query('INSERT INTO '.DB_PREFIX."filter SET filter_group_id = '".(int) $filter_group_id."', sort_order = '".(int) $filter['sort_order']."'");
+                }
 
-				foreach ($filter['filter_description'] as $language_id => $filter_description) {
-					$this->db->query("INSERT INTO " . DB_PREFIX . "filter_description SET filter_id = '" . (int)$filter_id . "', language_id = '" . (int)$language_id . "', filter_group_id = '" . (int)$filter_group_id . "', name = '" . $this->db->escape($filter_description['name']) . "'");
-				}
-			}
-		}
+                $filter_id = $this->db->getLastId();
 
-		$this->event->trigger('post.admin.filter.edit', $filter_group_id);
-	}
+                foreach ($filter['filter_description'] as $language_id => $filter_description) {
+                    $this->db->query('INSERT INTO '.DB_PREFIX."filter_description SET filter_id = '".(int) $filter_id."', language_id = '".(int) $language_id."', filter_group_id = '".(int) $filter_group_id."', name = '".$this->db->escape($filter_description['name'])."'");
+                }
+            }
+        }
 
-	public function deleteFilter($filter_group_id) {
-		$this->event->trigger('pre.admin.filter.delete', $filter_group_id);
+        $this->event->trigger('post.admin.filter.edit', $filter_group_id);
+    }
 
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "filter_group` WHERE filter_group_id = '" . (int)$filter_group_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "filter_group_description` WHERE filter_group_id = '" . (int)$filter_group_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "filter` WHERE filter_group_id = '" . (int)$filter_group_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "filter_description` WHERE filter_group_id = '" . (int)$filter_group_id . "'");
+    public function deleteFilter($filter_group_id)
+    {
+        $this->event->trigger('pre.admin.filter.delete', $filter_group_id);
 
-		$this->event->trigger('post.admin.filter.delete', $filter_group_id);
-	}
+        $this->db->query('DELETE FROM `'.DB_PREFIX."filter_group` WHERE filter_group_id = '".(int) $filter_group_id."'");
+        $this->db->query('DELETE FROM `'.DB_PREFIX."filter_group_description` WHERE filter_group_id = '".(int) $filter_group_id."'");
+        $this->db->query('DELETE FROM `'.DB_PREFIX."filter` WHERE filter_group_id = '".(int) $filter_group_id."'");
+        $this->db->query('DELETE FROM `'.DB_PREFIX."filter_description` WHERE filter_group_id = '".(int) $filter_group_id."'");
 
-	public function getFilterGroup($filter_group_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "filter_group` fg LEFT JOIN " . DB_PREFIX . "filter_group_description fgd ON (fg.filter_group_id = fgd.filter_group_id) WHERE fg.filter_group_id = '" . (int)$filter_group_id . "' AND fgd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+        $this->event->trigger('post.admin.filter.delete', $filter_group_id);
+    }
 
-		return $query->row;
-	}
+    public function getFilterGroup($filter_group_id)
+    {
+        $query = $this->db->query('SELECT * FROM `'.DB_PREFIX.'filter_group` fg LEFT JOIN '.DB_PREFIX."filter_group_description fgd ON (fg.filter_group_id = fgd.filter_group_id) WHERE fg.filter_group_id = '".(int) $filter_group_id."' AND fgd.language_id = '".(int) $this->config->get('config_language_id')."'");
 
-	public function getFilterGroups($data = array()) {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "filter_group` fg LEFT JOIN " . DB_PREFIX . "filter_group_description fgd ON (fg.filter_group_id = fgd.filter_group_id) WHERE fgd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+        return $query->row;
+    }
 
-		$sort_data = array(
-			'fgd.name',
-			'fg.sort_order'
-		);
+    public function getFilterGroups($data = array())
+    {
+        $sql = 'SELECT * FROM `'.DB_PREFIX.'filter_group` fg LEFT JOIN '.DB_PREFIX."filter_group_description fgd ON (fg.filter_group_id = fgd.filter_group_id) WHERE fgd.language_id = '".(int) $this->config->get('config_language_id')."'";
 
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
-		} else {
-			$sql .= " ORDER BY fgd.name";
-		}
+        $sort_data = array(
+            'fgd.name',
+            'fg.sort_order',
+        );
 
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
-		} else {
-			$sql .= " ASC";
-		}
+        if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
+            $sql .= ' ORDER BY '.$data['sort'];
+        } else {
+            $sql .= ' ORDER BY fgd.name';
+        }
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (isset($data['order']) && ($data['order'] == 'DESC')) {
+            $sql .= ' DESC';
+        } else {
+            $sql .= ' ASC';
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-		$query = $this->db->query($sql);
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-		return $query->rows;
-	}
+        $query = $this->db->query($sql);
 
-	public function getFilterGroupDescriptions($filter_group_id) {
-		$filter_group_data = array();
+        return $query->rows;
+    }
 
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "filter_group_description WHERE filter_group_id = '" . (int)$filter_group_id . "'");
+    public function getFilterGroupDescriptions($filter_group_id)
+    {
+        $filter_group_data = array();
 
-		foreach ($query->rows as $result) {
-			$filter_group_data[$result['language_id']] = array('name' => $result['name']);
-		}
+        $query = $this->db->query('SELECT * FROM '.DB_PREFIX."filter_group_description WHERE filter_group_id = '".(int) $filter_group_id."'");
 
-		return $filter_group_data;
-	}
+        foreach ($query->rows as $result) {
+            $filter_group_data[$result['language_id']] = array('name' => $result['name']);
+        }
 
-	public function getFilter($filter_id) {
-		$query = $this->db->query("SELECT *, (SELECT name FROM " . DB_PREFIX . "filter_group_description fgd WHERE f.filter_group_id = fgd.filter_group_id AND fgd.language_id = '" . (int)$this->config->get('config_language_id') . "') AS `group` FROM " . DB_PREFIX . "filter f LEFT JOIN " . DB_PREFIX . "filter_description fd ON (f.filter_id = fd.filter_id) WHERE f.filter_id = '" . (int)$filter_id . "' AND fd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+        return $filter_group_data;
+    }
 
-		return $query->row;
-	}
+    public function getFilter($filter_id)
+    {
+        $query = $this->db->query('SELECT *, (SELECT name FROM '.DB_PREFIX."filter_group_description fgd WHERE f.filter_group_id = fgd.filter_group_id AND fgd.language_id = '".(int) $this->config->get('config_language_id')."') AS `group` FROM ".DB_PREFIX.'filter f LEFT JOIN '.DB_PREFIX."filter_description fd ON (f.filter_id = fd.filter_id) WHERE f.filter_id = '".(int) $filter_id."' AND fd.language_id = '".(int) $this->config->get('config_language_id')."'");
 
-	public function getFilters($data) {
-		$sql = "SELECT *, (SELECT name FROM " . DB_PREFIX . "filter_group_description fgd WHERE f.filter_group_id = fgd.filter_group_id AND fgd.language_id = '" . (int)$this->config->get('config_language_id') . "') AS `group` FROM " . DB_PREFIX . "filter f LEFT JOIN " . DB_PREFIX . "filter_description fd ON (f.filter_id = fd.filter_id) WHERE fd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+        return $query->row;
+    }
 
-		if (!empty($data['filter_name'])) {
-			$sql .= " AND fd.name LIKE '" . $this->db->escape($data['filter_name']) . "%'";
-		}
+    public function getFilters($data)
+    {
+        $sql = 'SELECT *, (SELECT name FROM '.DB_PREFIX."filter_group_description fgd WHERE f.filter_group_id = fgd.filter_group_id AND fgd.language_id = '".(int) $this->config->get('config_language_id')."') AS `group` FROM ".DB_PREFIX.'filter f LEFT JOIN '.DB_PREFIX."filter_description fd ON (f.filter_id = fd.filter_id) WHERE fd.language_id = '".(int) $this->config->get('config_language_id')."'";
 
-		$sql .= " ORDER BY f.sort_order ASC";
+        if (!empty($data['filter_name'])) {
+            $sql .= " AND fd.name LIKE '".$this->db->escape($data['filter_name'])."%'";
+        }
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        $sql .= ' ORDER BY f.sort_order ASC';
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-		$query = $this->db->query($sql);
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-		return $query->rows;
-	}
+        $query = $this->db->query($sql);
 
-	public function getFilterDescriptions($filter_group_id) {
-		$filter_data = array();
+        return $query->rows;
+    }
 
-		$filter_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "filter WHERE filter_group_id = '" . (int)$filter_group_id . "'");
+    public function getFilterDescriptions($filter_group_id)
+    {
+        $filter_data = array();
 
-		foreach ($filter_query->rows as $filter) {
-			$filter_description_data = array();
+        $filter_query = $this->db->query('SELECT * FROM '.DB_PREFIX."filter WHERE filter_group_id = '".(int) $filter_group_id."'");
 
-			$filter_description_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "filter_description WHERE filter_id = '" . (int)$filter['filter_id'] . "'");
+        foreach ($filter_query->rows as $filter) {
+            $filter_description_data = array();
 
-			foreach ($filter_description_query->rows as $filter_description) {
-				$filter_description_data[$filter_description['language_id']] = array('name' => $filter_description['name']);
-			}
+            $filter_description_query = $this->db->query('SELECT * FROM '.DB_PREFIX."filter_description WHERE filter_id = '".(int) $filter['filter_id']."'");
 
-			$filter_data[] = array(
-				'filter_id'          => $filter['filter_id'],
-				'filter_description' => $filter_description_data,
-				'sort_order'         => $filter['sort_order']
-			);
-		}
+            foreach ($filter_description_query->rows as $filter_description) {
+                $filter_description_data[$filter_description['language_id']] = array('name' => $filter_description['name']);
+            }
 
-		return $filter_data;
-	}
+            $filter_data[] = array(
+                'filter_id' => $filter['filter_id'],
+                'filter_description' => $filter_description_data,
+                'sort_order' => $filter['sort_order'],
+            );
+        }
 
-	public function getTotalFilterGroups() {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "filter_group`");
+        return $filter_data;
+    }
 
-		return $query->row['total'];
-	}
+    public function getTotalFilterGroups()
+    {
+        $query = $this->db->query('SELECT COUNT(*) AS total FROM `'.DB_PREFIX.'filter_group`');
+
+        return $query->row['total'];
+    }
 }

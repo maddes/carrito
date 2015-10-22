@@ -3,4 +3,4 @@
 $_['heading_title'] = 'Total Orders';
 
 // Text
-$_['text_view']     = 'View more...';
+$_['text_view'] = 'View more...';

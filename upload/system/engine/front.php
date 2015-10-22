@@ -1,6 +1,6 @@
 <?php
 
-final class Front
+final class front
 {
     private $registry;
     private $action;
@@ -13,7 +13,7 @@ final class Front
         'catalog' => [
             'common/maintenance',
             'common/seo_url',
-        ]
+        ],
     ];
     private $error = 'error/not_found';
 

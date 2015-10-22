@@ -1,22 +1,26 @@
 <?php
-class ModelLocalisationZone extends Model {
-	public function getZone($zone_id) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone WHERE zone_id = '" . (int)$zone_id . "' AND status = '1'");
 
-		return $query->row;
-	}
+class ModelLocalisationZone extends Model
+{
+    public function getZone($zone_id)
+    {
+        $query = $this->db->query('SELECT * FROM '.DB_PREFIX."zone WHERE zone_id = '".(int) $zone_id."' AND status = '1'");
 
-	public function getZonesByCountryId($country_id) {
-		$zone_data = $this->cache->get('zone.' . (int)$country_id);
+        return $query->row;
+    }
 
-		if (!$zone_data) {
-			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
+    public function getZonesByCountryId($country_id)
+    {
+        $zone_data = $this->cache->get('zone.'.(int) $country_id);
 
-			$zone_data = $query->rows;
+        if (!$zone_data) {
+            $query = $this->db->query('SELECT * FROM '.DB_PREFIX."zone WHERE country_id = '".(int) $country_id."' AND status = '1' ORDER BY name");
 
-			$this->cache->set('zone.' . (int)$country_id, $zone_data);
-		}
+            $zone_data = $query->rows;
 
-		return $zone_data;
-	}
+            $this->cache->set('zone.'.(int) $country_id, $zone_data);
+        }
+
+        return $zone_data;
+    }
 }

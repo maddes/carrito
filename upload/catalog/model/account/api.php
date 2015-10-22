@@ -1,61 +1,67 @@
 <?php
-class ModelAccountApi extends Model {
-	public function getApiByKey($key) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "api` WHERE `key` = '" . $this->db->escape($key) . "' AND status = '1'");
 
-		return $query->row;
-	}
+class ModelAccountApi extends Model
+{
+    public function getApiByKey($key)
+    {
+        $query = $this->db->query('SELECT * FROM `'.DB_PREFIX."api` WHERE `key` = '".$this->db->escape($key)."' AND status = '1'");
 
-	public function addApiSession($api_id, $session_name, $session_id, $ip) {
-		$token = random_str(32);
+        return $query->row;
+    }
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "api_session` SET api_id = '" . (int)$api_id . "', token = '" . $this->db->escape($token) . "', session_name = '" . $this->db->escape($session_name) . "', session_id = '" . $this->db->escape($session_id) . "', ip = '" . $this->db->escape($ip) . "', date_added = NOW(), date_modified = NOW()");
+    public function addApiSession($api_id, $session_name, $session_id, $ip)
+    {
+        $token = random_str(32);
 
-		return $token;
-	}
+        $this->db->query('INSERT INTO `'.DB_PREFIX."api_session` SET api_id = '".(int) $api_id."', token = '".$this->db->escape($token)."', session_name = '".$this->db->escape($session_name)."', session_id = '".$this->db->escape($session_id)."', ip = '".$this->db->escape($ip)."', date_added = NOW(), date_modified = NOW()");
 
-	public function getApis($data = array()) {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "api`";
+        return $token;
+    }
 
-		$sort_data = array(
-			'name',
-			'status',
-			'date_added',
-			'date_modified'
-		);
+    public function getApis($data = array())
+    {
+        $sql = 'SELECT * FROM `'.DB_PREFIX.'api`';
 
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
-		} else {
-			$sql .= " ORDER BY name";
-		}
+        $sort_data = array(
+            'name',
+            'status',
+            'date_added',
+            'date_modified',
+        );
 
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
-		} else {
-			$sql .= " ASC";
-		}
+        if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
+            $sql .= ' ORDER BY '.$data['sort'];
+        } else {
+            $sql .= ' ORDER BY name';
+        }
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (isset($data['order']) && ($data['order'] == 'DESC')) {
+            $sql .= ' DESC';
+        } else {
+            $sql .= ' ASC';
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-		$query = $this->db->query($sql);
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-		return $query->rows;
-	}
+        $query = $this->db->query($sql);
 
-	public function getApiIps($api_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "api_ip` WHERE api_id = '" . (int)$api_id . "'");
+        return $query->rows;
+    }
 
-		return $query->rows;
-	}
+    public function getApiIps($api_id)
+    {
+        $query = $this->db->query('SELECT * FROM `'.DB_PREFIX."api_ip` WHERE api_id = '".(int) $api_id."'");
+
+        return $query->rows;
+    }
 }

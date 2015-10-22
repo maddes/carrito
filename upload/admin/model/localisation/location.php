@@ -1,63 +1,71 @@
 <?php
-class ModelLocalisationLocation extends Model {
-	public function addLocation($data) {
-		$this->db->query("INSERT INTO " . DB_PREFIX . "location SET name = '" . $this->db->escape($data['name']) . "', address = '" . $this->db->escape($data['address']) . "', geocode = '" . $this->db->escape($data['geocode']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', image = '" . $this->db->escape($data['image']) . "', open = '" . $this->db->escape($data['open']) . "', comment = '" . $this->db->escape($data['comment']) . "'");
-	}
 
-	public function editLocation($location_id, $data) {
-		$this->db->query("UPDATE " . DB_PREFIX . "location SET name = '" . $this->db->escape($data['name']) . "', address = '" . $this->db->escape($data['address']) . "', geocode = '" . $this->db->escape($data['geocode']) . "', telephone = '" . $this->db->escape($data['telephone']) . "', fax = '" . $this->db->escape($data['fax']) . "', image = '" . $this->db->escape($data['image']) . "', open = '" . $this->db->escape($data['open']) . "', comment = '" . $this->db->escape($data['comment']) . "' WHERE location_id = '" . (int)$location_id . "'");
-	}
+class ModelLocalisationLocation extends Model
+{
+    public function addLocation($data)
+    {
+        $this->db->query('INSERT INTO '.DB_PREFIX."location SET name = '".$this->db->escape($data['name'])."', address = '".$this->db->escape($data['address'])."', geocode = '".$this->db->escape($data['geocode'])."', telephone = '".$this->db->escape($data['telephone'])."', fax = '".$this->db->escape($data['fax'])."', image = '".$this->db->escape($data['image'])."', open = '".$this->db->escape($data['open'])."', comment = '".$this->db->escape($data['comment'])."'");
+    }
 
-	public function deleteLocation($location_id) {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "location WHERE location_id = " . (int)$location_id);
-	}
+    public function editLocation($location_id, $data)
+    {
+        $this->db->query('UPDATE '.DB_PREFIX."location SET name = '".$this->db->escape($data['name'])."', address = '".$this->db->escape($data['address'])."', geocode = '".$this->db->escape($data['geocode'])."', telephone = '".$this->db->escape($data['telephone'])."', fax = '".$this->db->escape($data['fax'])."', image = '".$this->db->escape($data['image'])."', open = '".$this->db->escape($data['open'])."', comment = '".$this->db->escape($data['comment'])."' WHERE location_id = '".(int) $location_id."'");
+    }
 
-	public function getLocation($location_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "location WHERE location_id = '" . (int)$location_id . "'");
+    public function deleteLocation($location_id)
+    {
+        $this->db->query('DELETE FROM '.DB_PREFIX.'location WHERE location_id = '.(int) $location_id);
+    }
 
-		return $query->row;
-	}
+    public function getLocation($location_id)
+    {
+        $query = $this->db->query('SELECT DISTINCT * FROM '.DB_PREFIX."location WHERE location_id = '".(int) $location_id."'");
 
-	public function getLocations($data = array()) {
-		$sql = "SELECT location_id, name, address FROM " . DB_PREFIX . "location";
+        return $query->row;
+    }
 
-		$sort_data = array(
-			'name',
-			'address',
-		);
+    public function getLocations($data = array())
+    {
+        $sql = 'SELECT location_id, name, address FROM '.DB_PREFIX.'location';
 
-		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
-			$sql .= " ORDER BY " . $data['sort'];
-		} else {
-			$sql .= " ORDER BY name";
-		}
+        $sort_data = array(
+            'name',
+            'address',
+        );
 
-		if (isset($data['order']) && ($data['order'] == 'DESC')) {
-			$sql .= " DESC";
-		} else {
-			$sql .= " ASC";
-		}
+        if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
+            $sql .= ' ORDER BY '.$data['sort'];
+        } else {
+            $sql .= ' ORDER BY name';
+        }
 
-		if (isset($data['start']) || isset($data['limit'])) {
-			if ($data['start'] < 0) {
-				$data['start'] = 0;
-			}
+        if (isset($data['order']) && ($data['order'] == 'DESC')) {
+            $sql .= ' DESC';
+        } else {
+            $sql .= ' ASC';
+        }
 
-			if ($data['limit'] < 1) {
-				$data['limit'] = 20;
-			}
+        if (isset($data['start']) || isset($data['limit'])) {
+            if ($data['start'] < 0) {
+                $data['start'] = 0;
+            }
 
-			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-		}
+            if ($data['limit'] < 1) {
+                $data['limit'] = 20;
+            }
 
-		$query = $this->db->query($sql);
+            $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+        }
 
-		return $query->rows;
-	}
+        $query = $this->db->query($sql);
 
-	public function getTotalLocations() {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "location");
+        return $query->rows;
+    }
 
-		return $query->row['total'];
-	}
+    public function getTotalLocations()
+    {
+        $query = $this->db->query('SELECT COUNT(*) AS total FROM '.DB_PREFIX.'location');
+
+        return $query->row['total'];
+    }
 }

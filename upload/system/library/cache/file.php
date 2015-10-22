@@ -1,72 +1,78 @@
 <?php
-namespace Cache;
-class File {
-	private $expire = CACHE_EXPIRE;
 
-	public function __construct() {
+namespace cache;
 
-		$files = glob(DIR_CACHE . 'cache.*');
+class file
+{
+    private $expire = CACHE_EXPIRE;
 
-		if ($files) {
-			foreach ($files as $file) {
-				$time = substr(strrchr($file, '.'), 1);
+    public function __construct()
+    {
+        $files = glob(DIR_CACHE.'cache.*');
 
-				if ($time < time()) {
-					if (file_exists($file)) {
-						unlink($file);
-					}
-				}
-			}
-		}
-	}
+        if ($files) {
+            foreach ($files as $file) {
+                $time = substr(strrchr($file, '.'), 1);
 
-	public function get($key) {
-		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
+                if ($time < time()) {
+                    if (file_exists($file)) {
+                        unlink($file);
+                    }
+                }
+            }
+        }
+    }
 
-		if ($files) {
-			$handle = fopen($files[0], 'r');
+    public function get($key)
+    {
+        $files = glob(DIR_CACHE.'cache.'.preg_replace('/[^A-Z0-9\._-]/i', '', $key).'.*');
 
-			flock($handle, LOCK_SH);
+        if ($files) {
+            $handle = fopen($files[0], 'r');
 
-			$data = fread($handle, filesize($files[0]));
+            flock($handle, LOCK_SH);
 
-			flock($handle, LOCK_UN);
+            $data = fread($handle, filesize($files[0]));
 
-			fclose($handle);
+            flock($handle, LOCK_UN);
 
-			return json_decode($data, true);
-		}
+            fclose($handle);
 
-		return false;
-	}
+            return json_decode($data, true);
+        }
 
-	public function set($key, $value) {
-		$this->delete($key);
+        return false;
+    }
 
-		$file = DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.' . (time() + $this->expire);
+    public function set($key, $value)
+    {
+        $this->delete($key);
 
-		$handle = fopen($file, 'w');
+        $file = DIR_CACHE.'cache.'.preg_replace('/[^A-Z0-9\._-]/i', '', $key).'.'.(time() + $this->expire);
 
-		flock($handle, LOCK_EX);
+        $handle = fopen($file, 'w');
 
-		fwrite($handle, json_encode($value));
+        flock($handle, LOCK_EX);
 
-		fflush($handle);
+        fwrite($handle, json_encode($value));
 
-		flock($handle, LOCK_UN);
+        fflush($handle);
 
-		fclose($handle);
-	}
+        flock($handle, LOCK_UN);
 
-	public function delete($key) {
-		$files = glob(DIR_CACHE . 'cache.' . preg_replace('/[^A-Z0-9\._-]/i', '', $key) . '.*');
+        fclose($handle);
+    }
 
-		if ($files) {
-			foreach ($files as $file) {
-				if (file_exists($file)) {
-					unlink($file);
-				}
-			}
-		}
-	}
+    public function delete($key)
+    {
+        $files = glob(DIR_CACHE.'cache.'.preg_replace('/[^A-Z0-9\._-]/i', '', $key).'.*');
+
+        if ($files) {
+            foreach ($files as $file) {
+                if (file_exists($file)) {
+                    unlink($file);
+                }
+            }
+        }
+    }
 }

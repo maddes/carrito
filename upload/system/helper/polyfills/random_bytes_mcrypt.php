@@ -1,7 +1,7 @@
 <?php
 /**
  * Random_* Compatibility Library 
- * for using the new PHP 7 random_* API in PHP 5 projects
+ * for using the new PHP 7 random_* API in PHP 5 projects.
  * 
  * The MIT License (MIT)
  * 
@@ -26,9 +26,8 @@
  * SOFTWARE.
  */
 
-
 /**
- * Powered by ext/mcrypt (and thankfully NOT libmcrypt)
+ * Powered by ext/mcrypt (and thankfully NOT libmcrypt).
  * 
  * @ref https://bugs.php.net/bug.php?id=55169
  * @ref https://github.com/php/php-src/blob/c568ffe5171d942161fc8dda066bce844bdef676/ext/mcrypt/mcrypt.c#L1321-L1386
@@ -57,13 +56,13 @@ function random_bytes($bytes)
     $buf = @mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
     if ($buf !== false) {
         if (RandomCompat_strlen($buf) === $bytes) {
-            /**
+            /*
              * Return our random entropy buffer here:
              */
             return $buf;
         }
     }
-    /**
+    /*
      * If we reach here, PHP has failed us.
      */
     throw new Exception(

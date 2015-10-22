@@ -1,48 +1,52 @@
 <?php
-class ModelTotalVoucherTheme extends Model {
-	public function getVoucherTheme($voucher_theme_id) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "voucher_theme vt LEFT JOIN " . DB_PREFIX . "voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE vt.voucher_theme_id = '" . (int)$voucher_theme_id . "' AND vtd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 
-		return $query->row;
-	}
+class ModelTotalVoucherTheme extends Model
+{
+    public function getVoucherTheme($voucher_theme_id)
+    {
+        $query = $this->db->query('SELECT * FROM '.DB_PREFIX.'voucher_theme vt LEFT JOIN '.DB_PREFIX."voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE vt.voucher_theme_id = '".(int) $voucher_theme_id."' AND vtd.language_id = '".(int) $this->config->get('config_language_id')."'");
 
-	public function getVoucherThemes($data = array()) {
-		if ($data) {
-			$sql = "SELECT * FROM " . DB_PREFIX . "voucher_theme vt LEFT JOIN " . DB_PREFIX . "voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE vtd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY vtd.name";
+        return $query->row;
+    }
 
-			if (isset($data['order']) && ($data['order'] == 'DESC')) {
-				$sql .= " DESC";
-			} else {
-				$sql .= " ASC";
-			}
+    public function getVoucherThemes($data = array())
+    {
+        if ($data) {
+            $sql = 'SELECT * FROM '.DB_PREFIX.'voucher_theme vt LEFT JOIN '.DB_PREFIX."voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE vtd.language_id = '".(int) $this->config->get('config_language_id')."' ORDER BY vtd.name";
 
-			if (isset($data['start']) || isset($data['limit'])) {
-				if ($data['start'] < 0) {
-					$data['start'] = 0;
-				}
+            if (isset($data['order']) && ($data['order'] == 'DESC')) {
+                $sql .= ' DESC';
+            } else {
+                $sql .= ' ASC';
+            }
 
-				if ($data['limit'] < 1) {
-					$data['limit'] = 20;
-				}
+            if (isset($data['start']) || isset($data['limit'])) {
+                if ($data['start'] < 0) {
+                    $data['start'] = 0;
+                }
 
-				$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
-			}
+                if ($data['limit'] < 1) {
+                    $data['limit'] = 20;
+                }
 
-			$query = $this->db->query($sql);
+                $sql .= ' LIMIT '.(int) $data['start'].','.(int) $data['limit'];
+            }
 
-			return $query->rows;
-		} else {
-			$voucher_theme_data = $this->cache->get('voucher_theme.' . (int)$this->config->get('config_language_id'));
+            $query = $this->db->query($sql);
 
-			if (!$voucher_theme_data) {
-				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "voucher_theme vt LEFT JOIN " . DB_PREFIX . "voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE vtd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY vtd.name");
+            return $query->rows;
+        } else {
+            $voucher_theme_data = $this->cache->get('voucher_theme.'.(int) $this->config->get('config_language_id'));
 
-				$voucher_theme_data = $query->rows;
+            if (!$voucher_theme_data) {
+                $query = $this->db->query('SELECT * FROM '.DB_PREFIX.'voucher_theme vt LEFT JOIN '.DB_PREFIX."voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE vtd.language_id = '".(int) $this->config->get('config_language_id')."' ORDER BY vtd.name");
 
-				$this->cache->set('voucher_theme.' . (int)$this->config->get('config_language_id'), $voucher_theme_data);
-			}
+                $voucher_theme_data = $query->rows;
 
-			return $voucher_theme_data;
-		}
-	}
+                $this->cache->set('voucher_theme.'.(int) $this->config->get('config_language_id'), $voucher_theme_data);
+            }
+
+            return $voucher_theme_data;
+        }
+    }
 }

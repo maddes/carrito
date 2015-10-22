@@ -1,35 +1,39 @@
 <?php
-class ControllerPaymentCheque extends Controller {
-	public function index() {
-		$this->load->language('payment/cheque');
 
-		$data['text_instruction'] = $this->language->get('text_instruction');
-		$data['text_payable'] = $this->language->get('text_payable');
-		$data['text_address'] = $this->language->get('text_address');
-		$data['text_payment'] = $this->language->get('text_payment');
-		$data['text_loading'] = $this->language->get('text_loading');
+class ControllerPaymentCheque extends Controller
+{
+    public function index()
+    {
+        $this->load->language('payment/cheque');
 
-		$data['button_confirm'] = $this->language->get('button_confirm');
+        $data['text_instruction'] = $this->language->get('text_instruction');
+        $data['text_payable'] = $this->language->get('text_payable');
+        $data['text_address'] = $this->language->get('text_address');
+        $data['text_payment'] = $this->language->get('text_payment');
+        $data['text_loading'] = $this->language->get('text_loading');
 
-		$data['payable'] = $this->config->get('cheque_payable');
-		$data['address'] = nl2br($this->config->get('config_address'));
+        $data['button_confirm'] = $this->language->get('button_confirm');
 
-		$data['continue'] = $this->url->link('checkout/success');
+        $data['payable'] = $this->config->get('cheque_payable');
+        $data['address'] = nl2br($this->config->get('config_address'));
 
-		return $this->load->view('payment/cheque', $data);
-	}
+        $data['continue'] = $this->url->link('checkout/success');
 
-	public function confirm() {
-		if ($this->session->data['payment_method']['code'] == 'cheque') {
-			$this->load->language('payment/cheque');
+        return $this->load->view('payment/cheque', $data);
+    }
 
-			$comment  = $this->language->get('text_payable') . "\n";
-			$comment .= $this->config->get('cheque_payable') . "\n\n";
-			$comment .= $this->language->get('text_address') . "\n";
-			$comment .= $this->config->get('config_address') . "\n\n";
-			$comment .= $this->language->get('text_payment') . "\n";
+    public function confirm()
+    {
+        if ($this->session->data['payment_method']['code'] == 'cheque') {
+            $this->load->language('payment/cheque');
 
-			$this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('cheque_order_status_id'), $comment, true);
-		}
-	}
+            $comment = $this->language->get('text_payable')."\n";
+            $comment .= $this->config->get('cheque_payable')."\n\n";
+            $comment .= $this->language->get('text_address')."\n";
+            $comment .= $this->config->get('config_address')."\n\n";
+            $comment .= $this->language->get('text_payment')."\n";
+
+            $this->model_checkout_order->addOrderHistory($this->session->data['order_id'], $this->config->get('cheque_order_status_id'), $comment, true);
+        }
+    }
 }

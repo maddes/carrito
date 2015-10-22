@@ -1,106 +1,116 @@
 <?php
-class ModelOpenbayEbayProfile extends Model{
-	public function add($data) {
-		if ($data['default'] == 1) {
-			$this->clearDefault($data['type']);
-		}
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "ebay_profile` SET `name` = '" . $this->db->escape($data['name']) . "', `description` = '" . $this->db->escape($data['description']) . "', `type` = '" . (int)$data['type'] . "', `default` = '" . (int)$data['default'] . "', `data` = '" . $this->db->escape(serialize($data['data'])) . "'");
+class ModelOpenbayEbayProfile extends Model
+{
+    public function add($data)
+    {
+        if ($data['default'] == 1) {
+            $this->clearDefault($data['type']);
+        }
 
-		return $this->db->getLastId();
-	}
+        $this->db->query('INSERT INTO `'.DB_PREFIX."ebay_profile` SET `name` = '".$this->db->escape($data['name'])."', `description` = '".$this->db->escape($data['description'])."', `type` = '".(int) $data['type']."', `default` = '".(int) $data['default']."', `data` = '".$this->db->escape(serialize($data['data']))."'");
 
-	public function edit($id, $data) {
-		if ($data['default'] == 1) {
-			$this->clearDefault($data['type']);
-		}
+        return $this->db->getLastId();
+    }
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "ebay_profile` SET `name` = '" . $this->db->escape($data['name']) . "', `description` = '" . $this->db->escape($data['description']) . "', `data` = '" . $this->db->escape(serialize($data['data'])) . "', `default` = '" . (int)$data['default'] . "' WHERE `ebay_profile_id` = '" . (int)$id . "' LIMIT 1");
-	}
+    public function edit($id, $data)
+    {
+        if ($data['default'] == 1) {
+            $this->clearDefault($data['type']);
+        }
 
-	public function delete($id) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "ebay_profile` WHERE `ebay_profile_id` = '" . (int)$id . "' LIMIT 1");
+        $this->db->query('UPDATE `'.DB_PREFIX."ebay_profile` SET `name` = '".$this->db->escape($data['name'])."', `description` = '".$this->db->escape($data['description'])."', `data` = '".$this->db->escape(serialize($data['data']))."', `default` = '".(int) $data['default']."' WHERE `ebay_profile_id` = '".(int) $id."' LIMIT 1");
+    }
 
-		if ($this->db->countAffected() > 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public function delete($id)
+    {
+        $this->db->query('DELETE FROM `'.DB_PREFIX."ebay_profile` WHERE `ebay_profile_id` = '".(int) $id."' LIMIT 1");
 
-	public function get($id) {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_profile` WHERE `ebay_profile_id` = '" . (int)$id . "' LIMIT 1");
+        if ($this->db->countAffected() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		if ($qry->num_rows) {
-			$row                = $qry->row;
-			$row['link_edit']   = $this->url->link('openbay/ebay_profile/edit', 'token=' . $this->session->data['token'] . '&ebay_profile_id=' . $row['ebay_profile_id'], 'SSL');
-			$row['link_delete'] = $this->url->link('openbay/ebay_profile/delete', 'token=' . $this->session->data['token'] . '&ebay_profile_id=' . $row['ebay_profile_id'], 'SSL');
-			$row['data']        = unserialize($row['data']);
+    public function get($id)
+    {
+        $qry = $this->db->query('SELECT * FROM `'.DB_PREFIX."ebay_profile` WHERE `ebay_profile_id` = '".(int) $id."' LIMIT 1");
 
-			return $row;
-		} else {
-			return false;
-		}
-	}
+        if ($qry->num_rows) {
+            $row = $qry->row;
+            $row['link_edit'] = $this->url->link('openbay/ebay_profile/edit', 'token='.$this->session->data['token'].'&ebay_profile_id='.$row['ebay_profile_id'], 'SSL');
+            $row['link_delete'] = $this->url->link('openbay/ebay_profile/delete', 'token='.$this->session->data['token'].'&ebay_profile_id='.$row['ebay_profile_id'], 'SSL');
+            $row['data'] = unserialize($row['data']);
 
-	public function getAll($type = '') {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "ebay_profile`";
+            return $row;
+        } else {
+            return false;
+        }
+    }
 
-		if($type !== '') {
-			$sql .= " WHERE `type` = '" . (int)$type . "'";
-		}
+    public function getAll($type = '')
+    {
+        $sql = 'SELECT * FROM `'.DB_PREFIX.'ebay_profile`';
 
-		$qry = $this->db->query($sql);
+        if ($type !== '') {
+            $sql .= " WHERE `type` = '".(int) $type."'";
+        }
 
-		if($qry->num_rows) {
-			$profiles = array();
-			foreach ($qry->rows as $row) {
-				$row['link_edit']   = $this->url->link('openbay/ebay_profile/edit', 'token=' . $this->session->data['token'] . '&ebay_profile_id=' . $row['ebay_profile_id'], 'SSL');
-				$row['link_delete'] = $this->url->link('openbay/ebay_profile/delete', 'token=' . $this->session->data['token'] . '&ebay_profile_id=' . $row['ebay_profile_id'], 'SSL');
-				$row['data']        = !empty($row['data']) ? unserialize($row['data']) : array();
-				$profiles[]         = $row;
-			}
+        $qry = $this->db->query($sql);
 
-			return $profiles;
-		}else{
-			return false;
-		}
-	}
+        if ($qry->num_rows) {
+            $profiles = array();
+            foreach ($qry->rows as $row) {
+                $row['link_edit'] = $this->url->link('openbay/ebay_profile/edit', 'token='.$this->session->data['token'].'&ebay_profile_id='.$row['ebay_profile_id'], 'SSL');
+                $row['link_delete'] = $this->url->link('openbay/ebay_profile/delete', 'token='.$this->session->data['token'].'&ebay_profile_id='.$row['ebay_profile_id'], 'SSL');
+                $row['data'] = !empty($row['data']) ? unserialize($row['data']) : array();
+                $profiles[] = $row;
+            }
 
-	public function getTypes() {
-		$types = array(
-			0 => array(
-				'name'          => $this->language->get('text_type_shipping'),
-				'template'      => 'openbay/ebay_profile_form_shipping'
-			),
-			1 => array(
-				'name'          => $this->language->get('text_type_returns'),
-				'template'      => 'openbay/ebay_profile_form_returns'
-			),
-			2 => array(
-				'name'          => $this->language->get('text_type_template'),
-				'template'      => 'openbay/ebay_profile_form_template'
-			),
-			3 => array(
-				'name'          => $this->language->get('text_type_general'),
-				'template'      => 'openbay/ebay_profile_form_generic'
-			)
-		);
+            return $profiles;
+        } else {
+            return false;
+        }
+    }
 
-		return $types;
-	}
+    public function getTypes()
+    {
+        $types = array(
+            0 => array(
+                'name' => $this->language->get('text_type_shipping'),
+                'template' => 'openbay/ebay_profile_form_shipping',
+            ),
+            1 => array(
+                'name' => $this->language->get('text_type_returns'),
+                'template' => 'openbay/ebay_profile_form_returns',
+            ),
+            2 => array(
+                'name' => $this->language->get('text_type_template'),
+                'template' => 'openbay/ebay_profile_form_template',
+            ),
+            3 => array(
+                'name' => $this->language->get('text_type_general'),
+                'template' => 'openbay/ebay_profile_form_generic',
+            ),
+        );
 
-	public function getDefault($type) {
-		$qry = $this->db->query("SELECT `ebay_profile_id` FROM `" . DB_PREFIX . "ebay_profile` WHERE `type` = '" . (int)$type . "' AND `default` = '1'LIMIT 1");
+        return $types;
+    }
 
-		if ($qry->num_rows) {
-			return (int)$qry->row['ebay_profile_id'];
-		} else {
-			return false;
-		}
-	}
+    public function getDefault($type)
+    {
+        $qry = $this->db->query('SELECT `ebay_profile_id` FROM `'.DB_PREFIX."ebay_profile` WHERE `type` = '".(int) $type."' AND `default` = '1'LIMIT 1");
 
-	private function clearDefault($type) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "ebay_profile` SET `default` = '0' WHERE `type` = '" . (int)$type . "'");
-	}
+        if ($qry->num_rows) {
+            return (int) $qry->row['ebay_profile_id'];
+        } else {
+            return false;
+        }
+    }
+
+    private function clearDefault($type)
+    {
+        $this->db->query('UPDATE `'.DB_PREFIX."ebay_profile` SET `default` = '0' WHERE `type` = '".(int) $type."'");
+    }
 }

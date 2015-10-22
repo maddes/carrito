@@ -1,4 +1,5 @@
 <?php
+
 $_['heading_title'] = 'Secure Trading Web Service';
 
 $_['tab_settings'] = 'Settings';

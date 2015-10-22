@@ -1,176 +1,184 @@
 <?php
-class ControllerEbayOpenbay extends Controller {
-	public function inbound() {
-		$encrypted      = $this->request->post;
-		$secret         = $this->config->get('ebay_secret');
-		$active         = $this->config->get('ebay_status');
 
-		if(empty($encrypted)) {
-			$this->response->addHeader('Content-Type: application/json');
-			$this->response->setOutput(json_encode(array('msg' => 'error 002')));
-		} else {
-			$data = $this->openbay->ebay->decryptArgs($encrypted['data'], true);
+class ControllerEbayOpenbay extends Controller
+{
+    public function inbound()
+    {
+        $encrypted = $this->request->post;
+        $secret = $this->config->get('ebay_secret');
+        $active = $this->config->get('ebay_status');
 
-			if($secret == $data['secret'] && $active == 1) {
-				if($data['action'] == 'ItemUnsold') {
-					$this->openbay->ebay->log('Action: Unsold Item');
-					$product_id = $this->openbay->ebay->getProductId($data['itemId']);
+        if (empty($encrypted)) {
+            $this->response->addHeader('Content-Type: application/json');
+            $this->response->setOutput(json_encode(array('msg' => 'error 002')));
+        } else {
+            $data = $this->openbay->ebay->decryptArgs($encrypted['data'], true);
 
-					if($product_id != false) {
-						$this->openbay->ebay->log('eBay item link found with internal product');
-						$rules = $this->model_openbay_ebay_product->getRelistRule($data['itemId']);
+            if ($secret == $data['secret'] && $active == 1) {
+                if ($data['action'] == 'ItemUnsold') {
+                    $this->openbay->ebay->log('Action: Unsold Item');
+                    $product_id = $this->openbay->ebay->getProductId($data['itemId']);
 
-						if(!empty($rules)) {
-							$this->openbay->ebay->log('Item is due to be automatically relisted');
-							$this->db->query("INSERT INTO `" . DB_PREFIX . "ebay_listing_pending` SET `ebay_item_id` = '" . $this->db->escape($data['itemId']) . "', `product_id` = '" . (int)$product_id . "', `key` = '" . $this->db->escape($data['key']) . "'");
-							$this->openbay->ebay->removeItemByItemId($data['itemId']);
-						} else {
-							$this->openbay->ebay->log('No automation rule set');
-							$this->openbay->ebay->removeItemByItemId($data['itemId']);
-						}
-					}
+                    if ($product_id != false) {
+                        $this->openbay->ebay->log('eBay item link found with internal product');
+                        $rules = $this->model_openbay_ebay_product->getRelistRule($data['itemId']);
 
-					$this->response->addHeader('Content-Type: application/json');
-					$this->response->setOutput(json_encode(array('msg' => 'ok')));
-				}
+                        if (!empty($rules)) {
+                            $this->openbay->ebay->log('Item is due to be automatically relisted');
+                            $this->db->query('INSERT INTO `'.DB_PREFIX."ebay_listing_pending` SET `ebay_item_id` = '".$this->db->escape($data['itemId'])."', `product_id` = '".(int) $product_id."', `key` = '".$this->db->escape($data['key'])."'");
+                            $this->openbay->ebay->removeItemByItemId($data['itemId']);
+                        } else {
+                            $this->openbay->ebay->log('No automation rule set');
+                            $this->openbay->ebay->removeItemByItemId($data['itemId']);
+                        }
+                    }
 
-				if($data['action'] == 'ItemListed') {
-					$this->openbay->ebay->log('Action: Listed Item');
+                    $this->response->addHeader('Content-Type: application/json');
+                    $this->response->setOutput(json_encode(array('msg' => 'ok')));
+                }
 
-					$product_id = $this->openbay->ebay->getProductIdFromKey($data['key']);
+                if ($data['action'] == 'ItemListed') {
+                    $this->openbay->ebay->log('Action: Listed Item');
 
-					if($product_id != false) {
-						$this->openbay->ebay->createLink($product_id, $data['itemId'], '');
-						$this->db->query("DELETE FROM `" . DB_PREFIX . "ebay_listing_pending` WHERE `key` = '" . $this->db->escape($data['key']) . "' LIMIT 1");
-						$this->openbay->ebay->log('A link was found with product id: ' . $product_id . ', item id: ' . $data['itemId'] . ' and key: ' . $data['key']);
-					} else {
-						$this->openbay->ebay->log('No link found to previous item');
-					}
+                    $product_id = $this->openbay->ebay->getProductIdFromKey($data['key']);
 
-					$this->response->addHeader('Content-Type: application/json');
-					$this->response->setOutput(json_encode(array('msg' => 'ok')));
-				}
+                    if ($product_id != false) {
+                        $this->openbay->ebay->createLink($product_id, $data['itemId'], '');
+                        $this->db->query('DELETE FROM `'.DB_PREFIX."ebay_listing_pending` WHERE `key` = '".$this->db->escape($data['key'])."' LIMIT 1");
+                        $this->openbay->ebay->log('A link was found with product id: '.$product_id.', item id: '.$data['itemId'].' and key: '.$data['key']);
+                    } else {
+                        $this->openbay->ebay->log('No link found to previous item');
+                    }
 
-				if($data['action'] == 'newOrder') {
-					$this->openbay->ebay->log('Action: newOrder / Order data from polling');
-					$this->model_openbay_ebay_openbay->importOrders($data['data2']);
+                    $this->response->addHeader('Content-Type: application/json');
+                    $this->response->setOutput(json_encode(array('msg' => 'ok')));
+                }
 
-					$this->response->addHeader('Content-Type: application/json');
-					$this->response->setOutput(json_encode(array('msg' => 'ok')));
-				}
+                if ($data['action'] == 'newOrder') {
+                    $this->openbay->ebay->log('Action: newOrder / Order data from polling');
+                    $this->model_openbay_ebay_openbay->importOrders($data['data2']);
 
-				if($data['action'] == 'notificationOrder') {
-					$this->openbay->ebay->log('Action: notificationOrder / Order data from notification');
-					$this->model_openbay_ebay_openbay->importOrders($data['data']);
+                    $this->response->addHeader('Content-Type: application/json');
+                    $this->response->setOutput(json_encode(array('msg' => 'ok')));
+                }
 
-					$this->response->addHeader('Content-Type: application/json');
-					$this->response->setOutput(json_encode(array('msg' => 'ok')));
-				}
+                if ($data['action'] == 'notificationOrder') {
+                    $this->openbay->ebay->log('Action: notificationOrder / Order data from notification');
+                    $this->model_openbay_ebay_openbay->importOrders($data['data']);
 
-				if($data['action'] == 'outputLog') {
-					$this->model_openbay_ebay_openbay->outputLog();
-				}
+                    $this->response->addHeader('Content-Type: application/json');
+                    $this->response->setOutput(json_encode(array('msg' => 'ok')));
+                }
 
-				if($data['action'] == 'updateLog') {
-					$this->model_openbay_ebay_openbay->updateLog();
-				}
-			} else {
-				$this->openbay->ebay->log('Secret incorrect or module not active.');
+                if ($data['action'] == 'outputLog') {
+                    $this->model_openbay_ebay_openbay->outputLog();
+                }
 
-				$this->response->addHeader('Content-Type: application/json');
-				$this->response->setOutput(json_encode(array('msg' => 'error 001')));
-			}
-		}
-	}
+                if ($data['action'] == 'updateLog') {
+                    $this->model_openbay_ebay_openbay->updateLog();
+                }
+            } else {
+                $this->openbay->ebay->log('Secret incorrect or module not active.');
 
-	public function importItems() {
-		set_time_limit(0);
+                $this->response->addHeader('Content-Type: application/json');
+                $this->response->setOutput(json_encode(array('msg' => 'error 001')));
+            }
+        }
+    }
 
-		$data   = $this->request->post;
-		$secret = $this->config->get('ebay_secret');
-		$active = $this->config->get('ebay_status');
+    public function importItems()
+    {
+        set_time_limit(0);
 
-		$this->response->addHeader('Content-Type: application/json');
+        $data = $this->request->post;
+        $secret = $this->config->get('ebay_secret');
+        $active = $this->config->get('ebay_status');
 
-		if(isset($data['secret']) && $secret == $data['secret'] && $active == 1 && isset($data['data'])) {
-			$this->model_openbay_ebay_product->importItems($data);
-			$this->response->setOutput(json_encode(array('msg' => 'ok', 'error' => false)));
-		} else {
-			$this->response->setOutput(json_encode(array('msg' => 'Auth failed', 'error' => true)));
-		}
-	}
+        $this->response->addHeader('Content-Type: application/json');
 
-	public function ping() {
-		$post_size   = ini_get('post_max_size');
-		$post_size   = (int)str_replace(array('M','m','Mb','MB'), '', $post_size);
-		$version    = (int)$this->config->get('openbay_version');
+        if (isset($data['secret']) && $secret == $data['secret'] && $active == 1 && isset($data['data'])) {
+            $this->model_openbay_ebay_product->importItems($data);
+            $this->response->setOutput(json_encode(array('msg' => 'ok', 'error' => false)));
+        } else {
+            $this->response->setOutput(json_encode(array('msg' => 'Auth failed', 'error' => true)));
+        }
+    }
 
-		$this->response->addHeader('Cache-Control: no-cache, must-revalidate');
-		$this->response->addHeader('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-		$this->response->addHeader('Content-type: application/json; charset=utf-8');
+    public function ping()
+    {
+        $post_size = ini_get('post_max_size');
+        $post_size = (int) str_replace(array('M', 'm', 'Mb', 'MB'), '', $post_size);
+        $version = (int) $this->config->get('openbay_version');
 
-		$this->response->setOutput(json_encode(array('msg' => 'ok', 'max_post' => $post_size, 'version' => $version)));
-	}
+        $this->response->addHeader('Cache-Control: no-cache, must-revalidate');
+        $this->response->addHeader('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        $this->response->addHeader('Content-type: application/json; charset=utf-8');
 
-	public function autoSetup() {
-		set_time_limit(0);
-		$settings = $this->model_setting_setting->getSetting('ebay');
+        $this->response->setOutput(json_encode(array('msg' => 'ok', 'max_post' => $post_size, 'version' => $version)));
+    }
 
-		$this->response->addHeader('Cache-Control: no-cache, must-revalidate');
-		$this->response->addHeader('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-		$this->response->addHeader('Content-type: application/json; charset=utf-8');
+    public function autoSetup()
+    {
+        set_time_limit(0);
+        $settings = $this->model_setting_setting->getSetting('ebay');
 
-		if(
-			(isset($settings['ebay_token']) && !empty($settings['ebay_token'])) ||
-			(isset($settings['ebay_secret']) && !empty($settings['ebay_secret'])) ||
-			(isset($settings['ebay_string1']) && !empty($settings['ebay_string1'])) ||
-			(isset($settings['ebay_string2']) && !empty($settings['ebay_string2'])) ||
-			!isset($this->request->post['token']) ||
-			!isset($this->request->post['secret']) ||
-			!isset($this->request->post['s1']) ||
-			!isset($this->request->post['s2'])
-		) {
-			$this->response->setOutput(json_encode(array('msg' => 'fail', 'reason' => 'Tokens are already setup or data missing')));
-		} else {
-			$settings['ebay_token']   = $this->request->post['token'];
-			$settings['ebay_secret']  = $this->request->post['secret'];
-			$settings['ebay_string1'] = $this->request->post['s1'];
-			$settings['ebay_string2'] = $this->request->post['s2'];
+        $this->response->addHeader('Cache-Control: no-cache, must-revalidate');
+        $this->response->addHeader('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        $this->response->addHeader('Content-type: application/json; charset=utf-8');
 
-			$this->openbay->ebay->editSetting('ebay', $settings);
+        if (
+            (isset($settings['ebay_token']) && !empty($settings['ebay_token'])) ||
+            (isset($settings['ebay_secret']) && !empty($settings['ebay_secret'])) ||
+            (isset($settings['ebay_string1']) && !empty($settings['ebay_string1'])) ||
+            (isset($settings['ebay_string2']) && !empty($settings['ebay_string2'])) ||
+            !isset($this->request->post['token']) ||
+            !isset($this->request->post['secret']) ||
+            !isset($this->request->post['s1']) ||
+            !isset($this->request->post['s2'])
+        ) {
+            $this->response->setOutput(json_encode(array('msg' => 'fail', 'reason' => 'Tokens are already setup or data missing')));
+        } else {
+            $settings['ebay_token'] = $this->request->post['token'];
+            $settings['ebay_secret'] = $this->request->post['secret'];
+            $settings['ebay_string1'] = $this->request->post['s1'];
+            $settings['ebay_string2'] = $this->request->post['s2'];
 
-			$this->response->setOutput(json_encode(array('msg' => 'ok', 'reason' => 'Auto setup has been completed','version' => (int)$this->config->get('openbay_version'))));
-		}
-	}
+            $this->openbay->ebay->editSetting('ebay', $settings);
 
-	public function autoSync() {
-		set_time_limit(0);
+            $this->response->setOutput(json_encode(array('msg' => 'ok', 'reason' => 'Auto setup has been completed', 'version' => (int) $this->config->get('openbay_version'))));
+        }
+    }
 
-		$this->response->addHeader('Content-Type: application/json');
+    public function autoSync()
+    {
+        set_time_limit(0);
 
-		if($this->request->post['process'] == 'categories') {
-			$this->response->setOutput(json_encode($this->openbay->ebay->updateCategories()));
-		}elseif($this->request->post['process'] == 'settings') {
-			$this->response->setOutput(json_encode($this->openbay->ebay->updateSettings()));
-		}elseif($this->request->post['process'] == 'store') {
-			$this->response->setOutput(json_encode($this->openbay->ebay->updateStore()));
-		}
-	}
+        $this->response->addHeader('Content-Type: application/json');
 
-	public function testfile() {
-		/*
-		// Commented out by default, only used for debug during support request
-		$post = $this->request->post;
-		$post_size   = ini_get('post_max_size');
-		$post_size   = (int)str_replace(array('M','m','Mb','MB'), '', $post_size);
+        if ($this->request->post['process'] == 'categories') {
+            $this->response->setOutput(json_encode($this->openbay->ebay->updateCategories()));
+        } elseif ($this->request->post['process'] == 'settings') {
+            $this->response->setOutput(json_encode($this->openbay->ebay->updateSettings()));
+        } elseif ($this->request->post['process'] == 'store') {
+            $this->response->setOutput(json_encode($this->openbay->ebay->updateStore()));
+        }
+    }
 
-		$response = array();
-		$response['php_postsize'] = $post_size;
-		$response['string1_length'] = strlen($post['string1']);
-		$response['string1_text'] = $post['string1'];
-		$response['string2_length'] = isset($post['string2']) ? strlen($post['string2']) : '';
+    public function testfile()
+    {
+        /*
+        // Commented out by default, only used for debug during support request
+        $post = $this->request->post;
+        $post_size   = ini_get('post_max_size');
+        $post_size   = (int)str_replace(array('M','m','Mb','MB'), '', $post_size);
 
-		echo json_encode($response);
-		*/
-	}
+        $response = array();
+        $response['php_postsize'] = $post_size;
+        $response['string1_length'] = strlen($post['string1']);
+        $response['string1_text'] = $post['string1'];
+        $response['string2_length'] = isset($post['string2']) ? strlen($post['string2']) : '';
+
+        echo json_encode($response);
+        */
+    }
 }

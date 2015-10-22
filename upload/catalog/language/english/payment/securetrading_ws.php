@@ -1,4 +1,5 @@
 <?php
+
 $_['text_title'] = 'Credit / Debit card';
 $_['text_card_details'] = 'Card details';
 $_['text_wait'] = 'Processing your payment';

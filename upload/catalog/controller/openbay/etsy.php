@@ -1,63 +1,66 @@
 <?php
-class ControllerOpenbayEtsy extends Controller {
-	public function inbound() {
-		if ($this->config->get('etsy_status') != '1') {
-			$this->openbay->etsy->log('etsy/inbound - module inactive (503)');
-			http_response_code(503);
-			exit();
-		}
 
-		$body = $this->request->post;
+class ControllerOpenbayEtsy extends Controller
+{
+    public function inbound()
+    {
+        if ($this->config->get('etsy_status') != '1') {
+            $this->openbay->etsy->log('etsy/inbound - module inactive (503)');
+            http_response_code(503);
+            exit();
+        }
 
-		if (!isset($body['action']) || !isset($body['auth'])) {
-			$this->openbay->etsy->log('etsy/inbound - action or auth data not set (401)');
-			http_response_code(401);
-			exit();
-		}
+        $body = $this->request->post;
 
-		$incoming_token = isset($body['auth']['token']) ? $body['auth']['token'] : '';
-		$incoming_secret = isset($body['auth']['secret']) ? $body['auth']['secret'] : '';
+        if (!isset($body['action']) || !isset($body['auth'])) {
+            $this->openbay->etsy->log('etsy/inbound - action or auth data not set (401)');
+            http_response_code(401);
+            exit();
+        }
 
-		if ($incoming_token !== $this->config->get('etsy_token') || $incoming_secret !== $this->config->get('etsy_enc1')) {
-			$this->openbay->etsy->log('etsy/inbound - Auth failed (401): ' . $incoming_token . '/' . $incoming_secret);
-			http_response_code(401);
-			exit();
-		}
+        $incoming_token = isset($body['auth']['token']) ? $body['auth']['token'] : '';
+        $incoming_secret = isset($body['auth']['secret']) ? $body['auth']['secret'] : '';
 
-		$data = array();
+        if ($incoming_token !== $this->config->get('etsy_token') || $incoming_secret !== $this->config->get('etsy_enc1')) {
+            $this->openbay->etsy->log('etsy/inbound - Auth failed (401): '.$incoming_token.'/'.$incoming_secret);
+            http_response_code(401);
+            exit();
+        }
 
-		if (isset($body['data']) && !empty($body['data'])) {
-			$decrypted = $this->openbay->etsy->decryptArgs($body['data'], true);
+        $data = array();
 
-			if (!$decrypted) {
-				$this->openbay->etsy->log('etsy/inbound Failed to decrypt data');
-				http_response_code(400);
-				exit();
-			}
+        if (isset($body['data']) && !empty($body['data'])) {
+            $decrypted = $this->openbay->etsy->decryptArgs($body['data'], true);
 
-			$data = json_decode($decrypted);
-		}
+            if (!$decrypted) {
+                $this->openbay->etsy->log('etsy/inbound Failed to decrypt data');
+                http_response_code(400);
+                exit();
+            }
 
-		switch ($body['action']) {
-			case 'orders':
+            $data = json_decode($decrypted);
+        }
 
-				$this->openbay->etsy->log('Orders action found');
+        switch ($body['action']) {
+            case 'orders':
 
-				$this->model_openbay_etsy_order->inbound($data);
+                $this->openbay->etsy->log('Orders action found');
 
-				break;
-			case 'products';
+                $this->model_openbay_etsy_order->inbound($data);
 
-				$this->model_openbay_etsy_product->inbound($data);
+                break;
+            case 'products';
 
-				break;
-		}
-	}
+                $this->model_openbay_etsy_product->inbound($data);
 
-	public function eventAddOrderHistory($order_id) {
-		if (!empty($order_id)) {
+                break;
+        }
+    }
 
-			$this->model_openbay_etsy_order->addOrderHistory($order_id);
-		}
-	}
+    public function eventAddOrderHistory($order_id)
+    {
+        if (!empty($order_id)) {
+            $this->model_openbay_etsy_order->addOrderHistory($order_id);
+        }
+    }
 }

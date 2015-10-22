@@ -1,25 +1,28 @@
 <?php
-class ControllerModuleInformation extends Controller {
-	public function index() {
-		$this->load->language('module/information');
 
-		$data['heading_title'] = $this->language->get('heading_title');
+class ControllerModuleInformation extends Controller
+{
+    public function index()
+    {
+        $this->load->language('module/information');
 
-		$data['text_contact'] = $this->language->get('text_contact');
-		$data['text_sitemap'] = $this->language->get('text_sitemap');
+        $data['heading_title'] = $this->language->get('heading_title');
 
-		$data['informations'] = array();
+        $data['text_contact'] = $this->language->get('text_contact');
+        $data['text_sitemap'] = $this->language->get('text_sitemap');
 
-		foreach ($this->model_catalog_information->getInformations() as $result) {
-			$data['informations'][] = array(
-				'title' => $result['title'],
-				'href'  => $this->url->link('information/information', 'information_id=' . $result['information_id'])
-			);
-		}
+        $data['informations'] = array();
 
-		$data['contact'] = $this->url->link('information/contact');
-		$data['sitemap'] = $this->url->link('information/sitemap');
+        foreach ($this->model_catalog_information->getInformations() as $result) {
+            $data['informations'][] = array(
+                'title' => $result['title'],
+                'href' => $this->url->link('information/information', 'information_id='.$result['information_id']),
+            );
+        }
 
-		return $this->load->view('module/information', $data);
-	}
+        $data['contact'] = $this->url->link('information/contact');
+        $data['sitemap'] = $this->url->link('information/sitemap');
+
+        return $this->load->view('module/information', $data);
+    }
 }

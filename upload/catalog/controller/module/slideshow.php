@@ -1,27 +1,30 @@
 <?php
-class ControllerModuleSlideshow extends Controller {
-	public function index($setting) {
-		static $module = 0;
 
-		$this->document->addStyle('catalog/view/javascript/jquery/owl-carousel/owl.carousel.css');
-		$this->document->addScript('catalog/view/javascript/jquery/owl-carousel/owl.carousel.min.js');
+class ControllerModuleSlideshow extends Controller
+{
+    public function index($setting)
+    {
+        static $module = 0;
 
-		$data['banners'] = array();
+        $this->document->addStyle('catalog/view/javascript/jquery/owl-carousel/owl.carousel.css');
+        $this->document->addScript('catalog/view/javascript/jquery/owl-carousel/owl.carousel.min.js');
 
-		$results = $this->model_design_banner->getBanner($setting['banner_id']);
+        $data['banners'] = array();
 
-		foreach ($results as $result) {
-			if (is_file(DIR_IMAGE . $result['image'])) {
-				$data['banners'][] = array(
-					'title' => $result['title'],
-					'link'  => $result['link'],
-					'image' => $this->model_tool_image->resize($result['image'], $setting['width'], $setting['height'])
-				);
-			}
-		}
+        $results = $this->model_design_banner->getBanner($setting['banner_id']);
 
-		$data['module'] = $module++;
+        foreach ($results as $result) {
+            if (is_file(DIR_IMAGE.$result['image'])) {
+                $data['banners'][] = array(
+                    'title' => $result['title'],
+                    'link' => $result['link'],
+                    'image' => $this->model_tool_image->resize($result['image'], $setting['width'], $setting['height']),
+                );
+            }
+        }
 
-		return $this->load->view('module/slideshow', $data);
-	}
+        $data['module'] = $module++;
+
+        return $this->load->view('module/slideshow', $data);
+    }
 }

@@ -1,105 +1,117 @@
 <?php
-namespace DB;
-final class mPDO {
-	private $pdo = null;
-	private $statement = null;
 
-	public function __construct($hostname, $username, $password, $database, $port = '3306') {
-		try {
-			$this->pdo = new \PDO("mysql:host=" . $hostname . ";port=" . $port . ";dbname=" . $database, $username, $password, array(\PDO::ATTR_PERSISTENT => true));
-		} catch(\PDOException $e) {
-			throw new \Exception('Unknown database \'' . $database . '\'');
-			exit();
-		}
+namespace db;
 
-		$this->pdo->exec("SET NAMES 'utf8'");
-		$this->pdo->exec("SET CHARACTER SET utf8");
-		$this->pdo->exec("SET CHARACTER_SET_CONNECTION=utf8");
-		$this->pdo->exec("SET SQL_MODE = ''");
+final class mpdo
+{
+    private $pdo = null;
+    private $statement = null;
 
-	}
+    public function __construct($hostname, $username, $password, $database, $port = '3306')
+    {
+        try {
+            $this->pdo = new \PDO('mysql:host='.$hostname.';port='.$port.';dbname='.$database, $username, $password, array(\PDO::ATTR_PERSISTENT => true));
+        } catch (\PDOException $e) {
+            throw new \Exception('Unknown database \''.$database.'\'');
+            exit();
+        }
 
-	public function prepare($sql) {
-		$this->statement = $this->pdo->prepare($sql);
-	}
+        $this->pdo->exec("SET NAMES 'utf8'");
+        $this->pdo->exec('SET CHARACTER SET utf8');
+        $this->pdo->exec('SET CHARACTER_SET_CONNECTION=utf8');
+        $this->pdo->exec("SET SQL_MODE = ''");
+    }
 
-	public function bindParam($parameter, $variable, $data_type = \PDO::PARAM_STR, $length = 0) {
-		if ($length) {
-			$this->statement->bindParam($parameter, $variable, $data_type, $length);
-		} else {
-			$this->statement->bindParam($parameter, $variable, $data_type);
-		}
-	}
+    public function prepare($sql)
+    {
+        $this->statement = $this->pdo->prepare($sql);
+    }
 
-	public function execute() {
-		try {
-			if ($this->statement && $this->statement->execute()) {
-				$data = array();
+    public function bindParam($parameter, $variable, $data_type = \PDO::PARAM_STR, $length = 0)
+    {
+        if ($length) {
+            $this->statement->bindParam($parameter, $variable, $data_type, $length);
+        } else {
+            $this->statement->bindParam($parameter, $variable, $data_type);
+        }
+    }
 
-				while ($row = $this->statement->fetch(\PDO::FETCH_ASSOC)) {
-					$data[] = $row;
-				}
+    public function execute()
+    {
+        try {
+            if ($this->statement && $this->statement->execute()) {
+                $data = array();
 
-				$result = new \stdClass();
-				$result->row = (isset($data[0])) ? $data[0] : array();
-				$result->rows = $data;
-				$result->num_rows = $this->statement->rowCount();
-			}
-		} catch(\PDOException $e) {
-			trigger_error('Error: ' . $e->getMessage() . ' Error Code : ' . $e->getCode());
-		}
-	}
+                while ($row = $this->statement->fetch(\PDO::FETCH_ASSOC)) {
+                    $data[] = $row;
+                }
 
-	public function query($sql, $params = array()) {
-		$this->statement = $this->pdo->prepare($sql);
-		$result = false;
+                $result = new \stdClass();
+                $result->row = (isset($data[0])) ? $data[0] : array();
+                $result->rows = $data;
+                $result->num_rows = $this->statement->rowCount();
+            }
+        } catch (\PDOException $e) {
+            trigger_error('Error: '.$e->getMessage().' Error Code : '.$e->getCode());
+        }
+    }
 
-		try {
-			if ($this->statement && $this->statement->execute($params)) {
-				$data = array();
+    public function query($sql, $params = array())
+    {
+        $this->statement = $this->pdo->prepare($sql);
+        $result = false;
 
-				while ($row = $this->statement->fetch(\PDO::FETCH_ASSOC)) {
-					$data[] = $row;
-				}
+        try {
+            if ($this->statement && $this->statement->execute($params)) {
+                $data = array();
 
-				$result = new \stdClass();
-				$result->row = (isset($data[0]) ? $data[0] : array());
-				$result->rows = $data;
-				$result->num_rows = $this->statement->rowCount();
-			}
-		} catch (\PDOException $e) {
-			trigger_error('Error: ' . $e->getMessage() . ' Error Code : ' . $e->getCode() . ' <br />' . $sql);
-			exit();
-		}
+                while ($row = $this->statement->fetch(\PDO::FETCH_ASSOC)) {
+                    $data[] = $row;
+                }
 
-		if ($result) {
-			return $result;
-		} else {
-			$result = new \stdClass();
-			$result->row = array();
-			$result->rows = array();
-			$result->num_rows = 0;
-			return $result;
-		}
-	}
+                $result = new \stdClass();
+                $result->row = (isset($data[0]) ? $data[0] : array());
+                $result->rows = $data;
+                $result->num_rows = $this->statement->rowCount();
+            }
+        } catch (\PDOException $e) {
+            trigger_error('Error: '.$e->getMessage().' Error Code : '.$e->getCode().' <br />'.$sql);
+            exit();
+        }
 
-	public function escape($value) {
-		return str_replace(array("\\", "\0", "\n", "\r", "\x1a", "'", '"'), array("\\\\", "\\0", "\\n", "\\r", "\Z", "\'", '\"'), $value);
-	}
+        if ($result) {
+            return $result;
+        } else {
+            $result = new \stdClass();
+            $result->row = array();
+            $result->rows = array();
+            $result->num_rows = 0;
 
-	public function countAffected() {
-		if ($this->statement) {
-			return $this->statement->rowCount();
-		} else {
-			return 0;
-		}
-	}
+            return $result;
+        }
+    }
 
-	public function getLastId() {
-		return $this->pdo->lastInsertId();
-	}
+    public function escape($value)
+    {
+        return str_replace(array('\\', "\0", "\n", "\r", "\x1a", "'", '"'), array('\\\\', '\\0', '\\n', '\\r', "\Z", "\'", '\"'), $value);
+    }
 
-	public function __destruct() {
-		$this->pdo = null;
-	}
+    public function countAffected()
+    {
+        if ($this->statement) {
+            return $this->statement->rowCount();
+        } else {
+            return 0;
+        }
+    }
+
+    public function getLastId()
+    {
+        return $this->pdo->lastInsertId();
+    }
+
+    public function __destruct()
+    {
+        $this->pdo = null;
+    }
 }

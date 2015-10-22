@@ -1,8 +1,11 @@
 <?php
-class ModelFraudMaxMind extends Model {
-	public function install() {
-		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "maxmind` (
+
+class ModelFraudMaxMind extends Model
+{
+    public function install()
+    {
+        $this->db->query('
+			CREATE TABLE IF NOT EXISTS `'.DB_PREFIX.'maxmind` (
 			  `order_id` int(11) NOT NULL,
 			  `customer_id` int(11) NOT NULL,
 			  `country_match` varchar(3) NOT NULL,
@@ -58,16 +61,18 @@ class ModelFraudMaxMind extends Model {
 			  `date_added` datetime NOT NULL,
 			  PRIMARY KEY (`order_id`)
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-		");		
-	}
+		');
+    }
 
-	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "maxmind`");
-	}
-	
-	public function getOrder($order_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "maxmind` WHERE order_id = '" . (int)$order_id . "'");
+    public function uninstall()
+    {
+        $this->db->query('DROP TABLE IF EXISTS `'.DB_PREFIX.'maxmind`');
+    }
 
-		return $query->row;
-	}	
+    public function getOrder($order_id)
+    {
+        $query = $this->db->query('SELECT * FROM `'.DB_PREFIX."maxmind` WHERE order_id = '".(int) $order_id."'");
+
+        return $query->row;
+    }
 }

@@ -1,81 +1,84 @@
 <?php
-class ControllerAffiliateTracking extends Controller {
-	public function index() {
-		if (!$this->affiliate->isLogged()) {
-			$this->session->data['redirect'] = $this->url->link('affiliate/tracking', '', 'SSL');
 
-			$this->response->redirect($this->url->link('affiliate/login', '', 'SSL'));
-		}
+class ControllerAffiliateTracking extends Controller
+{
+    public function index()
+    {
+        if (!$this->affiliate->isLogged()) {
+            $this->session->data['redirect'] = $this->url->link('affiliate/tracking', '', 'SSL');
 
-		$this->load->language('affiliate/tracking');
+            $this->response->redirect($this->url->link('affiliate/login', '', 'SSL'));
+        }
 
-		$this->document->setTitle($this->language->get('heading_title'));
+        $this->load->language('affiliate/tracking');
 
-		$data['breadcrumbs'] = array();
+        $this->document->setTitle($this->language->get('heading_title'));
 
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/home')
-		);
+        $data['breadcrumbs'] = array();
 
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('text_account'),
-			'href' => $this->url->link('affiliate/account', '', 'SSL')
-		);
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('text_home'),
+            'href' => $this->url->link('common/home'),
+        );
 
-		$data['breadcrumbs'][] = array(
-			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('affiliate/tracking', '', 'SSL')
-		);
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('text_account'),
+            'href' => $this->url->link('affiliate/account', '', 'SSL'),
+        );
 
-		$data['heading_title'] = $this->language->get('heading_title');
+        $data['breadcrumbs'][] = array(
+            'text' => $this->language->get('heading_title'),
+            'href' => $this->url->link('affiliate/tracking', '', 'SSL'),
+        );
 
-		$data['text_description'] = sprintf($this->language->get('text_description'), $this->config->get('config_name'));
+        $data['heading_title'] = $this->language->get('heading_title');
 
-		$data['entry_code'] = $this->language->get('entry_code');
-		$data['entry_generator'] = $this->language->get('entry_generator');
-		$data['entry_link'] = $this->language->get('entry_link');
+        $data['text_description'] = sprintf($this->language->get('text_description'), $this->config->get('config_name'));
 
-		$data['help_generator'] = $this->language->get('help_generator');
+        $data['entry_code'] = $this->language->get('entry_code');
+        $data['entry_generator'] = $this->language->get('entry_generator');
+        $data['entry_link'] = $this->language->get('entry_link');
 
-		$data['button_continue'] = $this->language->get('button_continue');
+        $data['help_generator'] = $this->language->get('help_generator');
 
-		$data['code'] = $this->affiliate->getCode();
+        $data['button_continue'] = $this->language->get('button_continue');
 
-		$data['continue'] = $this->url->link('affiliate/account', '', 'SSL');
+        $data['code'] = $this->affiliate->getCode();
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		$data['footer'] = $this->load->controller('common/footer');
-		$data['header'] = $this->load->controller('common/header');
+        $data['continue'] = $this->url->link('affiliate/account', '', 'SSL');
 
-		$this->response->setOutput($this->load->view('affiliate/tracking', $data));
-	}
+        $data['column_left'] = $this->load->controller('common/column_left');
+        $data['column_right'] = $this->load->controller('common/column_right');
+        $data['content_top'] = $this->load->controller('common/content_top');
+        $data['content_bottom'] = $this->load->controller('common/content_bottom');
+        $data['footer'] = $this->load->controller('common/footer');
+        $data['header'] = $this->load->controller('common/header');
 
-	public function autocomplete() {
-		$json = array();
+        $this->response->setOutput($this->load->view('affiliate/tracking', $data));
+    }
 
-		if (isset($this->request->get['filter_name'])) {
+    public function autocomplete()
+    {
+        $json = array();
 
-			$filter_data = array(
-				'filter_name' => $this->request->get['filter_name'],
-				'start'       => 0,
-				'limit'       => 5
-			);
+        if (isset($this->request->get['filter_name'])) {
+            $filter_data = array(
+                'filter_name' => $this->request->get['filter_name'],
+                'start' => 0,
+                'limit' => 5,
+            );
 
-			$results = $this->model_catalog_product->getProducts($filter_data);
+            $results = $this->model_catalog_product->getProducts($filter_data);
 
-			foreach ($results as $result) {
-				$json[] = array(
-					'name' => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),
-					'link' => str_replace('&amp;', '&', $this->url->link('product/product', 'product_id=' . $result['product_id'] . '&tracking=' . $this->affiliate->getCode()))
-				);
-			}
-		}
+            foreach ($results as $result) {
+                $json[] = array(
+                    'name' => strip_tags(html_entity_decode($result['name'], ENT_QUOTES, 'UTF-8')),
+                    'link' => str_replace('&amp;', '&', $this->url->link('product/product', 'product_id='.$result['product_id'].'&tracking='.$this->affiliate->getCode())),
+                );
+            }
+        }
 
-		$this->response->addHeader('Content-Type: application/json');
-		$this->response->setOutput(json_encode($json));
-	}
+        $this->response->addHeader('Content-Type: application/json');
+        $this->response->setOutput(json_encode($json));
+    }
 }

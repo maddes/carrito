@@ -1,7 +1,7 @@
 <?php
 /**
  * Random_* Compatibility Library 
- * for using the new PHP 7 random_* API in PHP 5 projects
+ * for using the new PHP 7 random_* API in PHP 5 projects.
  * 
  * The MIT License (MIT)
  * 
@@ -54,21 +54,21 @@ function random_bytes($bytes)
     $buf = '';
     $util = new COM('CAPICOM.Utilities.1');
     $execCount = 0;
-    /**
+    /*
      * Let's not let it loop forever. If we run N times and fail to
      * get N bytes of random data, then CAPICOM has failed us.
      */
     do {
         $buf .= base64_decode($util->GetRandom($bytes, 0));
         if (RandomCompat_strlen($buf) >= $bytes) {
-            /**
+            /*
              * Return our random entropy buffer here:
              */
             return RandomCompat_substr($buf, 0, $bytes);
         }
-        ++$execCount; 
+        ++$execCount;
     } while ($execCount < $bytes);
-    /**
+    /*
      * If we reach here, PHP has failed us.
      */
     throw new Exception(

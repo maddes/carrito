@@ -1,7 +1,7 @@
 <?php
 /**
  * Random_* Compatibility Library 
- * for using the new PHP 7 random_* API in PHP 5 projects
+ * for using the new PHP 7 random_* API in PHP 5 projects.
  * 
  * The MIT License (MIT)
  * 
@@ -54,7 +54,7 @@ function random_bytes($bytes)
         );
     }
     $secure = true;
-    /**
+    /*
      * $secure is passed by reference. If it's set to false, fail. Note
      * that this will only return false if this function fails to return
      * any data.
@@ -67,7 +67,7 @@ function random_bytes($bytes)
             return $buf;
         }
     }
-    /**
+    /*
      * If we reach here, PHP has failed us.
      */
     throw new Exception(

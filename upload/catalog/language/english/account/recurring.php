@@ -1,4 +1,5 @@
 <?php
+
 $_['heading_title'] = 'Recurring Payments';
 $_['button_continue'] = 'Continue';
 $_['button_view'] = 'View';
