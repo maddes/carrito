@@ -136,7 +136,7 @@ class ModelUpgrade extends Model {
 			}
 		}
 
-		$this->db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_PORT);
+		$this->db = new DB();
 
 		// Get all current tables, fields, type, size, etc..
 		$table_old_data = array();

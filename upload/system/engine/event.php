@@ -5,6 +5,10 @@ class Event {
 
 	public function __construct($registry) {
 		$this->registry = $registry;
+        $query = $registry->get('db')->query('SELECT * FROM '.DB_PREFIX.'event');
+        foreach ($query->rows as $event) {
+            $this->register($event['trigger'], $event['action']);
+        }
 	}
 
 	public function register($key, $action, $priority = 0) {

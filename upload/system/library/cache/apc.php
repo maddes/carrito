@@ -1,12 +1,8 @@
 <?php
 namespace Cache;
 class APC {
-	private $expire;
+	private $expire = CACHE_EXPIRE;
 	private $cache;
-
-	public function __construct($expire) {
-		$this->expire = $expire;
-	}
 
 	public function get($key) {
 		return apc_fetch(CACHE_PREFIX . $key);

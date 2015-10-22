@@ -10,6 +10,7 @@ Carrito provides a professional and reliable foundation from which to build a su
 Please create a bug report on GitHub.
 
 **Important!**
+
 - If you would like to report a serious security bug please PM the Carrito repository owner on Github.
 
 ## How to contribute
@@ -18,7 +19,7 @@ Fork the repository, edit and [submit a pull request](https://github.com/maddes/
 
 Please be very clear on your commit messages and pull request.
 
-All new code should use Laravel coding guideline, use PHPDOC and have plentiful comments.
+All new code should use the PSR-2 coding standard, PHPDOC and have plentiful comments.
 
 ## Versioning
 
@@ -39,3 +40,9 @@ Please read the installation instructions included in the repository or download
 
 - [Carrito's repository](https://github.com/maddes/carrito/issues/new)
 - [OpenCart homepage](http://www.opencart.com/)
+
+## Credits
+
+We use awesome libraries from these guys:
+
+- https://github.com/paragonie/random_compat

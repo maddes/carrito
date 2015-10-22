@@ -5,6 +5,14 @@ class ControllerStep3 extends Controller {
 	public function index() {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 
+			define('DB_DRIVER',   addslashes($this->request->post['db_driver']));
+			define('DB_HOSTNAME', addslashes($this->request->post['db_hostname']));
+			define('DB_USERNAME', addslashes($this->request->post['db_username']));
+			define('DB_PASSWORD', addslashes(html_entity_decode($this->request->post['db_password'], ENT_QUOTES, 'UTF-8')));
+			define('DB_DATABASE', addslashes($this->request->post['db_database']));
+			define('DB_PORT',     addslashes($this->request->post['db_port']));
+			define('DB_PREFIX',   addslashes($this->request->post['db_prefix']));
+
 			$this->model_install->database($this->request->post);
 
 			$output  = '<?php' . "\n";

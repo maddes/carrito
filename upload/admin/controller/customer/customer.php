@@ -1121,7 +1121,7 @@ class ControllerCustomerCustomer extends Controller {
 
 		if ($customer_info) {
 			// Create token to login with
-			$token = token(64);
+			$token = random_str(64);
 
 			$this->model_customer_customer->editToken($customer_id, $token);
 

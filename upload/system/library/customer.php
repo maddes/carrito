@@ -41,6 +41,14 @@ class Customer {
 				$this->logout();
 			}
 		}
+        // Customer Group
+        if ($this->isLogged()) {
+            $registry->get('config')->set('config_customer_group_id', $this->getGroupId());
+        } elseif (isset($registry->get('session')->data['customer']) && isset($registry->get('session')->data['customer']['customer_group_id'])) {
+            $registry->get('config')->set('config_customer_group_id', $registry->get('session')->data['customer']['customer_group_id']);
+        } elseif (isset($registry->get('session')->data['guest']) && isset($registry->get('session')->data['guest']['customer_group_id'])) {
+            $registry->get('config')->set('config_customer_group_id', $registry->get('session')->data['guest']['customer_group_id']);
+        }
 	}
 
 	public function login($email, $password, $override = false) {

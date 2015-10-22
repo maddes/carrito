@@ -1,10 +1,9 @@
 <?php
 namespace Cache;
 class File {
-	private $expire;
+	private $expire = CACHE_EXPIRE;
 
-	public function __construct($expire = 3600) {
-		$this->expire = $expire;
+	public function __construct() {
 
 		$files = glob(DIR_CACHE . 'cache.*');
 

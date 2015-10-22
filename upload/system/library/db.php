@@ -2,11 +2,11 @@
 class DB {
 	private $db;
 
-	public function __construct($driver, $hostname, $username, $password, $database, $port = NULL) {
-		$class = 'DB\\' . $driver;
+	public function __construct($registry = null) {
+		$class = 'DB\\' . DB_DRIVER;
 
 		if (class_exists($class)) {
-			$this->db = new $class($hostname, $username, $password, $database, $port);
+			$this->db = new $class(DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_PORT);
 		} else {
 			exit('Error: Could not load database driver ' . $driver . '!');
 		}

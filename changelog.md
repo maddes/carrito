@@ -1,3 +1,13 @@
+# Carrito 5.1.0
+* Refactored autoloader.
+* Added mapping facilities to the `Registry`.
+* Added https://github.com/paragonie/random_compat polyfills to use random_str() instead of token().
+* Refactored startup.php completely, moved tons of code to respective classes.
+* Removed .jsbeautifyrc and updated .editorconfig for PSR-2
+
+# Carrito 5.0.0
+* Bumped PHP version required to 5.4.
+
 # Carrito 4.0.0
 * Mayor startup overhaul, index.php files left to a simple two-liner.
 * `admin/config.php` file no longer needed.

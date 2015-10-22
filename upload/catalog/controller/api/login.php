@@ -27,13 +27,11 @@ class ControllerApiLogin extends Controller {
 
 				$sesion_name = 'temp_session_' . uniqid();
 
-				$session = new Session($this->session->getId(), $sesion_name);
-
 				// Set API ID
-				$session->data['api_id'] = $api_info['api_id'];
+				$this->session->data['api_id'] = $api_info['api_id'];
 
 				// Create Token
-				$json['token'] = $this->model_account_api->addApiSession($api_info['api_id'], $sesion_name, $session->getId(), $this->request->server['REMOTE_ADDR']);
+				$json['token'] = $this->model_account_api->addApiSession($api_info['api_id'], $sesion_name, $this->session->getId(), $this->request->server['REMOTE_ADDR']);
 			} else {
 				$json['error']['key'] = $this->language->get('error_key');
 			}

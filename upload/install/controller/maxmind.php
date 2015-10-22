@@ -3,7 +3,7 @@ class ControllerMaxmind extends Controller {
 	private $error = array();
 
 	public function index() {
-		$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_PORT);
+		$db = new DB();
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$db->query("REPLACE INTO `" . DB_PREFIX . "setting` SET `maxmind_key` = '" . $db->escape($this->request->post['maxmind_key']) . "', `maxmind_score` = '" . (int)$this->request->post['maxmind_score'] . "', `maxmind_order_status_id` = '" . (int)$this->request->post['maxmind_order_status_id'] . "'  WHERE `store_id` = '0' AND `code` = 'maxmind'");

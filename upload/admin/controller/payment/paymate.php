@@ -89,7 +89,7 @@ class ControllerPaymentPayMate extends Controller {
 		} elseif ($this->config->get('paymate_password')) {
 			$data['paymate_password'] = $this->config->get('paymate_password');
 		} else {
-			$data['paymate_password'] = token(32);
+			$data['paymate_password'] = random_str(32);
 		}
 
 		if (isset($this->request->post['paymate_test'])) {

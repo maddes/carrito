@@ -447,7 +447,7 @@ class ControllerSaleRecurring extends Controller {
 
 			$this->response->setOutput($this->load->view('sale/recurring_info', $data));
 		} else {
-			return new Action('error/not_found');
+			return 'error/not_found';
 		}
 	}
 }
