@@ -8,14 +8,14 @@ final class ebay
     private $enc1;
     private $enc2;
     private $url = 'https://uk.openbaypro.com/';
-    private $registry;
+    private $app;
     private $no_log = array('notification/getPublicNotifications/', 'setup/getEbayCategories/', 'item/getItemAllList/', 'account/validate/', 'item/getItemListLimited/');
     private $logger;
     private $max_log_size = 50; //max log size in Mb
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->registry = $registry;
+        $this->app = $app;
         $this->token = $this->config->get('ebay_token');
         $this->secret = $this->config->get('ebay_secret');
         $this->enc1 = $this->config->get('ebay_string1');
@@ -33,7 +33,7 @@ final class ebay
 
     public function __get($name)
     {
-        return $this->registry->get($name);
+        return $this->app->get($name);
     }
 
     public function call($call, array $post = null, array $options = array(), $content_type = 'json', $status_override = false)
@@ -52,7 +52,7 @@ final class ebay
                 $domain = HTTPS_SERVER;
             }
 
-            $data = array('token' => $this->token, 'secret' => $this->secret, 'server' => $this->server, 'domain' => $domain, 'openbay_version' => (int) $this->config->get('openbay_version'), 'opencart_version' => VERSION, 'data' => $post, 'content_type' => $content_type, 'language' => $this->config->get('openbay_language'));
+            $data = array('token' => $this->token, 'secret' => $this->secret, 'server' => $this->server, 'domain' => $domain, 'openbay_version' => (int) $this->config->get('openbay_version'), 'opencart_version' => $this->app->version(), 'data' => $post, 'content_type' => $content_type, 'language' => $this->config->get('openbay_language'));
 
             $defaults = array(
                 CURLOPT_POST => 1,
@@ -122,7 +122,7 @@ final class ebay
                 $domain = HTTPS_SERVER;
             }
 
-            $data = array('token' => $this->token, 'secret' => $this->secret, 'server' => $this->server, 'domain' => $domain, 'openbay_version' => (int) $this->config->get('openbay_version'), 'opencart_version' => VERSION, 'data' => $post, 'content_type' => $content_type, 'language' => $this->config->get('openbay_language'));
+            $data = array('token' => $this->token, 'secret' => $this->secret, 'server' => $this->server, 'domain' => $domain, 'openbay_version' => (int) $this->config->get('openbay_version'), 'opencart_version' => $this->app->version(), 'data' => $post, 'content_type' => $content_type, 'language' => $this->config->get('openbay_language'));
 
             $defaults = array(
                 CURLOPT_POST => 1,

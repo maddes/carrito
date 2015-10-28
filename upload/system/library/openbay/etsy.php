@@ -8,13 +8,13 @@ final class etsy
     private $enc1;
     private $enc2;
     private $url = 'https://api.openbaypro.io/';
-    private $registry;
+    private $app;
     private $logger;
     private $max_log_size = 50; //max log size in Mb
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->registry = $registry;
+        $this->app = $app;
         $this->token = $this->config->get('etsy_token');
         $this->enc1 = $this->config->get('etsy_enc1');
         $this->enc2 = $this->config->get('etsy_enc2');
@@ -27,7 +27,7 @@ final class etsy
 
     public function __get($name)
     {
-        return $this->registry->get($name);
+        return $this->app->get($name);
     }
 
     public function call($uri, $method, $data = array())

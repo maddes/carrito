@@ -4,10 +4,10 @@ class weight
 {
     private $weights = array();
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->db = $registry->get('db');
-        $this->config = $registry->get('config');
+        $this->db = $app->get('db');
+        $this->config = $app->get('config');
 
         $weight_class_query = $this->db->query('SELECT * FROM '.DB_PREFIX.'weight_class wc LEFT JOIN '.DB_PREFIX."weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '".(int) $this->config->get('config_language_id')."'");
 

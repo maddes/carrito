@@ -2,7 +2,7 @@
 
 final class front
 {
-    private $registry;
+    private $app;
     private $action;
     private $pre_action = [
         'admin' => [
@@ -17,11 +17,11 @@ final class front
     ];
     private $error = 'error/not_found';
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->registry = $registry;
+        $this->app = $app;
 
-        $this->action = $registry->get('request')->get('route', false);
+        $this->action = $app->get('request')->get('route', false);
 
         if (!$this->action) {
             switch (APP) {
@@ -59,7 +59,7 @@ final class front
 
     private function execute($action)
     {
-        $result = $action->execute($this->registry);
+        $result = $action->execute($this->app);
 
         if (is_string($result)) {
             $action = $result;

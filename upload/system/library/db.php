@@ -4,7 +4,7 @@ class db
 {
     private $db;
 
-    public function __construct($registry = null)
+    public function __construct($app = null)
     {
         $class = 'DB\\'.DB_DRIVER;
 

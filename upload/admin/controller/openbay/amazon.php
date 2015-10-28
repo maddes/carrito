@@ -767,7 +767,7 @@ class ControllerOpenbayAmazon extends Controller
             foreach ($results as $result) {
                 $product = $this->model_catalog_product->getProduct($result['product_id']);
 
-                if ($product['image'] && file_exists(DIR_IMAGE.$product['image'])) {
+                if ($product['image'] && file_exists($this->{'path.image'}.DIRECTORY_SEPARATOR.$product['image'])) {
                     $image = $this->model_tool_image->resize($product['image'], 40, 40);
                 } else {
                     $image = $this->model_tool_image->resize('no_image.png', 40, 40);

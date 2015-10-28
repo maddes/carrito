@@ -2,20 +2,20 @@
 
 abstract class model
 {
-    protected $registry;
+    protected $app;
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->registry = $registry;
+        $this->app = $app;
     }
 
     public function __get($key)
     {
-        return $this->registry->get($key);
+        return $this->app->get($key);
     }
 
     public function __set($key, $value)
     {
-        $this->registry->set($key, $value);
+        $this->app->set($key, $value);
     }
 }

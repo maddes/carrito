@@ -1348,7 +1348,7 @@ class ControllerOpenbayEbay extends Controller
                 $product_info['product_images'] = array();
 
                 if (!empty($product_info['image'])) {
-                    $img_info = getimagesize(DIR_IMAGE.$product_info['image']);
+                    $img_info = getimagesize($this->{'path.image'}.DIRECTORY_SEPARATOR.$product_info['image']);
 
                     $product_info['product_images'][] = array(
                         'image' => $product_info['image'],
@@ -1360,8 +1360,8 @@ class ControllerOpenbayEbay extends Controller
                 }
 
                 foreach ($product_images as $product_image) {
-                    if ($product_image['image'] && file_exists(DIR_IMAGE.$product_image['image'])) {
-                        $img_info = getimagesize(DIR_IMAGE.$product_image['image']);
+                    if ($product_image['image'] && file_exists($this->{'path.image'}.DIRECTORY_SEPARATOR.$product_image['image'])) {
+                        $img_info = getimagesize($this->{'path.image'}.DIRECTORY_SEPARATOR.$product_image['image']);
 
                         $product_info['product_images'][] = array(
                             'image' => $product_image['image'],
@@ -1460,7 +1460,7 @@ class ControllerOpenbayEbay extends Controller
                 $data['error_warning'] = array();
 
                 $data['cancel'] = $this->url->link('extension/openbay/items', 'token='.$this->session->data['token'], 'SSL');
-                $data['image_directory'] = DIR_IMAGE;
+                $data['image_directory'] = $this->{'path.image'}.DIRECTORY_SEPARATOR;
 
                 $active_list = $this->model_openbay_ebay->getLiveListingArray();
 
@@ -1480,7 +1480,7 @@ class ControllerOpenbayEbay extends Controller
                             $data['error_warning']['os'] = $this->language->get('text_error_variants');
                         } else {
                             if ($prod['quantity'] > 0) {
-                                if ($prod['image'] && file_exists(DIR_IMAGE.$prod['image'])) {
+                                if ($prod['image'] && file_exists($this->{'path.image'}.DIRECTORY_SEPARATOR.$prod['image'])) {
                                     $prod['image'] = $this->model_tool_image->resize($prod['image'], 80, 80);
                                 } else {
                                     $prod['image'] = $this->model_tool_image->resize('no_image.png', 80, 80);
@@ -1859,7 +1859,7 @@ class ControllerOpenbayEbay extends Controller
 
                 if (isset($profile_template['data']['ebay_img_ebay']) && $profile_template['data']['ebay_img_ebay'] == 1) {
                     foreach ($product_images as $product_image) {
-                        if ($product_image['image'] && file_exists(DIR_IMAGE.$product_image['image'])) {
+                        if ($product_image['image'] && file_exists($this->{'path.image'}.DIRECTORY_SEPARATOR.$product_image['image'])) {
                             $data['img'][] = $product_image['image'];
                         }
                     }
@@ -2134,7 +2134,7 @@ class ControllerOpenbayEbay extends Controller
 
                 if (isset($profile_template['data']['ebay_img_ebay']) && $profile_template['data']['ebay_img_ebay'] == 1) {
                     foreach ($product_images as $product_image) {
-                        if ($product_image['image'] && file_exists(DIR_IMAGE.$product_image['image'])) {
+                        if ($product_image['image'] && file_exists($this->{'path.image'}.DIRECTORY_SEPARATOR.$product_image['image'])) {
                             $data['img'][] = $product_image['image'];
                         }
                     }

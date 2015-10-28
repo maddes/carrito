@@ -65,7 +65,7 @@ class ControllerToolUpload extends Controller
         if (!$json) {
             $file = $filename.'.'.random_str(32);
 
-            move_uploaded_file($this->request->files['file']['tmp_name'], DIR_UPLOAD.$file);
+            move_uploaded_file($this->request->files['file']['tmp_name'], $this->{'path.upload'}.'/'.$file);
 
             // Hide the uploaded file name so people can not link to it directly.
 

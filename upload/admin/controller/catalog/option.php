@@ -382,7 +382,7 @@ class ControllerCatalogOption extends Controller
         $data['option_values'] = array();
 
         foreach ($option_values as $option_value) {
-            if (is_file(DIR_IMAGE.$option_value['image'])) {
+            if (is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$option_value['image'])) {
                 $image = $option_value['image'];
                 $thumb = $option_value['image'];
             } else {
@@ -476,7 +476,7 @@ class ControllerCatalogOption extends Controller
                     $option_values = $this->model_catalog_option->getOptionValues($option['option_id']);
 
                     foreach ($option_values as $option_value) {
-                        if (is_file(DIR_IMAGE.$option_value['image'])) {
+                        if (is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$option_value['image'])) {
                             $image = $this->model_tool_image->resize($option_value['image'], 50, 50);
                         } else {
                             $image = $this->model_tool_image->resize('no_image.png', 50, 50);

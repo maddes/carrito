@@ -7,9 +7,9 @@ class ControllerCommonHeader extends Controller
         $data['title'] = $this->document->getTitle();
 
         if ($this->request->server['HTTPS']) {
-            $data['base'] = HTTPS_SERVER;
+            $data['base'] = $this->config->get('config_ssl');
         } else {
-            $data['base'] = HTTP_SERVER;
+            $data['base'] = $this->config->get('config_url');
         }
 
         $data['description'] = $this->document->getDescription();

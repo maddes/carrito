@@ -15,7 +15,7 @@ class ControllerCommonProfile extends Controller
 
             $data['user_group'] = $user_info['user_group'];
 
-            if (is_file(DIR_IMAGE.$user_info['image'])) {
+            if (is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$user_info['image'])) {
                 $data['image'] = $this->model_tool_image->resize($user_info['image'], 45, 45);
             } else {
                 $data['image'] = '';

@@ -14,9 +14,9 @@ class ControllerCommonFileManager extends Controller
 
         // Make sure we have the correct directory
         if (isset($this->request->get['directory'])) {
-            $directory = rtrim(DIR_IMAGE.'catalog/'.str_replace(array('../', '..\\', '..'), '', $this->request->get['directory']), '/');
+            $directory = rtrim($this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog/'.str_replace(array('../', '..\\', '..'), '', $this->request->get['directory']), '/');
         } else {
-            $directory = DIR_IMAGE.'catalog';
+            $directory = $this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog';
         }
 
         if (isset($this->request->get['page'])) {
@@ -68,8 +68,8 @@ class ControllerCommonFileManager extends Controller
                     'thumb' => '',
                     'name' => implode(' ', $name),
                     'type' => 'directory',
-                    'path' => utf8_substr($image, utf8_strlen(DIR_IMAGE)),
-                    'href' => $this->url->link('common/filemanager', 'token='.$this->session->data['token'].'&directory='.urlencode(utf8_substr($image, utf8_strlen(DIR_IMAGE.'catalog/'))).$url, 'SSL'),
+                    'path' => utf8_substr($image, utf8_strlen($this->{'path.image'}.DIRECTORY_SEPARATOR)),
+                    'href' => $this->url->link('common/filemanager', 'token='.$this->session->data['token'].'&directory='.urlencode(utf8_substr($image, utf8_strlen($this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog/'))).$url, 'SSL'),
                 );
             } elseif (is_file($image)) {
                 // Find which protocol to use to pass the full image link back
@@ -80,11 +80,11 @@ class ControllerCommonFileManager extends Controller
                 }
 
                 $data['images'][] = array(
-                    'thumb' => $this->model_tool_image->resize(utf8_substr($image, utf8_strlen(DIR_IMAGE)), 100, 100),
+                    'thumb' => $this->model_tool_image->resize(utf8_substr($image, utf8_strlen($this->{'path.image'}.DIRECTORY_SEPARATOR)), 100, 100),
                     'name' => implode(' ', $name),
                     'type' => 'image',
-                    'path' => utf8_substr($image, utf8_strlen(DIR_IMAGE)),
-                    'href' => $server.'image/'.utf8_substr($image, utf8_strlen(DIR_IMAGE)),
+                    'path' => utf8_substr($image, utf8_strlen($this->{'path.image'}.DIRECTORY_SEPARATOR)),
+                    'href' => $server.'image/'.utf8_substr($image, utf8_strlen($this->{'path.image'}.DIRECTORY_SEPARATOR)),
                 );
             }
         }
@@ -212,9 +212,9 @@ class ControllerCommonFileManager extends Controller
 
         // Make sure we have the correct directory
         if (isset($this->request->get['directory'])) {
-            $directory = rtrim(DIR_IMAGE.'catalog/'.str_replace(array('../', '..\\', '..'), '', $this->request->get['directory']), '/');
+            $directory = rtrim($this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog/'.str_replace(array('../', '..\\', '..'), '', $this->request->get['directory']), '/');
         } else {
-            $directory = DIR_IMAGE.'catalog';
+            $directory = $this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog';
         }
 
         // Check its a directory
@@ -296,9 +296,9 @@ class ControllerCommonFileManager extends Controller
 
         // Make sure we have the correct directory
         if (isset($this->request->get['directory'])) {
-            $directory = rtrim(DIR_IMAGE.'catalog/'.str_replace(array('../', '..\\', '..'), '', $this->request->get['directory']), '/');
+            $directory = rtrim($this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog/'.str_replace(array('../', '..\\', '..'), '', $this->request->get['directory']), '/');
         } else {
-            $directory = DIR_IMAGE.'catalog';
+            $directory = $this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog';
         }
 
         // Check its a directory
@@ -351,10 +351,10 @@ class ControllerCommonFileManager extends Controller
 
         // Loop through each path to run validations
         foreach ($paths as $path) {
-            $path = rtrim(DIR_IMAGE.str_replace(array('../', '..\\', '..'), '', $path), '/');
+            $path = rtrim($this->{'path.image'}.DIRECTORY_SEPARATOR.str_replace(array('../', '..\\', '..'), '', $path), '/');
 
             // Check path exsists
-            if ($path == DIR_IMAGE.'catalog') {
+            if ($path == $this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog') {
                 $json['error'] = $this->language->get('error_delete');
 
                 break;
@@ -364,7 +364,7 @@ class ControllerCommonFileManager extends Controller
         if (!$json) {
             // Loop through each path
             foreach ($paths as $path) {
-                $path = rtrim(DIR_IMAGE.str_replace(array('../', '..\\', '..'), '', $path), '/');
+                $path = rtrim($this->{'path.image'}.DIRECTORY_SEPARATOR.str_replace(array('../', '..\\', '..'), '', $path), '/');
 
                 // If path is just a file delete it
                 if (is_file($path)) {

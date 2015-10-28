@@ -2,11 +2,11 @@
 
 final class loader
 {
-    private $registry;
+    private $app;
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->registry = $registry;
+        $this->app = $app;
     }
 
     public function controller($route, $data = array())
@@ -29,7 +29,7 @@ final class loader
             }
         }
 
-        $controller = new $class($this->registry);
+        $controller = new $class($this->app);
 
         if (!isset($method)) {
             $method = 'index';
@@ -66,7 +66,7 @@ final class loader
         $class = preg_replace('/[^a-zA-Z0-9]/', '', $model);
 
         // Instance the model and insert it on the IOC
-        $this->registry->set($model, new $class($this->registry));
+        $this->app->set($model, new $class($this->app));
     }
 
     public function view($template, $data = array())
@@ -75,9 +75,9 @@ final class loader
 
         $file = DIR_TEMPLATE.'default/template/'.$template.'.php';
 
-        if ($this->registry->get('config')) {
-            if (file_exists(DIR_TEMPLATE.$this->registry->get('config')->get('config_template').'/template/'.$template.'.php')) {
-                $file = DIR_TEMPLATE.$this->registry->get('config')->get('config_template').'/template/'.$template.'.php';
+        if ($this->app->get('config')) {
+            if (file_exists(DIR_TEMPLATE.$this->app->get('config')->get('config_template').'/template/'.$template.'.php')) {
+                $file = DIR_TEMPLATE.$this->app->get('config')->get('config_template').'/template/'.$template.'.php';
             }
         }
 
@@ -97,25 +97,13 @@ final class loader
         return $output;
     }
 
-    public function helper($helper)
-    {
-        $file = DIR_SYSTEM.'helper/'.str_replace('../', '', (string) $helper).'.php';
-
-        if (file_exists($file)) {
-            include_once $file;
-        } else {
-            trigger_error('Error: Could not load helper '.$file.'!');
-            exit();
-        }
-    }
-
     public function config($config)
     {
-        $this->registry->get('config')->load($config);
+        $this->app->get('config')->load($config);
     }
 
     public function language($language)
     {
-        return $this->registry->get('language')->load($language);
+        return $this->app->get('language')->load($language);
     }
 }

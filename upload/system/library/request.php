@@ -8,7 +8,7 @@ class request
     public $files = array();
     public $server = array();
 
-    public function __construct($registry)
+    public function __construct($app)
     {
         if (ini_get('magic_quotes_gpc')) {
             $_GET = $this->clean_magic_quotes($_GET);
@@ -29,7 +29,7 @@ class request
         if (isset($this->get['tracking'])) {
             setcookie('tracking', $this->get['tracking'], time() + 3600 * 24 * 1000, '/');
 
-            $registry->get('db')->query('UPDATE `'.DB_PREFIX."marketing` SET clicks = (clicks + 1) WHERE code = '".$registry->get('db')->escape($this->get['tracking'])."'");
+            $app->get('db')->query('UPDATE `'.DB_PREFIX."marketing` SET clicks = (clicks + 1) WHERE code = '".$app->get('db')->escape($this->get['tracking'])."'");
         }
     }
 

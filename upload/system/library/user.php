@@ -6,11 +6,11 @@ class user
     private $username;
     private $permission = array();
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->db = $registry->get('db');
-        $this->request = $registry->get('request');
-        $this->session = $registry->get('session');
+        $this->db = $app->get('db');
+        $this->request = $app->get('request');
+        $this->session = $app->get('session');
 
         if (isset($this->session->data['user_id'])) {
             $user_query = $this->db->query('SELECT * FROM '.DB_PREFIX."user WHERE user_id = '".(int) $this->session->data['user_id']."' AND status = '1'");

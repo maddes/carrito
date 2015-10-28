@@ -10,7 +10,11 @@ class ControllerHeader extends Controller
         $data['styles'] = $this->document->getStyles();
         $data['scripts'] = $this->document->getScripts();
 
-        $data['base'] = HTTP_SERVER;
+        if ($this->request->server['HTTPS']) {
+            $data['base'] = $this->config->get('config_ssl');
+        } else {
+            $data['base'] = $this->config->get('config_url');
+        }
 
         return $this->load->view('header', $data);
     }

@@ -8,10 +8,12 @@ class language
 
     public function __construct($directory = 'english')
     {
-        if ($directory instanceof Registry) {
+        if ($directory instanceof App) {
             $this->directory = $this->detect($directory);
         } elseif (is_string($directory)) {
             $this->directory = $directory;
+        } else {
+            $this->directory = 'english';
         }
         $this->load($this->directory);
     }
@@ -47,36 +49,36 @@ class language
         return $this->data;
     }
 
-    public function detect($registry)
+    public function detect($app)
     {
         switch (APP) {
             case 'admin':
-                $query = $registry->get('db')->query('SELECT * FROM `'.DB_PREFIX.'language` WHERE code = '.(int) $registry->get('config')->get('config_admin_language'));
-                $registry->get('config')->set('config_language_id', $query->row['language_id']);
+                $query = $app->get('db')->query('SELECT * FROM `'.DB_PREFIX.'language` WHERE code = '.(int) $app->get('config')->get('config_admin_language'));
+                $app->get('config')->set('config_language_id', $query->row['language_id']);
 
                 return $query->row['directory'];
             case 'catalog':
                 // Get a list of available languages
                 $languages = [];
-                $query = $registry->get('db')->query('SELECT * FROM `'.DB_PREFIX."language` WHERE status = '1'");
+                $query = $app->get('db')->query('SELECT * FROM `'.DB_PREFIX."language` WHERE status = '1'");
                 foreach ($query->rows as $result) {
                     $languages[$result['code']] = $result;
                 }
 
                 // Search the language in the session and check its availability
-                if (array_key_exists('language', $registry->get('session')->data) and array_key_exists($registry->get('session')->data['language'], $languages)) {
-                    $code = $registry->get('session')->data['language'];
+                if (array_key_exists('language', $app->get('session')->data) and array_key_exists($app->get('session')->data['language'], $languages)) {
+                    $code = $app->get('session')->data['language'];
                 }
                 // Search the language in the cookies and check its availability
-                elseif (array_key_exists('language', $registry->get('request')->cookie) and array_key_exists($registry->get('request')->cookie['language'], $languages)) {
-                    $code = $registry->get('request')->cookie['language'];
+                elseif (array_key_exists('language', $app->get('request')->cookie) and array_key_exists($app->get('request')->cookie['language'], $languages)) {
+                    $code = $app->get('request')->cookie['language'];
                 }
                 // Detect the language with headers magic…
                 else {
                     // Check that the HTTP_ACCEPT_LANGUAGE header exists and has a useful value
-                    if (isset($registry->get('request')->server['HTTP_ACCEPT_LANGUAGE'])) {
+                    if (isset($app->get('request')->server['HTTP_ACCEPT_LANGUAGE'])) {
                         // Make a list of the accepted languages
-                        $browser_languages = explode(',', $registry->get('request')->server['HTTP_ACCEPT_LANGUAGE']);
+                        $browser_languages = explode(',', $app->get('request')->server['HTTP_ACCEPT_LANGUAGE']);
 
                         // Check if any locale from any active language matches any browser accepted locale
                         foreach ($browser_languages as $browser_language) {
@@ -91,21 +93,21 @@ class language
 
                     // Language detection failed. Fall back to config setting.
                     if (!isset($code)) {
-                        $code = $registry->get('config')->get('config_language');
+                        $code = $app->get('config')->get('config_language');
                     }
                 }
 
                 // Set the language in the sesion
-                $registry->get('session')->data['language'] = $code;
+                $app->get('session')->data['language'] = $code;
 
                 // Set the language in the cookie
-                setcookie('language', $code, time() + 60 * 60 * 24 * 30, '/', $registry->get('request')->server['HTTP_HOST']);
+                setcookie('language', $code, time() + 60 * 60 * 24 * 30, '/', $app->get('request')->server['HTTP_HOST']);
 
                 // Set config value, because reasons…
-                $registry->get('config')->set('config_language_id', $languages[$code]['language_id']);
+                $app->get('config')->set('config_language_id', $languages[$code]['language_id']);
 
                 // This is a very high derp level, but I'll just leave it here to laugh later
-                $registry->get('config')->set('config_language', $languages[$code]['code']);
+                $app->get('config')->set('config_language', $languages[$code]['code']);
 
                 return $languages[$code]['directory'];
 

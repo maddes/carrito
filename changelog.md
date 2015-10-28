@@ -1,3 +1,9 @@
+# Carrito 6.0.0
+* Laravel style startup refactoring.
+    * Registry renamed to App
+    * Created bootstrap/app.php and bootstrap/autoload.php.
+    * No more hundreds of constants for paths, now they are app bindings.
+
 # Carrito 5.1.0
 * Refactored autoloader.
 * Added mapping facilities to the `Registry`.

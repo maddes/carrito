@@ -5,13 +5,13 @@ class currency
     private $code;
     private $currencies = array();
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->config = $registry->get('config');
-        $this->db = $registry->get('db');
-        $this->language = $registry->get('language');
-        $this->request = $registry->get('request');
-        $this->session = $registry->get('session');
+        $this->config = $app->get('config');
+        $this->db = $app->get('db');
+        $this->language = $app->get('language');
+        $this->request = $app->get('request');
+        $this->session = $app->get('session');
 
         $query = $this->db->query('SELECT * FROM '.DB_PREFIX.'currency');
 

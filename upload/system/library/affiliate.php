@@ -10,12 +10,12 @@ class affiliate
     private $fax;
     private $code;
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->config = $registry->get('config');
-        $this->db = $registry->get('db');
-        $this->request = $registry->get('request');
-        $this->session = $registry->get('session');
+        $this->config = $app->get('config');
+        $this->db = $app->get('db');
+        $this->request = $app->get('request');
+        $this->session = $app->get('session');
 
         if (isset($this->session->data['affiliate_id'])) {
             $affiliate_query = $this->db->query('SELECT * FROM '.DB_PREFIX."affiliate WHERE affiliate_id = '".(int) $this->session->data['affiliate_id']."' AND status = '1'");

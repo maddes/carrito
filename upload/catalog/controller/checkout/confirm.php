@@ -93,10 +93,10 @@ class ControllerCheckoutConfirm extends Controller
             $order_data['store_id'] = $this->config->get('config_store_id');
             $order_data['store_name'] = $this->config->get('config_name');
 
-            if ($order_data['store_id']) {
+            if ($this->request->server['HTTPS']) {
                 $order_data['store_url'] = $this->config->get('config_url');
             } else {
-                $order_data['store_url'] = HTTP_SERVER;
+                $order_data['store_url'] = $this->config->get('config_ssl');
             }
 
             if ($this->customer->isLogged()) {

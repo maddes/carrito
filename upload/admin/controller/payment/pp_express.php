@@ -310,9 +310,9 @@ class ControllerPaymentPPExpress extends Controller
             $data['pp_express_recurring_cancel_status'] = $this->config->get('pp_express_recurring_cancel_status');
         }
 
-        if (isset($this->request->post['pp_express_logo']) && is_file(DIR_IMAGE.$this->request->post['pp_express_logo'])) {
+        if (isset($this->request->post['pp_express_logo']) && is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$this->request->post['pp_express_logo'])) {
             $data['thumb'] = $this->model_tool_image->resize($this->request->post['pp_express_logo'], 750, 90);
-        } elseif (is_file(DIR_IMAGE.$this->config->get('pp_express_logo'))) {
+        } elseif (is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$this->config->get('pp_express_logo'))) {
             $data['thumb'] = $this->model_tool_image->resize($this->config->get('pp_express_logo'), 750, 90);
         } else {
             $data['thumb'] = $this->model_tool_image->resize('no_image.png', 750, 90);

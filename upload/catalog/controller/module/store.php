@@ -7,7 +7,7 @@ class ControllerModuleStore extends Controller
         $status = true;
 
         if ($this->config->get('store_admin')) {
-            $this->user = new User($this->registry);
+            $this->user = new User($this->app);
 
             $status = $this->user->isLogged();
         }
@@ -26,7 +26,7 @@ class ControllerModuleStore extends Controller
             $data['stores'][] = array(
                 'store_id' => 0,
                 'name' => $this->language->get('text_default'),
-                'url' => HTTP_SERVER.'index.php?route=common/home&session_id='.$this->session->getId(),
+                'url' => $this->config->get('config_url').'index.php?route=common/home&session_id='.$this->session->getId(),
             );
 
             $results = $this->model_setting_store->getStores();

@@ -2,25 +2,12 @@
 
 class url
 {
-    private $domain;
-    private $ssl;
-    private $rewrite = array();
+    private $app;
+    private $rewrite = [];
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        switch (APP) {
-            case 'catalog':
-                $this->domain = $registry->get('config')->get('config_url');
-                $this->ssl = $registry->get('config')->get('config_secure') ? $registry->get('config')->get('config_ssl') : $registry->get('config')->get('config_url');
-                break;
-            case 'admin':
-                $this->domain = HTTP_SERVER;
-                $this->ssl = $registry->get('config')->get('config_secure') ? HTTPS_SERVER : HTTP_SERVER;
-                break;
-            default:
-                $this->domain = HTTP_SERVER;
-                $this->ssl = '';
-        }
+        $this->app = $app;
     }
 
     public function addRewrite($rewrite)
@@ -30,10 +17,10 @@ class url
 
     public function link($route, $args = '', $secure = false)
     {
-        if (!$secure) {
-            $url = $this->domain;
+        if ($this->app->get('request')->server['HTTPS']) {
+            $url = $this->app->get('config')->get('config_ssl');
         } else {
-            $url = $this->ssl;
+            $url = $this->app->get('config')->get('config_url');
         }
 
         $url .= 'index.php?route='.$route;

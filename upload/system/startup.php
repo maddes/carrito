@@ -8,131 +8,96 @@ if (version_compare(phpversion(), '5.4.0', '<') == true) {
     exit('PHP5.4+ Required');
 }
 
+// TODO:
+// TODO: REGISTRAR SERVICE PROVIDERS PARA CONSTRUIR LAS INSTANCIAS DEL REGISTRY.
+// TODO:
+
+define('CACHE_EXPIRE', 3600);
+
+define('DIR_LOGS',     __DIR__.'/storage/logs/');
+
+define('DIR_APPLICATION', dirname(__DIR__).'/'.APP.'/');
+define('DIR_LANGUAGE',    DIR_APPLICATION.'language/');
+define('DIR_TEMPLATE',    DIR_APPLICATION.'view/theme/');
+
 // Configuration
 if (is_file(dirname(__DIR__).'/config.php') and APP !== 'install') {
     require_once dirname(__DIR__).'/config.php';
 }
 
-// Install
-if (defined('HTTP_DOMAIN')) {
-    // Version
-    define('VERSION', '4.0.0');
-
-    define('DIR_BASE', dirname(__DIR__).'/');
-
-    define('DIR_APPLICATION', DIR_BASE.APP.'/');
-    define('DIR_LANGUAGE',    DIR_BASE.APP.'/language/');
-    define('DIR_TEMPLATE',    DIR_BASE.APP.'/view/theme/');
-
-    define('DIR_IMAGE',    DIR_BASE.'image/');
-    define('DIR_SYSTEM',   __DIR__.'/');
-    define('DIR_CONFIG',   __DIR__.'/config/');
-    define('DIR_CACHE',    __DIR__.'/storage/cache/');
-    define('DIR_DOWNLOAD', __DIR__.'/storage/download/');
-    define('DIR_LOGS',     __DIR__.'/storage/logs/');
-    define('DIR_UPLOAD',   __DIR__.'/storage/upload/');
-
-    if (APP === 'admin') {
-        define('HTTP_SERVER',    'http://'.HTTP_DOMAIN.HTTP_ROOT.'admin/');
-        define('HTTPS_SERVER',  'https://'.HTTP_DOMAIN.HTTP_ROOT.'admin/');
-        define('HTTP_CATALOG',   'http://'.HTTP_DOMAIN.HTTP_ROOT);
-        define('HTTPS_CATALOG', 'https://'.HTTP_DOMAIN.HTTP_ROOT);
-        define('DIR_CATALOG',     DIR_BASE.'catalog/');
-    } else {
-        define('HTTP_SERVER',   'http://'.HTTP_DOMAIN.HTTP_ROOT);
-        define('HTTPS_SERVER', 'https://'.HTTP_DOMAIN.HTTP_ROOT);
+if (!defined('HTTP_DOMAIN')) {
+    // Run installation
+    switch (APP) {
+        case 'catalog': header('Location: install/index.php'); exit();
+        case 'admin':   header('Location: ../install/index.php'); exit();
+        default:
+            define('HTTP_DOMAIN', $_SERVER['HTTP_HOST']);
     }
-} elseif (APP !== 'install') {
-    if (APP === 'catalog') {
-        header('Location: install/index.php');
-    } else {
-        header('Location: ../install/index.php');
-    }
-    exit;
-} else {
-    // HTTP
-    $protocol = (!empty($_SERVER['HTTPS']) and $_SERVER['HTTPS'] !== 'off' or $_SERVER['SERVER_PORT'] == 443) ? 'https://' : 'http://';
-    define('HTTP_SERVER',   $protocol.$_SERVER['HTTP_HOST'].rtrim(dirname($_SERVER['SCRIPT_NAME']), '/.\\').'/');
-    define('HTTP_OPENCART', $protocol.$_SERVER['HTTP_HOST'].rtrim(rtrim(dirname($_SERVER['SCRIPT_NAME']), 'install'), '/.\\').'/');
-
-    // DIR
-    define('DIR_SYSTEM',      str_replace('\\', '/', realpath(__DIR__)).'/');
-    define('DIR_OPENCART',    dirname(DIR_SYSTEM).'/');
-    define('DIR_CONFIG',      DIR_SYSTEM.'config/');
-    define('DIR_APPLICATION', DIR_OPENCART.'install/');
-    define('DIR_LANGUAGE',    DIR_APPLICATION.'language/');
-    define('DIR_TEMPLATE',    DIR_APPLICATION.'view/theme/');
 }
 
-define('CACHE_EXPIRE', 3600);
+if (!defined('HTTP_ROOT')) {
+    define('HTTP_ROOT', rtrim(rtrim(dirname($_SERVER['SCRIPT_NAME']), 'install'), '/.\\').'/');
+}
+
+define('HTTP_CATALOG',   'http://'.HTTP_DOMAIN.HTTP_ROOT);
+define('HTTPS_CATALOG', 'https://'.HTTP_DOMAIN.HTTP_ROOT);
+define('DIR_CATALOG',     dirname(__DIR__).'/catalog/');
+
+// TODO: Move this somewhere else…
 
 if (!ini_get('date.timezone')) {
     date_default_timezone_set('UTC');
 }
 
-/**
- * Autoloader for base system.
- *
- * This function is registered with the spl_autoload_register and searches
- * the corresponding file for the base classes.
- *
- * @param string $class The class name to load
- *
- * @return bool Whether the class file has been loaded
- */
-function autoload($class)
-{
-    // Search class in folders engine, library and vendor
-    foreach (['engine/', 'library/', 'vendor/'] as $folder) {
-        // Replace namespace separators with folder separators
-        $file = DIR_SYSTEM.$folder.str_replace('\\', DIRECTORY_SEPARATOR, strtolower($class)).'.php';
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader for
+| our application. We just need to utilize it! We'll simply require it
+| into the script here so that we don't have to worry about manual
+| loading any of our classes later on. It feels nice to relax.
+|
+*/
 
-        // Only try loading if the file exists
-        if (is_file($file)) {
-            include_once $file;
+require __DIR__.'/../bootstrap/autoload.php';
 
-            return true;
-        }
-    }
+/*
+|--------------------------------------------------------------------------
+| Turn On The Lights
+|--------------------------------------------------------------------------
+|
+| We need to illuminate PHP development, so let us turn on the lights.
+| This bootstraps the framework and gets it ready for use, then it
+| will load up this application so that we can run it and send
+| the responses back to the browser and delight our users.
+|
+| I wanted to change this message, but Taylor Otwell couldn't say it better.
+|
+*/
 
-    return false;
-}
+$app = require_once __DIR__.'/../bootstrap/app.php';
 
-spl_autoload_register('autoload');
-spl_autoload_extensions('.php');
+// TODO: move this into the app constructor?
+$app->set('log', new Log($app->get('config')->get('config_error_filename')));
 
-// Helper
-require_once DIR_SYSTEM.'helper/general.php';
-require_once DIR_SYSTEM.'helper/json.php';
-require_once DIR_SYSTEM.'helper/utf8.php';
+/*
+|--------------------------------------------------------------------------
+| Run The Application
+|--------------------------------------------------------------------------
+|
+| Once we have the application, we can handle the incoming request
+| through the front controller, and send the associated response back to
+| the client's browser allowing them to enjoy the creative
+| and wonderful application we have prepared for them.
+|
+| I wanted to change this message, but Taylor Otwell couldn't say it better.
+|
+*/
 
-// Registry
-$registry = new Registry();
+// Handle incoming request.
+$app->get('front')->dispatch();
 
-if (APP === 'install') {
-    // Upgrade
-    $upgrade = false;
-
-    if (file_exists(DIR_OPENCART.'/config.php')) {
-        if (filesize(DIR_OPENCART.'/config.php') > 0) {
-            $upgrade = true;
-
-            $lines = file(DIR_OPENCART.'config.php');
-
-            foreach ($lines as $line) {
-                if (strpos(strtoupper($line), 'DB_') !== false) {
-                    eval($line);
-                }
-            }
-        }
-    }
-} else {
-    // Log
-    $registry->set('log', new Log($registry->get('config')->get('config_error_filename')));
-}
-
-// Front Controller
-$registry->get('front')->dispatch();
-
-// Output
-$registry->get('response')->output();
+// Send the response.
+$app->get('response')->output();

@@ -5,40 +5,28 @@ namespace cache;
 class file
 {
     private $expire = CACHE_EXPIRE;
+    private $path;
 
-    public function __construct()
+    public function __construct($app)
     {
-        $files = glob(DIR_CACHE.'cache.*');
+        $this->path = $app->get('path.cache');
+        $files = glob($this->path.'/cache.*');
 
-        if ($files) {
-            foreach ($files as $file) {
-                $time = substr(strrchr($file, '.'), 1);
+        foreach ($files as $file) {
+            $time = substr(strrchr($file, '.'), 1);
 
-                if ($time < time()) {
-                    if (file_exists($file)) {
-                        unlink($file);
-                    }
-                }
+            if ($time < time()) {
+                unlink($file);
             }
         }
     }
 
     public function get($key)
     {
-        $files = glob(DIR_CACHE.'cache.'.preg_replace('/[^A-Z0-9\._-]/i', '', $key).'.*');
+        $files = glob($this->getPrefix($key).'*');
 
-        if ($files) {
-            $handle = fopen($files[0], 'r');
-
-            flock($handle, LOCK_SH);
-
-            $data = fread($handle, filesize($files[0]));
-
-            flock($handle, LOCK_UN);
-
-            fclose($handle);
-
-            return json_decode($data, true);
+        if (isset($files[0])) {
+            return json_decode(file_get_contents($files[0]), true);
         }
 
         return false;
@@ -48,31 +36,18 @@ class file
     {
         $this->delete($key);
 
-        $file = DIR_CACHE.'cache.'.preg_replace('/[^A-Z0-9\._-]/i', '', $key).'.'.(time() + $this->expire);
+        $file = $this->getPrefix($key).(time() + $this->expire);
 
-        $handle = fopen($file, 'w');
-
-        flock($handle, LOCK_EX);
-
-        fwrite($handle, json_encode($value));
-
-        fflush($handle);
-
-        flock($handle, LOCK_UN);
-
-        fclose($handle);
+        file_put_contents($file, json_encode($value));
     }
 
     public function delete($key)
     {
-        $files = glob(DIR_CACHE.'cache.'.preg_replace('/[^A-Z0-9\._-]/i', '', $key).'.*');
+        array_map('unlink', glob($this->getPrefix($key).'*'));
+    }
 
-        if ($files) {
-            foreach ($files as $file) {
-                if (file_exists($file)) {
-                    unlink($file);
-                }
-            }
-        }
+    public function getPrefix($key)
+    {
+        return $this->path.'/cache.'.preg_replace('/[^A-Z0-9\._-]/i', '', $key).'.';
     }
 }

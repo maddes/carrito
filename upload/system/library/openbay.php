@@ -2,20 +2,20 @@
 
 final class openbay
 {
-    private $registry;
+    private $app;
     private $installed_modules = array();
     public $installed_markets = array();
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->registry = $registry;
+        $this->app = $app;
 
         $this->getInstalled();
 
         foreach ($this->installed_markets as $market) {
             $class = '\openbay\\'.ucfirst($market);
 
-            $this->{$market} = new $class($registry);
+            $this->{$market} = new $class($app);
         }
 
         $this->logger = new \Log('openbay.log');
@@ -23,7 +23,7 @@ final class openbay
 
     public function __get($name)
     {
-        return $this->registry->get($name);
+        return $this->app->get($name);
     }
 
     public function log($data, $write = true)

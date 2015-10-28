@@ -8,7 +8,7 @@ class session
 {
     public $data = array();
 
-    public function __construct($registry)
+    public function __construct($app)
     {
         // Default values
         $session_id = '';
@@ -16,22 +16,22 @@ class session
 
         // Resume API Session
         if (APP === 'catalog'
-            and isset($registry->get('request')->get['token'])
-            and isset($registry->get('request')->get['route'])
-            and substr($registry->get('request')->get['route'], 0, 4) == 'api/'
+            and isset($app->get('request')->get['token'])
+            and isset($app->get('request')->get['route'])
+            and substr($app->get('request')->get['route'], 0, 4) == 'api/'
         ) {
             // Delete old API sessions
-            $registry->get('db')->query('DELETE FROM `'.DB_PREFIX.'api_session` WHERE TIMESTAMPADD(HOUR, 1, date_modified) < NOW()');
+            $app->get('db')->query('DELETE FROM `'.DB_PREFIX.'api_session` WHERE TIMESTAMPADD(HOUR, 1, date_modified) < NOW()');
 
             // Get session for token+ip of user
-            $query = $registry->get('db')->query('SELECT DISTINCT * FROM `'.DB_PREFIX.'api` `a` LEFT JOIN `'.DB_PREFIX.'api_session` `as` ON (a.api_id = as.api_id) LEFT JOIN '.DB_PREFIX."api_ip `ai` ON (as.api_id = ai.api_id) WHERE a.status = '1' AND as.token = '".$registry->get('db')->escape($registry->get('request')->get['token'])."' AND ai.ip = '".$registry->get('db')->escape($request->server['REMOTE_ADDR'])."'");
+            $query = $app->get('db')->query('SELECT DISTINCT * FROM `'.DB_PREFIX.'api` `a` LEFT JOIN `'.DB_PREFIX.'api_session` `as` ON (a.api_id = as.api_id) LEFT JOIN '.DB_PREFIX."api_ip `ai` ON (as.api_id = ai.api_id) WHERE a.status = '1' AND as.token = '".$app->get('db')->escape($app->get('request')->get['token'])."' AND ai.ip = '".$app->get('db')->escape($request->server['REMOTE_ADDR'])."'");
 
             if ($query->num_rows) {
                 $session_id = $query->row['session_id'];
                 $key = $query->row['session_name'];
 
                 // keep the session alive
-                $registry->get('db')->query('UPDATE `'.DB_PREFIX."api_session` SET date_modified = NOW() WHERE api_session_id = '".$query->row['api_session_id']."'");
+                $app->get('db')->query('UPDATE `'.DB_PREFIX."api_session` SET date_modified = NOW() WHERE api_session_id = '".$query->row['api_session_id']."'");
             }
         }
 
@@ -44,8 +44,8 @@ class session
             ini_set('session.cookie_httponly', 'On');
 
             // Abort if the session cookie has bad characters
-            if (array_key_exists(session_name(), $registry->get('request')->cookie)
-                and !preg_match('/^[a-zA-Z0-9,\-]{22,40}$/', $registry->get('request')->cookie[session_name()])
+            if (array_key_exists(session_name(), $app->get('request')->cookie)
+                and !preg_match('/^[a-zA-Z0-9,\-]{22,40}$/', $app->get('request')->cookie[session_name()])
             ) {
                 exit();
             }

@@ -23,7 +23,7 @@ class ControllerExtensionOpenbay extends Controller
             require_once DIR_APPLICATION.'controller/openbay/'.$this->request->get['extension'].'.php';
 
             $class = 'ControllerOpenbay'.str_replace('_', '', $this->request->get['extension']);
-            $class = new $class($this->registry);
+            $class = new $class($this->app);
 
             if (method_exists($class, 'install')) {
                 $class->install();
@@ -50,7 +50,7 @@ class ControllerExtensionOpenbay extends Controller
             $this->model_setting_setting->deleteSetting($this->request->get['extension']);
 
             $class = 'ControllerOpenbay'.str_replace('_', '', $this->request->get['extension']);
-            $class = new $class($this->registry);
+            $class = new $class($this->app);
 
             if (method_exists($class, 'uninstall')) {
                 $class->uninstall();
@@ -289,7 +289,7 @@ class ControllerExtensionOpenbay extends Controller
         $this->load->language('extension/openbay');
 
         // set base var
-        $web_root = preg_replace('/system\/$/', '', DIR_SYSTEM);
+        $web_root = preg_replace('/system\/$/', '', $this->{'path.system'});
 
         if (!isset($this->request->get['stage'])) {
             $stage = 'check_server';
@@ -1407,7 +1407,7 @@ class ControllerExtensionOpenbay extends Controller
         foreach ($results as $result) {
             $edit = $this->url->link('catalog/product/edit', 'token='.$this->session->data['token'].'&product_id='.$result['product_id'].$url, 'SSL');
 
-            if ($result['image'] && file_exists(DIR_IMAGE.$result['image'])) {
+            if ($result['image'] && file_exists($this->{'path.image'}.DIRECTORY_SEPARATOR.$result['image'])) {
                 $image = $this->model_tool_image->resize($result['image'], 40, 40);
             } else {
                 $image = $this->model_tool_image->resize('no_image.png', 40, 40);

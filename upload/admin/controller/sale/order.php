@@ -1484,9 +1484,9 @@ class ControllerSaleOrder extends Controller
         $data['title'] = $this->language->get('text_invoice');
 
         if ($this->request->server['HTTPS']) {
-            $data['base'] = HTTPS_SERVER;
+            $data['base'] = $this->config->get('config_ssl');
         } else {
-            $data['base'] = HTTP_SERVER;
+            $data['base'] = $this->config->get('config_url');
         }
 
         $data['direction'] = $this->language->get('direction');
@@ -1710,9 +1710,9 @@ class ControllerSaleOrder extends Controller
         $data['title'] = $this->language->get('text_shipping');
 
         if ($this->request->server['HTTPS']) {
-            $data['base'] = HTTPS_SERVER;
+            $data['base'] = $this->config->get('config_ssl');
         } else {
-            $data['base'] = HTTP_SERVER;
+            $data['base'] = $this->config->get('config_url');
         }
 
         $data['direction'] = $this->language->get('direction');

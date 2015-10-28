@@ -3,12 +3,12 @@
 class event
 {
     private $data = array();
-    private $registry;
+    private $app;
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->registry = $registry;
-        $query = $registry->get('db')->query('SELECT * FROM '.DB_PREFIX.'event');
+        $this->app = $app;
+        $query = $app->get('db')->query('SELECT * FROM '.DB_PREFIX.'event');
         foreach ($query->rows as $event) {
             $this->register($event['trigger'], $event['action']);
         }
@@ -39,7 +39,7 @@ class event
             usort($this->data[$key], array('Event', 'cmpByPriority'));
             foreach ($this->data[$key] as $event) {
                 $action = $this->createAction($event['action'], $arg);
-                $action->execute($this->registry);
+                $action->execute($this->app);
             }
         }
     }

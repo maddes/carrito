@@ -32,7 +32,7 @@ class action
         $this->args = $args;
     }
 
-    public function execute($registry)
+    public function execute($app)
     {
         // Stop any magical methods being called
         if (substr($this->method, 0, 2) == '__') {
@@ -44,7 +44,7 @@ class action
 
             $class = $this->class;
 
-            $controller = new $class($registry);
+            $controller = new $class($app);
 
             if (is_callable(array($controller, $this->method))) {
                 return call_user_func(array($controller, $this->method), $this->args);

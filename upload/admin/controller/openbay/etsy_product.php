@@ -35,7 +35,7 @@ class ControllerOpenbayEtsyProduct extends Controller
 
         $product_info = $this->model_catalog_product->getProduct($this->request->get['product_id']);
 
-        if (!empty($product_info) && is_file(DIR_IMAGE.$product_info['image'])) {
+        if (!empty($product_info) && is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$product_info['image'])) {
             $product_info['image_url'] = $this->model_tool_image->resize($product_info['image'], 800, 800);
             $product_info['thumb'] = $this->model_tool_image->resize($product_info['image'], 100, 100);
         } else {
@@ -53,7 +53,7 @@ class ControllerOpenbayEtsyProduct extends Controller
         $data['product_images'] = array();
 
         foreach ($product_images as $product_image) {
-            if (is_file(DIR_IMAGE.$product_image['image'])) {
+            if (is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$product_image['image'])) {
                 $image = $product_image['image'];
             } else {
                 $image = '';

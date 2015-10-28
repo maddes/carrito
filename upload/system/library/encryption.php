@@ -4,9 +4,9 @@ final class encryption
 {
     private $key;
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->key = hash('sha256', $registry->get('config')->get('config_encryption'), true);
+        $this->key = hash('sha256', $app->get('config')->get('config_encryption'), true);
     }
 
     public function encrypt($value)

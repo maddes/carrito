@@ -373,9 +373,9 @@ class ControllerCatalogManufacturer extends Controller
             $data['image'] = '';
         }
 
-        if (isset($this->request->post['image']) && is_file(DIR_IMAGE.$this->request->post['image'])) {
+        if (isset($this->request->post['image']) && is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$this->request->post['image'])) {
             $data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
-        } elseif (!empty($manufacturer_info) && is_file(DIR_IMAGE.$manufacturer_info['image'])) {
+        } elseif (!empty($manufacturer_info) && is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$manufacturer_info['image'])) {
             $data['thumb'] = $this->model_tool_image->resize($manufacturer_info['image'], 100, 100);
         } else {
             $data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);

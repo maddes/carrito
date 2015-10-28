@@ -395,7 +395,7 @@ class ControllerCatalogDownload extends Controller
             $this->error['filename'] = $this->language->get('error_filename');
         }
 
-        if (!is_file(DIR_DOWNLOAD.$this->request->post['filename'])) {
+        if (!is_file($this->{'path.download'}.'/'.$this->request->post['filename'])) {
             $this->error['filename'] = $this->language->get('error_exists');
         }
 
@@ -493,7 +493,7 @@ class ControllerCatalogDownload extends Controller
         if (!$json) {
             $file = $filename.'.'.random_str(32);
 
-            move_uploaded_file($this->request->files['file']['tmp_name'], DIR_DOWNLOAD.$file);
+            move_uploaded_file($this->request->files['file']['tmp_name'], $this->{'path.download'}.'/'.$file);
 
             $json['filename'] = $file;
             $json['mask'] = $filename;

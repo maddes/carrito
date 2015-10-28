@@ -817,11 +817,7 @@ class ControllerPaymentPPExpress extends Controller
             $data['store_id'] = $this->config->get('config_store_id');
             $data['store_name'] = $this->config->get('config_name');
 
-            if ($data['store_id']) {
-                $data['store_url'] = $this->config->get('config_url');
-            } else {
-                $data['store_url'] = HTTP_SERVER;
-            }
+            $data['store_url'] = $this->config->get('config_url');
 
             if ($this->customer->isLogged() && isset($this->session->data['payment_address_id'])) {
                 $data['customer_id'] = $this->customer->getId();

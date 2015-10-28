@@ -4,11 +4,11 @@ final class tax
 {
     private $tax_rates = array();
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->config = $registry->get('config');
-        $this->db = $registry->get('db');
-        $this->session = $registry->get('session');
+        $this->config = $app->get('config');
+        $this->db = $app->get('db');
+        $this->session = $app->get('session');
 
         if (isset($this->session->data['shipping_address'])) {
             $this->setShippingAddress($this->session->data['shipping_address']['country_id'], $this->session->data['shipping_address']['zone_id']);

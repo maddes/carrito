@@ -8,11 +8,11 @@ class amazon
     private $enc1;
     private $enc2;
     private $url = 'http://uk-amazon.openbaypro.com/';
-    private $registry;
+    private $app;
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->registry = $registry;
+        $this->app = $app;
 
         $this->token = $this->config->get('openbay_amazon_token');
         $this->enc1 = $this->config->get('openbay_amazon_enc_string1');
@@ -21,7 +21,7 @@ class amazon
 
     public function __get($name)
     {
-        return $this->registry->get($name);
+        return $this->app->get($name);
     }
 
     public function call($method, $data = array(), $is_json = true)
@@ -45,7 +45,7 @@ class amazon
             CURLOPT_TIMEOUT => 30,
             CURLOPT_SSL_VERIFYPEER => 0,
             CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_POSTFIELDS => 'token='.$this->token.'&data='.rawurlencode($crypt).'&opencart_version='.VERSION,
+            CURLOPT_POSTFIELDS => 'token='.$this->token.'&data='.rawurlencode($crypt).'&opencart_version='.$this->app->version(),
         );
         $ch = curl_init();
 
@@ -79,7 +79,7 @@ class amazon
             CURLOPT_TIMEOUT => 2,
             CURLOPT_SSL_VERIFYPEER => 0,
             CURLOPT_SSL_VERIFYHOST => 0,
-            CURLOPT_POSTFIELDS => 'token='.$this->token.'&data='.rawurlencode($crypt).'&opencart_version='.VERSION,
+            CURLOPT_POSTFIELDS => 'token='.$this->token.'&data='.rawurlencode($crypt).'&opencart_version='.$this->app->version(),
         );
         $ch = curl_init();
 

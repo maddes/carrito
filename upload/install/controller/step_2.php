@@ -84,8 +84,8 @@ class ControllerStep2 extends Controller
         $data['iconv'] = function_exists('iconv');
         $data['mbstring'] = extension_loaded('mbstring');
 
-        $data['config_catalog'] = DIR_OPENCART.'config.php';
-        $data['config_admin'] = DIR_OPENCART.'admin/config.php';
+        $data['config_catalog'] = $this->{'path.base'}.'/config.php';
+        $data['config_admin'] = $this->{'path.base'}.'/admin/config.php';
         if (!file_exists($data['config_catalog'])) {
             touch($data['config_catalog']);
         }
@@ -93,13 +93,13 @@ class ControllerStep2 extends Controller
             touch($data['config_admin']);
         }
 
-        $data['image'] = DIR_OPENCART.'image';
-        $data['image_cache'] = DIR_OPENCART.'image/cache';
-        $data['image_catalog'] = DIR_OPENCART.'image/catalog';
-        $data['cache'] = DIR_SYSTEM.'/storage/cache';
-        $data['logs'] = DIR_SYSTEM.'storage/logs';
-        $data['download'] = DIR_SYSTEM.'storage/download';
-        $data['upload'] = DIR_SYSTEM.'storage/upload';
+        $data['image'] = $this->{'path.base'}.'/image';
+        $data['image_cache'] = $this->{'path.base'}.'/image/cache';
+        $data['image_catalog'] = $this->{'path.base'}.'/image/catalog';
+        $data['cache'] = $this->{'path.system'}.'/storage/cache';
+        $data['logs'] = $this->{'path.system'}.'/storage/logs';
+        $data['download'] = $this->{'path.system'}.'/storage/download';
+        $data['upload'] = $this->{'path.system'}.'/storage/upload';
 
         $data['back'] = $this->url->link('step_1');
 
@@ -153,43 +153,43 @@ class ControllerStep2 extends Controller
             }
         }
 
-        if (!file_exists(DIR_OPENCART.'config.php')) {
+        if (!file_exists($this->{'path.base'}.'/config.php')) {
             $this->error['warning'] = 'Warning: config.php needs to be writable for Carrito to be installed!';
-        } elseif (!is_writable(DIR_OPENCART.'config.php')) {
+        } elseif (!is_writable($this->{'path.base'}.'/config.php')) {
             $this->error['warning'] = 'Warning: config.php needs to be writable for Carrito to be installed!';
         }
 
-        if (!file_exists(DIR_OPENCART.'admin/config.php')) {
+        if (!file_exists($this->{'path.base'}.'/admin/config.php')) {
             $this->error['warning'] = 'Warning: admin/config.php needs to be writable for Carrito to be installed!';
-        } elseif (!is_writable(DIR_OPENCART.'admin/config.php')) {
+        } elseif (!is_writable($this->{'path.base'}.'/admin/config.php')) {
             $this->error['warning'] = 'Warning: admin/config.php needs to be writable for Carrito to be installed!';
         }
 
-        if (!is_writable(DIR_OPENCART.'image')) {
+        if (!is_writable($this->{'path.base'}.'/image')) {
             $this->error['warning'] = 'Warning: Image directory needs to be writable for Carrito to work!';
         }
 
-        if (!is_writable(DIR_OPENCART.'image/cache')) {
+        if (!is_writable($this->{'path.base'}.'/image/cache')) {
             $this->error['warning'] = 'Warning: Image cache directory needs to be writable for Carrito to work!';
         }
 
-        if (!is_writable(DIR_OPENCART.'image/catalog')) {
+        if (!is_writable($this->{'path.base'}.'/image/catalog')) {
             $this->error['warning'] = 'Warning: Image catalog directory needs to be writable for Carrito to work!';
         }
 
-        if (!is_writable(DIR_SYSTEM.'storage/cache')) {
+        if (!is_writable($this->{'path.system'}.'/storage/cache')) {
             $this->error['warning'] = 'Warning: Cache directory needs to be writable for Carrito to work!';
         }
 
-        if (!is_writable(DIR_SYSTEM.'storage/logs')) {
+        if (!is_writable($this->{'path.system'}.'/storage/logs')) {
             $this->error['warning'] = 'Warning: Logs directory needs to be writable for Carrito to work!';
         }
 
-        if (!is_writable(DIR_SYSTEM.'storage/download')) {
+        if (!is_writable($this->{'path.system'}.'/storage/download')) {
             $this->error['warning'] = 'Warning: Download directory needs to be writable for Carrito to work!';
         }
 
-        if (!is_writable(DIR_SYSTEM.'storage/upload')) {
+        if (!is_writable($this->{'path.system'}.'/storage/upload')) {
             $this->error['warning'] = 'Warning: Upload directory needs to be writable for Carrito to work!';
         }
 

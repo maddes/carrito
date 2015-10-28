@@ -320,7 +320,7 @@ class ModelOpenbayEbayProduct extends Model
                     foreach ($item['pictures'] as $img) {
                         if (!empty($img)) {
                             $name = rand(500000, 1000000000);
-                            $this->addImage($img, DIR_IMAGE.'catalog/'.$name.'.jpg', $name.'.jpg', $product_id, $img_count);
+                            $this->addImage($img, $this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog/'.$name.'.jpg', $name.'.jpg', $product_id, $img_count);
                             ++$img_count;
                         }
                     }
@@ -609,14 +609,14 @@ class ModelOpenbayEbayProduct extends Model
 
     public function resize($filename, $width, $height, $type = '')
     {
-        if (!file_exists(DIR_IMAGE.'catalog/'.md5($filename).'.jpg')) {
-            copy($filename, DIR_IMAGE.'catalog/'.md5($filename).'.jpg');
+        if (!file_exists($this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog/'.md5($filename).'.jpg')) {
+            copy($filename, $this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog/'.md5($filename).'.jpg');
         }
 
-        $old_image = DIR_IMAGE.'catalog/'.md5($filename).'.jpg';
+        $old_image = $this->{'path.image'}.DIRECTORY_SEPARATOR.'catalog/'.md5($filename).'.jpg';
         $new_image = 'cache/ebaydisplay/'.md5($filename).'-'.$width.'x'.$height.$type.'.jpg';
 
-        if (!file_exists(DIR_IMAGE.$new_image)) {
+        if (!file_exists($this->{'path.image'}.DIRECTORY_SEPARATOR.$new_image)) {
             $path = '';
 
             $directories = explode('/', dirname(str_replace(' . ./', '', $new_image)));
@@ -624,8 +624,8 @@ class ModelOpenbayEbayProduct extends Model
             foreach ($directories as $directory) {
                 $path = $path.'/'.$directory;
 
-                if (!file_exists(DIR_IMAGE.$path)) {
-                    @mkdir(DIR_IMAGE.$path, 0777);
+                if (!file_exists($this->{'path.image'}.DIRECTORY_SEPARATOR.$path)) {
+                    @mkdir($this->{'path.image'}.DIRECTORY_SEPARATOR.$path, 0777);
                 }
             }
 
@@ -634,9 +634,9 @@ class ModelOpenbayEbayProduct extends Model
             if ($width_orig != $width || $height_orig != $height) {
                 $image = new Image($old_image);
                 $image->resize($width, $height, $type);
-                $image->save(DIR_IMAGE.$new_image);
+                $image->save($this->{'path.image'}.DIRECTORY_SEPARATOR.$new_image);
             } else {
-                copy($filename, DIR_IMAGE.$new_image);
+                copy($filename, $this->{'path.image'}.DIRECTORY_SEPARATOR.$new_image);
             }
         }
 

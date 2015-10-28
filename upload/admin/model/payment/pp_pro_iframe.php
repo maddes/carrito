@@ -104,7 +104,7 @@ class ModelPaymentPPProIframe extends Model
             'PWD' => $this->config->get('pp_pro_iframe_password'),
             'SIGNATURE' => $this->config->get('pp_pro_iframe_sig'),
             'VERSION' => '84',
-            'BUTTONSOURCE' => 'WM_PRO_OPENCART_UK_'.VERSION,
+            'BUTTONSOURCE' => 'WM_PRO_OPENCART_UK_'.$this->app->version(),
         );
 
         $this->log($data, 'Call data');

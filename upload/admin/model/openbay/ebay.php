@@ -732,7 +732,7 @@ class ModelOpenbayEbay extends Model
 
     public function verifyCredentials()
     {
-        $this->request->post['domain'] = HTTPS_SERVER;
+        $this->request->post['domain'] = $this->get('config_ssl');
 
         $data = $this->openbay->ebay->call('account/validate/', $this->request->post, array(), 'json', 1);
 

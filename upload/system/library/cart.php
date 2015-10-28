@@ -4,14 +4,14 @@ class cart
 {
     private $data = array();
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->config = $registry->get('config');
-        $this->customer = $registry->get('customer');
-        $this->session = $registry->get('session');
-        $this->db = $registry->get('db');
-        $this->tax = $registry->get('tax');
-        $this->weight = $registry->get('weight');
+        $this->config = $app->get('config');
+        $this->customer = $app->get('customer');
+        $this->session = $app->get('session');
+        $this->db = $app->get('db');
+        $this->tax = $app->get('tax');
+        $this->weight = $app->get('weight');
 
         // Remove all the expired carts with no customer ID
         $this->db->query('DELETE FROM '.DB_PREFIX."cart WHERE customer_id = '0' AND date_added < DATE_SUB(NOW(), INTERVAL 1 HOUR)");

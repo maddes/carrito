@@ -43,7 +43,7 @@ class ControllerPaymentFirstdata extends Controller
         $ascii = bin2hex($tmp);
         $data['hash'] = sha1($ascii);
 
-        $data['version'] = 'OPENCART-C-'.VERSION;
+        $data['version'] = 'OPENCART-C-'.$this->app->version();
 
         $data['bcompany'] = $order_info['payment_company'];
         $data['bname'] = $order_info['payment_firstname'].' '.$order_info['payment_lastname'];

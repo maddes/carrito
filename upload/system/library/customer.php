@@ -12,12 +12,12 @@ class customer
     private $newsletter;
     private $address_id;
 
-    public function __construct($registry)
+    public function __construct($app)
     {
-        $this->config = $registry->get('config');
-        $this->db = $registry->get('db');
-        $this->request = $registry->get('request');
-        $this->session = $registry->get('session');
+        $this->config = $app->get('config');
+        $this->db = $app->get('db');
+        $this->request = $app->get('request');
+        $this->session = $app->get('session');
 
         if (isset($this->session->data['customer_id'])) {
             $customer_query = $this->db->query('SELECT * FROM '.DB_PREFIX."customer WHERE customer_id = '".(int) $this->session->data['customer_id']."' AND status = '1'");
@@ -46,11 +46,11 @@ class customer
         }
         // Customer Group
         if ($this->isLogged()) {
-            $registry->get('config')->set('config_customer_group_id', $this->getGroupId());
-        } elseif (isset($registry->get('session')->data['customer']) && isset($registry->get('session')->data['customer']['customer_group_id'])) {
-            $registry->get('config')->set('config_customer_group_id', $registry->get('session')->data['customer']['customer_group_id']);
-        } elseif (isset($registry->get('session')->data['guest']) && isset($registry->get('session')->data['guest']['customer_group_id'])) {
-            $registry->get('config')->set('config_customer_group_id', $registry->get('session')->data['guest']['customer_group_id']);
+            $app->get('config')->set('config_customer_group_id', $this->getGroupId());
+        } elseif (isset($app->get('session')->data['customer']) && isset($app->get('session')->data['customer']['customer_group_id'])) {
+            $app->get('config')->set('config_customer_group_id', $app->get('session')->data['customer']['customer_group_id']);
+        } elseif (isset($app->get('session')->data['guest']) && isset($app->get('session')->data['guest']['customer_group_id'])) {
+            $app->get('config')->set('config_customer_group_id', $app->get('session')->data['guest']['customer_group_id']);
         }
     }
 

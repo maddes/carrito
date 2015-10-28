@@ -38,9 +38,9 @@ class ModelOpenbayOpenbay extends Model
         }
 
         // create a tmp folder
-        if (!is_dir(DIR_DOWNLOAD.'/tmp')) {
+        if (!is_dir($this->{'path.download'}.'/tmp')) {
             try {
-                mkdir(DIR_DOWNLOAD.'/tmp');
+                mkdir($this->{'path.download'}.'/tmp');
             } catch (ErrorException $ex) {
                 $this->error[] = $ex->getMessage();
             }
@@ -48,7 +48,7 @@ class ModelOpenbayOpenbay extends Model
 
         // create tmp file
         try {
-            $tmp_file = fopen(DIR_DOWNLOAD.'/tmp/test_file.php', 'w+');
+            $tmp_file = fopen($this->{'path.download'}.'/tmp/test_file.php', 'w+');
         } catch (ErrorException $ex) {
             $this->error[] = $ex->getMessage();
         }
@@ -69,14 +69,14 @@ class ModelOpenbayOpenbay extends Model
 
         // remove tmp file
         try {
-            unlink(DIR_DOWNLOAD.'/tmp/test_file.php');
+            unlink($this->{'path.download'}.'/tmp/test_file.php');
         } catch (ErrorException $ex) {
             $this->error[] = $ex->getMessage();
         }
 
         // delete tmp folder
         try {
-            rmdir(DIR_DOWNLOAD.'/tmp');
+            rmdir($this->{'path.download'}.'/tmp');
         } catch (ErrorException $ex) {
             $this->error[] = $ex->getMessage();
         }
@@ -110,7 +110,7 @@ class ModelOpenbayOpenbay extends Model
         if ($this->lasterror == true) {
             $this->openbay->log('Check version error: '.$this->lastmsg);
 
-            return array('error' => 1, 'response' => $this->lastmsg.' ('.VERSION.')');
+            return array('error' => 1, 'response' => $this->lastmsg.' ('.$this->app->version().')');
         } else {
             if ($data['version'] > $current_version) {
                 $this->openbay->log('Check version new available: '.$data['version']);
@@ -128,7 +128,7 @@ class ModelOpenbayOpenbay extends Model
     {
         $this->openbay->log('Downloading');
 
-        $local_file = DIR_DOWNLOAD.'/openbaypro_update.zip';
+        $local_file = $this->{'path.download'}.'/openbaypro_update.zip';
         $handle = fopen($local_file, 'w+');
 
         $post = array('version' => 2, 'beta' => $beta);
@@ -165,7 +165,7 @@ class ModelOpenbayOpenbay extends Model
     {
         $this->error = array();
 
-        $web_root = preg_replace('/system\/$/', '', DIR_SYSTEM);
+        $web_root = preg_replace('/system\/$/', '', $this->{'path.system'});
 
         if (!function_exists('exception_error_handler')) {
             function exception_error_handler($errno, $errstr, $errfile, $errline)
@@ -179,7 +179,7 @@ class ModelOpenbayOpenbay extends Model
         try {
             $zip = new ZipArchive();
 
-            if ($zip->open(DIR_DOWNLOAD.'openbaypro_update.zip')) {
+            if ($zip->open($this->{'path.download'}.'/openbaypro_update.zip')) {
                 $zip->extractTo($web_root);
                 $zip->close();
             } else {
@@ -206,7 +206,7 @@ class ModelOpenbayOpenbay extends Model
     {
         $this->error = array();
 
-        $web_root = preg_replace('/system\/$/', '', DIR_SYSTEM);
+        $web_root = preg_replace('/system\/$/', '', $this->{'path.system'});
 
         if (!function_exists('exception_error_handler')) {
             function exception_error_handler($errno, $errstr, $errfile, $errline)
@@ -266,7 +266,7 @@ class ModelOpenbayOpenbay extends Model
         if ($this->lasterror == true) {
             $this->openbay->log('Update version: '.$this->lastmsg);
 
-            return array('error' => 1, 'response' => $this->lastmsg.' ('.VERSION.')');
+            return array('error' => 1, 'response' => $this->lastmsg.' ('.$this->app->version().')');
         } else {
             $settings = $this->model_setting_setting->getSetting('openbay');
             $settings['openbay_version'] = $data['version'];
@@ -407,7 +407,7 @@ class ModelOpenbayOpenbay extends Model
 
                 $current_version = $this->config->get('openbay_version');
 
-                $send = array('version' => $current_version, 'ocversion' => VERSION, 'beta' => $data['beta']);
+                $send = array('version' => $current_version, 'ocversion' => $this->app->version(), 'beta' => $data['beta']);
 
                 $files = $this->call('update/getList/', $send);
                 $updatelog .= "Requesting file list\n";
@@ -452,7 +452,7 @@ class ModelOpenbayOpenbay extends Model
 
                         $filedata = base64_decode($this->call('update/getFileContent/', array('file' => implode('/', $file['locations']['location']).'/'.$file['name'], 'beta' => $data['beta'])));
 
-                        $tmp_file = DIR_CACHE.'openbay.tmp';
+                        $tmp_file = $this->{'path.cache'}.'openbay.tmp';
 
                         $fp = fopen($tmp_file, 'w');
                         fwrite($fp, $filedata);
@@ -583,7 +583,7 @@ class ModelOpenbayOpenbay extends Model
         if ($this->lasterror == true) {
             $data = array(
                 'error' => true,
-                'msg' => $this->lastmsg.' ('.VERSION.')',
+                'msg' => $this->lastmsg.' ('.$this->app->version().')',
             );
 
             return $data;
@@ -678,7 +678,7 @@ class ModelOpenbayOpenbay extends Model
         if (defined('HTTP_CATALOG')) {
             $domain = HTTP_CATALOG;
         } else {
-            $domain = HTTP_SERVER;
+            $domain = $this->config->get('config_url');
         }
 
         $data = array(
@@ -688,7 +688,7 @@ class ModelOpenbayOpenbay extends Model
             'openbay_version' => (int) $this->config->get('openbay_version'),
             'data' => $post,
             'content_type' => $content_type,
-            'ocversion' => VERSION,
+            'ocversion' => $this->app->version(),
         );
 
         $useragent = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.1) Gecko/20061204 Firefox/2.0.0.1';

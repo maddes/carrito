@@ -6,11 +6,11 @@ class response
     private $level = 0;
     private $output;
 
-    public function __construct($registry)
+    public function __construct($app)
     {
         $this->addHeader('Content-Type: text/html; charset=utf-8');
         if (APP === 'catalog') {
-            $this->setCompression($registry->get('config')->get('config_compression'));
+            $this->setCompression($app->get('config')->get('config_compression'));
         }
     }
 

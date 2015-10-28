@@ -18,23 +18,11 @@ class ControllerStep3 extends Controller
             $this->model_install->database($this->request->post);
 
             $output = '<?php'."\n";
-            $output .= '// HTTP'."\n";
-            $output .= 'define(\'HTTP_SERVER\', \''.HTTP_OPENCART.'\');'."\n\n";
-
-            $output .= '// HTTPS'."\n";
-            $output .= 'define(\'HTTPS_SERVER\', \''.HTTP_OPENCART.'\');'."\n\n";
-
             $output .= '// DIR'."\n";
-            $output .= 'define(\'DIR_APPLICATION\', \''.DIR_OPENCART.'catalog/\');'."\n";
-            $output .= 'define(\'DIR_SYSTEM\', \''.DIR_OPENCART.'system/\');'."\n";
-            $output .= 'define(\'DIR_LANGUAGE\', \''.DIR_OPENCART.'catalog/language/\');'."\n";
-            $output .= 'define(\'DIR_TEMPLATE\', \''.DIR_OPENCART.'catalog/view/theme/\');'."\n";
-            $output .= 'define(\'DIR_CONFIG\', \''.DIR_OPENCART.'system/config/\');'."\n";
-            $output .= 'define(\'DIR_IMAGE\', \''.DIR_OPENCART.'image/\');'."\n";
-            $output .= 'define(\'DIR_CACHE\', \''.DIR_OPENCART.'system/storage/cache/\');'."\n";
-            $output .= 'define(\'DIR_DOWNLOAD\', \''.DIR_OPENCART.'system/storage/download/\');'."\n";
-            $output .= 'define(\'DIR_LOGS\', \''.DIR_OPENCART.'system/storage/logs/\');'."\n";
-            $output .= 'define(\'DIR_UPLOAD\', \''.DIR_OPENCART.'system/storage/upload/\');'."\n\n";
+            $output .= 'define(\'DIR_APPLICATION\', \''.$this->{'path.base'}.'/catalog/\');'."\n";
+            $output .= 'define(\'DIR_LANGUAGE\', \''.$this->{'path.base'}.'/catalog/language/\');'."\n";
+            $output .= 'define(\'DIR_TEMPLATE\', \''.$this->{'path.base'}.'/catalog/view/theme/\');'."\n";
+            $output .= 'define(\'DIR_LOGS\', \''.$this->{'path.base'}.'/system/storage/logs/\');'."\n";
 
             $output .= '// DB'."\n";
             $output .= 'define(\'DB_DRIVER\', \''.addslashes($this->request->post['db_driver']).'\');'."\n";
@@ -45,7 +33,7 @@ class ControllerStep3 extends Controller
             $output .= 'define(\'DB_PORT\', \''.addslashes($this->request->post['db_port']).'\');'."\n";
             $output .= 'define(\'DB_PREFIX\', \''.addslashes($this->request->post['db_prefix']).'\');'."\n";
 
-            $file = fopen(DIR_OPENCART.'config.php', 'w');
+            $file = fopen($this->{'path.base'}.'/config.php', 'w');
 
             fwrite($file, $output);
 
@@ -53,25 +41,17 @@ class ControllerStep3 extends Controller
 
             $output = '<?php'."\n";
             $output .= '// HTTP'."\n";
-            $output .= 'define(\'HTTP_SERVER\', \''.HTTP_OPENCART.'admin/\');'."\n";
             $output .= 'define(\'HTTP_CATALOG\', \''.HTTP_OPENCART.'\');'."\n\n";
 
             $output .= '// HTTPS'."\n";
-            $output .= 'define(\'HTTPS_SERVER\', \''.HTTP_OPENCART.'admin/\');'."\n";
             $output .= 'define(\'HTTPS_CATALOG\', \''.HTTP_OPENCART.'\');'."\n\n";
 
             $output .= '// DIR'."\n";
-            $output .= 'define(\'DIR_APPLICATION\', \''.DIR_OPENCART.'admin/\');'."\n";
-            $output .= 'define(\'DIR_SYSTEM\', \''.DIR_OPENCART.'system/\');'."\n";
-            $output .= 'define(\'DIR_LANGUAGE\', \''.DIR_OPENCART.'admin/language/\');'."\n";
-            $output .= 'define(\'DIR_TEMPLATE\', \''.DIR_OPENCART.'admin/view/template/\');'."\n";
-            $output .= 'define(\'DIR_CONFIG\', \''.DIR_OPENCART.'system/config/\');'."\n";
-            $output .= 'define(\'DIR_IMAGE\', \''.DIR_OPENCART.'image/\');'."\n";
-            $output .= 'define(\'DIR_CACHE\', \''.DIR_OPENCART.'system/storage/cache/\');'."\n";
-            $output .= 'define(\'DIR_DOWNLOAD\', \''.DIR_OPENCART.'system/storage/download/\');'."\n";
-            $output .= 'define(\'DIR_LOGS\', \''.DIR_OPENCART.'system/storage/logs/\');'."\n";
-            $output .= 'define(\'DIR_UPLOAD\', \''.DIR_OPENCART.'system/storage/upload/\');'."\n";
-            $output .= 'define(\'DIR_CATALOG\', \''.DIR_OPENCART.'catalog/\');'."\n\n";
+            $output .= 'define(\'DIR_APPLICATION\', \''.$this->{'path.base'}.'/admin/\');'."\n";
+            $output .= 'define(\'DIR_LANGUAGE\', \''.$this->{'path.base'}.'/admin/language/\');'."\n";
+            $output .= 'define(\'DIR_TEMPLATE\', \''.$this->{'path.base'}.'/admin/view/template/\');'."\n";
+            $output .= 'define(\'DIR_LOGS\', \''.$this->{'path.base'}.'/system/storage/logs/\');'."\n";
+            $output .= 'define(\'DIR_CATALOG\', \''.$this->{'path.base'}.'/catalog/\');'."\n\n";
 
             $output .= '// DB'."\n";
             $output .= 'define(\'DB_DRIVER\', \''.addslashes($this->request->post['db_driver']).'\');'."\n";
@@ -82,7 +62,7 @@ class ControllerStep3 extends Controller
             $output .= 'define(\'DB_PORT\', \''.addslashes($this->request->post['db_port']).'\');'."\n";
             $output .= 'define(\'DB_PREFIX\', \''.addslashes($this->request->post['db_prefix']).'\');'."\n";
 
-            $file = fopen(DIR_OPENCART.'admin/config.php', 'w');
+            $file = fopen($this->{'path.base'}.'/admin/config.php', 'w');
 
             fwrite($file, $output);
 
@@ -299,12 +279,12 @@ class ControllerStep3 extends Controller
             $this->error['email'] = $this->language->get('error_email');
         }
 
-        if (!is_writable(DIR_OPENCART.'config.php')) {
-            $this->error['warning'] = $this->language->get('error_config').DIR_OPENCART.'config.php!';
+        if (!is_writable($this->{'path.base'}.'/config.php')) {
+            $this->error['warning'] = $this->language->get('error_config').$this->{'path.base'}.'/config.php!';
         }
 
-        if (!is_writable(DIR_OPENCART.'admin/config.php')) {
-            $this->error['warning'] = $this->language->get('error_config').DIR_OPENCART.'admin/config.php!';
+        if (!is_writable($this->{'path.base'}.'/admin/config.php')) {
+            $this->error['warning'] = $this->language->get('error_config').$this->{'path.base'}.'/admin/config.php!';
         }
 
         return !$this->error;

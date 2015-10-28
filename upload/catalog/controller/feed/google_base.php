@@ -10,7 +10,11 @@ class ControllerFeedGoogleBase extends Controller
             $output .= '<channel>';
             $output .= '<title>'.$this->config->get('config_name').'</title>';
             $output .= '<description>'.$this->config->get('config_meta_description').'</description>';
-            $output .= '<link>'.HTTP_SERVER.'</link>';
+            if ($this->request->server['HTTPS']) {
+                $output .= '<link>'.$this->get('config_ssl').'</link>';
+            } else {
+                $output .= '<link>'.$this->get('config_url').'</link>';
+            }
 
             $product_data = array();
 

@@ -81,7 +81,7 @@ class ControllerTotalVoucher extends Controller
                     $data['text_redeem'] = sprintf($language->get('text_redeem'), $voucher['code']);
                     $data['text_footer'] = $language->get('text_footer');
 
-                    if (is_file(DIR_IMAGE.$voucher['image'])) {
+                    if (is_file($this->{'path.image'}.DIRECTORY_SEPARATOR.$voucher['image'])) {
                         $data['image'] = $this->config->get('config_url').'image/'.$voucher['image'];
                     } else {
                         $data['image'] = '';
