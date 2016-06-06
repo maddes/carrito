@@ -1,0 +1,22 @@
+{
+    "name": "maddes/carrito",
+    "description": "The Carrito e-commmerce Framework.",
+    "keywords": ["framework", "carrito"],
+    "license": "GPLv3",
+    "type": "project",
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "files": [
+            "resources/helpers/general.php",
+            "resources/helpers/json.php",
+            "resources/helpers/utf8.php",
+            "resources/helpers/vat.php",
+            "resources/helpers/polyfills/random.php"
+        ],
+        "psr-4": {
+            "Carrito\\": "app/"
+        }
+    }
+}
