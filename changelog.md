@@ -1,5 +1,6 @@
 # Carrito 5.1.1
-* Fixed install startup
+* Fixed install startup.
+* Added seo resoution for catalog builtin controllers.
 
 # Carrito 5.1.0
 * Refactored autoloader.

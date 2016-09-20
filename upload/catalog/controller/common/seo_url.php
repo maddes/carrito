@@ -7,8 +7,8 @@ class ControllerCommonSeoUrl extends Controller {
 		}
 
 		// Decode URL
-		if (isset($this->request->get['_route_'])) {
-			$parts = explode('/', $this->request->get['_route_']);
+		if (isset($this->request->get['route'])) {
+			$parts = explode('/', $this->request->get['route']);
 
 			// remove any empty arrays from trailing
 			if (utf8_strlen(end($parts)) == 0) {
@@ -22,10 +22,12 @@ class ControllerCommonSeoUrl extends Controller {
 					$url = explode('=', $query->row['query']);
 
 					if ($url[0] == 'product_id') {
+                        $this->request->get['route'] = 'product/product';
 						$this->request->get['product_id'] = $url[1];
 					}
 
 					if ($url[0] == 'category_id') {
+                        $this->request->get['route'] = 'product/category';
 						if (!isset($this->request->get['path'])) {
 							$this->request->get['path'] = $url[1];
 						} else {
@@ -34,10 +36,12 @@ class ControllerCommonSeoUrl extends Controller {
 					}
 
 					if ($url[0] == 'manufacturer_id') {
+                        $this->request->get['route'] = 'product/manufacturer/info';
 						$this->request->get['manufacturer_id'] = $url[1];
 					}
 
 					if ($url[0] == 'information_id') {
+                        $this->request->get['route'] = 'information/information';
 						$this->request->get['information_id'] = $url[1];
 					}
 
@@ -45,21 +49,7 @@ class ControllerCommonSeoUrl extends Controller {
 						$this->request->get['route'] = $query->row['query'];
 					}
 				} else {
-					$this->request->get['route'] = 'error/not_found';
-
 					break;
-				}
-			}
-
-			if (!isset($this->request->get['route'])) {
-				if (isset($this->request->get['product_id'])) {
-					$this->request->get['route'] = 'product/product';
-				} elseif (isset($this->request->get['path'])) {
-					$this->request->get['route'] = 'product/category';
-				} elseif (isset($this->request->get['manufacturer_id'])) {
-					$this->request->get['route'] = 'product/manufacturer/info';
-				} elseif (isset($this->request->get['information_id'])) {
-					$this->request->get['route'] = 'information/information';
 				}
 			}
 
