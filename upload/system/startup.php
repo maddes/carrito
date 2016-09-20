@@ -16,7 +16,7 @@ if (is_file(dirname(__DIR__).'/config.php') and APP !== 'install') {
 // Install
 if (defined('HTTP_DOMAIN')) {
     // Version
-    define('VERSION', '4.0.0');
+    define('VERSION', '5.1.1');
 
     define('DIR_BASE', dirname(__DIR__).'/');
 

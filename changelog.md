@@ -1,3 +1,6 @@
+# Carrito 5.1.1
+* Fixed install startup
+
 # Carrito 5.1.0
 * Refactored autoloader.
 * Added mapping facilities to the `Registry`.
