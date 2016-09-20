@@ -8,7 +8,7 @@ class DB {
 		if (class_exists($class)) {
 			$this->db = new $class(DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_PORT);
 		} else {
-			exit('Error: Could not load database driver ' . $driver . '!');
+			exit('Error: Could not load database driver ' . DB_DRIVER . '!');
 		}
 	}
 

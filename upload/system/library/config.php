@@ -5,20 +5,22 @@ class Config {
 
 	public function __construct($registry)
 	{
-		// Default Store Settings
-		$settings = $registry->get('db')->query('SELECT * FROM '.DB_PREFIX."setting WHERE store_id = '0'");
+        if (APP === 'admin' or APP === 'catalog') {
+            // Default Store Settings
+            $settings = $registry->get('db')->query('SELECT * FROM '.DB_PREFIX."setting WHERE store_id = '0'");
 
-		foreach ($settings->rows as $setting)
-		{
-			if ($setting['serialized'])
-			{
-				$this->set($setting['key'], json_decode($setting['value'], true));
-			}
-			else
-			{
-				$this->set($setting['key'], $setting['value']);
-			}
-		}
+            foreach ($settings->rows as $setting)
+            {
+                if ($setting['serialized'])
+                {
+                    $this->set($setting['key'], json_decode($setting['value'], true));
+                }
+                else
+                {
+                    $this->set($setting['key'], $setting['value']);
+                }
+            }
+        }
 
 		// Store settings for catalog
 		if (APP === 'catalog')
